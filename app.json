@@ -1,0 +1,53 @@
+{
+  "pages":[
+    "pages/entrace/index",
+    "pages/shop_around/index",
+    "pages/index/index",
+    "pages/order/index",
+    "pages/order_confirm/index",
+    "pages/account/index",
+    "pages/card_list/index",
+    "pages/order_fail/index",
+    "pages/order_list/index",
+    "pages/order_info/index",
+    "pages/view_state/index",
+    "pages/takeOut_index/index",
+    "pages/takeOut_order/index",
+    "pages/takeOut_mine/index",
+    "pages/takeOut_addr/index",
+    "pages/takeOut_addr_add/index",
+    "pages/takeOut_myaddr/index",
+    "pages/takeOut_shop/index",
+    "pages/takeOut_menu/index",
+    "pages/takeOut_order_confirm/index",
+    "pages/takeOut_order_info/index"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "老娘舅自助点餐",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "color":"#666",
+    "selectedColor":"#FDD01B",
+    "backgroundColor":"#fff",
+    "borderStyle":"white",
+    "list": [{
+      "pagePath": "pages/takeOut_index/index",
+      "iconPath":"image/index.png",
+      "selectedIconPath":"image/index_active.png",
+      "text": "首页"
+    },{
+      "pagePath": "pages/takeOut_order/index",
+      "iconPath":"image/order.png",
+      "selectedIconPath":"image/order_active.png",
+       "text": "订单"
+    },{
+      "pagePath": "pages/takeOut_mine/index",
+      "iconPath":"image/mine.png",
+      "selectedIconPath":"image/mine_active.png",
+      "text": "我的"
+    }]
+  }
+}

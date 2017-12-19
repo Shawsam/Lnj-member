@@ -1,0 +1,16 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+<view class="section search">
+    <input placeholder="请输入关键字" bindinput="keyInput" />
+    <image class="searchBtn" bindtap="searchFun" src="../../image/search.png" />
+</view>   
+<view class="section main">
+    <view class="item" wx:for="{{searchResult}}" data-param="{{item.shopId}}" wx:key="{{index}}" bindtap="enterShop">
+        <image class="shop_img" src="../../image/door.png" />
+        <view class="shop"><image class="shop_icon" src="../../image/mendian.png" />{{item.shopName}}</view>
+        <view class="addr"><image class="addr_icon" src="../../image/location.png" />{{item.shopAddr}}</view>
+        <image class="arrodow rote" src="../../image/arrodow.png" />
+    </view>
+</view>
+</view>

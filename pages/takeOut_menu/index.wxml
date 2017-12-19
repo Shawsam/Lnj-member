@@ -1,0 +1,96 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading>  
+<view class="header">
+    <view class="welcome">
+        <view class="name">{{shopName}}<view class="dot">·</view></view> 
+        欢迎您！
+   </view>
+</view>
+
+<view class="main">
+    <view class="tab_list {{detail_panel?'noscroll':''}}">
+        <view wx:key="{{item.categoryId}}" wx:for="{{items}}" class="tab {{item.active?'active':''}}" data-param="{{index}}"  bindtap="tabTap">
+           <image src="{{item.active?item.picture:item.onPicture}}" />
+           <view>{{item.name}}</view>
+        </view>
+    </view>
+
+    <view class="item_list {{detail_panel?'noscroll':''}}">
+        <view wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:if="{{item.active}}" wx:for-index="i">
+           <view class="item"  wx:key="{{item.goodsId}}" wx:for="{{item.mainGoodsList}}" wx:for-index="j">
+                <image bindtap="infoScan" data-paramA="{{i}}" data-paramB="{{j}}" src="{{item.centerImg}}" alt="{{item.name}}"/>
+                <view class="name">{{item.name}}</view>
+                <view class="desp words_line2">{{item.description}}</view>
+                <view class="stock_state" wx:if="{{item.stockNum==0}}" >已售罄</view>
+                <view class="price_bar">￥<view class="price">{{item.priceVal}}</view>
+                </view>
+                <view class="quantity">
+                   <view class="minus" catchtap="minusTap" data-paramA="{{i}}" data-paramB="{{j}}">
+                       <image src="../../image/cut.png" />
+                   </view>
+                   <view  class="number">{{item.count}}</view>
+                   <view class="plus addcart"  catchtap="addTap" data-paramA="{{i}}" data-paramB="{{j}}">
+                       <image src="../../image/add.png" />
+                   </view>
+                </view>
+            </view>
+            <view class="emptyItem" wx:if="{{item.mainGoodsList.length == 0}}">暂无此品类</view>
+        </view>
+    </view>
+</view>
+
+<view class="panel_cover" hidden="{{!(detail_panel||info_panel)}}" bindtap="coverTap"></view>
+
+<view class="panel" hidden="{{!(detail_panel||info_panel)}}">
+
+    <view class="info_panel" wx:if="{{info_panel}}">
+        <view class="img">
+            <image src="{{infoData.centerImg}}" />
+        </view>
+        <view class="text name">{{infoData.name}}</view>
+        <view class="text desp">{{infoData.description}}</view>
+        <view class="handle">
+            <view class="price_bar">￥<view class="price">{{infoData.priceVal}}</view></view>
+            <view class="quantity">
+               <view class="minus" catchtap="infoMinus"><image src="../../image/cut.png" /></view>
+               <view  class="number">{{infoData.count}}</view>
+               <view class="plus addcart"  catchtap="infoAdd"><image src="../../image/add.png" /></view>
+            </view>
+        </view>
+    </view>
+
+    <view class="detail_panel" wx:if="{{detail_panel}}">
+        <view class="hd-title">订单明细<view class="cartEmpty" catchtap="cartEmpty">清空</view></view>
+            <view class="list" wx:for="{{items}}" wx:key="{{item.categoryId}}"  wx:for-index="i">
+                <view wx:key="{{item.goodsId}}" wx:for="{{item.mainGoodsList}}" wx:for-index="j">
+                    <view class="item" wx:if="{{item.count > 0}}">
+                        <view class="info1">
+                            <view class="name">{{item.name}}</view>
+                        </view>
+                        <view class="price_bar">
+                               ￥<view class="price">{{item.priceVal}}</view>
+                        </view>
+                        <view class="quantity">
+                           <view class="minus" bindtap="cartMinusTap" data-paramA="{{i}}" data-paramB="{{j}}" data-paramC="{{k}}"><image src="../../image/cut.png" /></view>
+                           <view  class="number">{{item.count}}</view>
+                           <view class="plus addcart"  bindtap="cartAddTap" data-paramA="{{i}}" data-paramB="{{j}}" data-paramC="{{k}}"><image src="../../image/add.png" /></view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="total">总计:<view class="flag">￥</view>{{cart_fee}}</view>
+    </view>
+</view>
+
+<view class="footer">
+    <view class="cart">
+        <image class="cart_img" src="../../image/total.png" />
+        <view class="item_num">+{{cart_num}}</view>
+    </view>
+    <view class="total_fee">￥<i class="fee">{{cart_fee}}</i></view>
+    <view class="detailBtn" data-param="{{cart_num}}" bindtap="detailTap" >明细</view>
+    <view class="checkBtn {{cart_num>0?'num':'none'}}"  data-param="{{cart_num>0?'true':'false'}}" bindtap="orderConfirmTap">去结算</view>
+</view>
+

@@ -1,0 +1,21 @@
+/**index.wxss**/
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > .flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+
+.container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; background:#FDD01B;}
+.topbar{ background:#000; color:#FDD01B; text-align:center; padding:14rpx 0;}
+.topbar view{ display:inline-block;color:#f00; }
+.banner image{ width:750rpx; height:380rpx;}
+.main{ padding:60rpx; text-align:center; border-top:2px solid #E2A102; }
+.main .user{ font:65rpx/80rpx "微软雅黑";}
+.main .user .sex{ display:inline-block; font:40rpx/80rpx "微软雅黑"; margin-left:10rpx; }
+.main .welcome{ font:65rpx/80rpx "微软雅黑"; margin-bottom:30rpx; }
+.main .btnCon{ position:relative; display:inline-block;  }
+.main .btnImg{ height:250rpx; width:206rpx;  }
+.main .avatar{ height:120rpx; width:120rpx; border-radius:100%; position:absolute; top:25rpx; left:50%; margin-left:-60rpx; }
+
+
+

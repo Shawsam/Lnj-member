@@ -1,0 +1,47 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+<view class="section backcolor"></view>
+<view class="main">
+    <view class="list">
+        <view class="list_item" bindtap="infoTap" data-param="{{item.orderId}}" wx:key="{{item.orderId}}" wx:for="{{orderList}}">
+            <view class="top">
+                <view class="info">
+                    <view class="dinnerNo" wx:if="{{item.status==2}}">送餐号：{{item.dinnerNo}}</view>
+                    <view class="order_state">订单状态：{{item.statusDesc}}</view>
+                    <view class="total">订单金额</view>
+                </view>
+                <view class="time">订单时间：{{item.orderTime}}
+                    <view class="total_fee">￥{{item.totalFee}}</view>
+               </view>
+               <view class="time" wx:if="{{item.subscribeTime}}">预约时间：{{item.subscribeTime}}</view>
+            </view>
+            <view class="order">
+                <view wx:if="{{!item.slide}}">
+                    <view class="order_item" wx:for="{{item.dcOrderGoodsList}}" wx:key="{{item.dcOrderGoodsList.id}}" wx:if="{{index<2}}">
+                        <view class="name">{{item.goodsName}}</view>
+                        <view class="num">x{{item.count}}</view>
+                        <view class="price">￥{{item.price}}</view>
+                    </view>
+                    <view class="blurCon" wx:if="{{item.dcOrderGoodsList.length>2}}"></view>
+                    <view class="slide" data-param="{{index}}" catchtap="slideFun"  wx:if="{{item.dcOrderGoodsList.length>2}}"><image class="slideImg" src="../../image/slideDown.png" />查看全部</view>
+                </view>
+
+                <view wx:if="{{item.slide}}">
+                    <view class="order_item" wx:for="{{item.dcOrderGoodsList}}" wx:key="{{item.dcOrderGoodsList.id}}">
+                        <view class="name">{{item.goodsName}}</view>
+                        <view class="num">x{{item.count}}</view>
+                        <view class="price">￥{{item.price}}</view>
+                    </view>
+                    <view class="slide" data-param="{{index}}" catchtap="slideFun"  wx:if="{{item.dcOrderGoodsList.length>2}}"><image class="slideImg" src="../../image/slideUp.png" />收起</view>
+                </view>
+            </view>         
+        </view>
+    </view>   
+</view>
+
+<view class="footer">
+    <view class="moreBtn {{moreDisabled?'disabled':''}}" bindtap="moreTap">再来一单</view>
+</view>
+
+</view>

@@ -1,0 +1,25 @@
+/**index.wxss**/
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > .flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+
+.backcolor{ background:#2F2E33; height:240rpx; width:100%; position:absolute; left:0; top:0; z-index:0; }
+.container{ background:#f3f3f3; box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; padding:100rpx 60rpx 60rpx 60rpx;}
+.main{ background:#fff; border-radius:10px; box-shadow:2rpx 2rpx 6rpx rgba(0,0,0,0.1); position:relative; }
+.main .title{ height:110rpx; font:32rpx/110rpx "微软雅黑"; font-weight:bold; text-align:center; background:#FDD01B; border-radius:20rpx 20rpx 0 0; }
+.main .title image{ height:70rpx; width:69rpx; display:inline-block; vertical-align:middle; margin-right:15rpx;}
+.main .content{ padding:0 30rpx 70rpx 30rpx;  }
+.main .content .list{ max-height:700rpx; overflow-y:scroll; }
+.main .content .list .item{ padding:40rpx; position:relative; padding-left:54rpx; border-top:1px solid #e8e8e8; }
+.main .content .list .item .icon{ position:absolute; left:5rpx; top:74rpx; height:29rpx; width:29rpx; border-radius:50%; border:1px solid #ccc;}
+.main .content .list .item .icon.active .circle{  position:absolute; background:#FDD01B; left:5rpx; top:5rpx; height:20rpx; width:20rpx; border-radius:50%; }
+.main .content .list .item:nth-child(1){ border:none; }
+.main .content .list .item .info{ font:30rpx/50rpx "微软雅黑"; font-weight:bold; position:relative; padding-right:160rpx; }
+.main .content .list .item .info .tel{ font:30rpx/50rpx "微软雅黑"; font-weight:bold; position:absolute; right:0; top:0;  }
+.main .content .list .item .addr{ font:28rpx/50rpx "微软雅黑"; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+
+.main .content .confirmBtn{  position:absolute; bottom:-45rpx; left:50%; margin-left:-175rpx;  font:30rpx/90rpx "微软雅黑"; height:90rpx; width:350rpx; font-weight:bold; text-align:center;  background:#FDD01B; box-shadow:0 10rpx 20rpx rgba(255, 198,0,0.5); border-radius:40px; }
+.main .content .addrBtn{  position:absolute; bottom:-165rpx; left:50%; margin-left:-175rpx;  font:30rpx/90rpx "微软雅黑"; height:90rpx; width:350rpx; font-weight:bold; text-align:center;  background:#FDD01B; box-shadow:0 10rpx 20rpx rgba(255, 198,0,0.5); border-radius:40px; }
+

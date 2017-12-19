@@ -1,0 +1,131 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+<view class="section backcolor"></view>
+<view class="main">
+    <view class="topCon" wx:if="{{order.status==1}}">
+       <view class="title">
+            <icon type="success" size="27" color="#FDD01B" />订单已生成，请尽快支付！
+      </view>
+    </view>
+
+    <view class="topCon" wx:if="{{order.status==2}}">
+      <view class="title">
+            <icon type="success" size="27" color="#FDD01B" />下单成功！感谢您的光临！
+      </view>
+      <view class="bold">送餐号: {{order.dinnerNo}}</view>
+      <view class="bold">{{shopName}} | 桌号: {{deskNo}}</view>
+      <view>请耐心等待，不要远离您的座位！</view>
+    </view>
+
+    <view class="topCon" wx:if="{{order.status==3}}">
+       <view class="title">
+            <icon type="success" size="27" color="#FDD01B" />已出餐！
+      </view>
+    </view>
+
+    <view class="topCon" wx:if="{{order.status==9}}">
+       <view class="title">
+            <icon type="success" size="27" color="#FDD01B" />已退单！
+      </view>
+    </view>
+
+
+    <view class="infoCon1 {{order.status==2?'':'waitPay'}}">
+      <view class="title">订单总价<view class="desp">￥<view class="num">{{order.totalFee}}</view></view></view>
+      <view class="title">实付金额<view class="desp">￥<view class="num">{{order.userFee}}</view></view></view>
+      <view class="list"> 
+           <view class="list_item" wx:for="{{items}}" wx:key="{{item.goodsId}}">
+                <view class="info1">
+                    <view class="name">{{item.Data.goodsName}}<view wx:key="{{item.goodsId}}" wx:for="{{item.subData}}" wx:if="{{index==0}}">{{item.goodsName}}</view></view>
+                    <view class="num">x{{item.Data.count}}</view>
+                    <view class="price">￥{{item.Data.price}}</view>
+                </view>
+                <view class="info2">
+                    <view wx:key="{{item.goodsId}}" wx:for="{{item.subData}}" wx:if="{{index>0}}">+{{item.goodsName}}{{item.price?'(￥'+item.price/100+')':''}}</view>
+                </view>
+           </view>
+           <view class="package" wx:if="{{order.packTotalFee}}"><view class="name">餐盒</view><view class="price">￥{{order.packTotalFeeVal}}</view></view>
+
+
+           <view wx:if="{{order.activity.length}}">
+               <view class="list_item card" wx:for="{{order.activity}}" wx:key="{{item.activityId}}"> 
+                 <view class="info1">
+                   <view class="name">{{item.name}}</view>
+                   <view class="price">-￥{{item.dePrice/100}}</view>
+                 </view>
+               </view>
+          </view>
+
+
+           <view wx:if="{{order.coupons.length}}">
+               <view class="list_item card" wx:for="{{order.coupons}}" wx:key="{{item.couponNo}}"> 
+                 <view class="info1">
+                   <view class="name">{{item.typeName}}</view>
+                   <view class="price">-￥{{item.single}}</view>
+                 </view>
+               </view>
+          </view>
+
+
+      </view>
+    </view>
+
+    <view class="infoCon2">
+      <view class="title">订单信息</view>
+      <view class="item">订单状态<view class="desp">{{order.statusDesc}}</view></view>
+      <view class="item">订单号<view class="desp">{{order.orderNo}}</view></view>
+      <view class="item">下单时间<view class="desp">{{order.orderTime}}</view></view>
+      <view class="item">付款时间<view class="desp">{{order.payTime}}</view></view>
+      <view class="item" wx:if="{{order.subscribeTime}}">预约时间<view class="desp">{{order.subscribeTime}}</view></view>
+<!--  <view class="item">备注信息<view class="desp">{{order.caution?order.caution:'无'}}</view></view> -->
+      <view class="item">支付方式<view class="desp">{{order.payTypeDesc}}</view></view>
+    </view>
+
+    <view class="infoCon2">
+      <view class="item">备注<view class="desp">发票请至收银台领取</view></view>
+    </view>
+</view>
+
+
+
+
+
+<view class="panel_cover" hidden="{{!(type_panel||tip_panel)}}" bindtap="coverTap"></view>
+
+<view class="panel" hidden="{{!type_panel}}">
+     <view class="Con">
+       <view class="title">选择支付方式</view>
+       <view class="list">
+           <view class="account" data-type="1" bindtap="chooseTap"><image src="../../image/family_card.png" />亲情账户
+               <view class="choose {{paytype==1?'active':''}}"><view class="dot"></view></view>
+           </view>
+           <view class="wx" data-type="2" bindtap="chooseTap"><image src="../../image/wechart.png" />微信支付
+               <view class="choose {{paytype==2?'active':''}}"><view class="dot"></view></view>
+           </view>
+       </view>
+    </view>
+    <view class="btnGroup flexbox">
+        <view class="cancel" bindtap="coverTap">取消</view>
+        <view class="confirm" bindtap="confirmChoose">确定</view>
+    </view>
+</view>
+
+<view class="panel"  hidden="{{!tip_panel}}">
+  <view class="tip_panel">
+    <view class="hd-title">消费提醒</view>
+    <view class="info">
+      <view>本次消费：￥{{tradeInfo.bala}}</view>
+      <view>支付方式：{{tradeInfo.paytype}}</view>
+      <view>账户余额：￥{{tradeInfo.totalBala}}</view>
+    </view>
+    <view class="confirmBtn" bindtap="confirmTrade">确定</view>
+  </view>
+</view>
+
+
+<view class="footer">
+    <view wx:if="{{order.status!=1}}" class="backBtn" bindtap="backFun">返回</view>
+    <view wx:if="{{order.status==1}}" class="backBtn" bindtap="payFun">去结算</view>
+</view>
+</view>

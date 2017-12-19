@@ -1,0 +1,37 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading>    
+<view class="section backcolor"></view>
+<view class="section main">
+    <view class="infoCon">
+        <view class="title">当前门店</view>
+        <view class="info">
+            <image class="shop_img" src="../../image/door.png" />
+            <view class="shop"><image class="shop_icon" src="../../image/mendian.png" />{{shopName}}</view>
+            <view class="addr"><image class="addr_icon" src="../../image/location.png" />{{shopAddr}}</view>
+        </view>
+        <view class="codeNum">
+          <view class="code">台号<view class="code_num">{{deskNo}}</view></view>
+        </view>
+        <view class="enterBtn" bindtap="orderTap" >进入菜单</view>
+    </view>
+</view>
+
+<view class="section bottomCon">
+  <view class="title">加入会员 即刻享有<!-- <view class="backet"> > </view> --></view>
+  <view class="itemCon">
+    <view class="item item1">
+        <image class="item_img" src="../../image/rookie.png" />
+        <view>新人礼遇</view>
+    </view>
+    <view class="item item2">
+        <image class="item_img" src="../../image/recharge_git.png" />
+        <view>充值礼遇</view>
+    </view>
+    <view class="item item3">
+        <image class="item_img" src="../../image/consume.png" />
+        <view>消费奖励</view>
+    </view>
+  </view>
+</view>
+</view>

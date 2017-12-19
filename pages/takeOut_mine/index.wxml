@@ -1,0 +1,31 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+<view class="section backcolor"></view>
+<view class="section topCon">
+	<view class="title"></view>
+	<image class="avatar" src="{{userInfo.avatarUrl}}" />
+	<view class="name">{{userInfo.nickName}}</view>
+	<view class="phone">13567898856</view>
+</view>
+<view class="list">
+    <view class="cont">
+	    <view class="con2" bindtap="openInfo">
+		    <image class="icon" src="../../image/list1.png" />信息管理
+		    <image class="arrodow rote" src="../../image/arrodow.png" />
+	    </view>
+	</view>
+	<view class="cont">
+	    <view class="con2" bindtap="openOrder">
+	      <image class="icon" src="../../image/list2.png" />订单管理
+	      <image class="arrodow rote" src="../../image/arrodow.png" />
+	    </view>
+	</view>
+	<view class="cont">
+	    <view class="con2" bindtap="openAddr">
+	       <image class="icon" src="../../image/list3.png" />地址管理
+	       <image class="arrodow rote" src="../../image/arrodow.png" />
+	    </view>
+	</view>
+</view>
+</view>

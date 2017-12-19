@@ -1,0 +1,8 @@
+<!--index.wxml-->
+<view class="container">
+  <view class="main">
+    <view class="error">{{error==200?'':error}}</view>
+    <view class="tip">{{errorMsg?errorMsg:'服务器出错了'}}</view>
+    <view class="btn" bindtap="backFun">返回主页</view>
+  </view>
+</view>

@@ -1,0 +1,13 @@
+/**index.wxss**/
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+.container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch; position:relative; }
+
+.main{ position:relative; padding:120rpx 0; text-align:center;}
+.main .error{ font:160rpx/220rpx "微软雅黑"; font-weight:bold; color:#FDD01B; }
+.main .tip{ font:35rpx/100rpx "微软雅黑"; }
+.main .btn{ background:#FDD01B; width:60%; margin:20rpx auto; font:35rpx/80rpx "微软雅黑"; height:80rpx; border-radius:40rpx; }
+ 

@@ -1,0 +1,22 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+<view class="section backcolor"></view>
+<view class="section main">
+	<view class="title">
+		<image src="../../image/addr.png" />我的送餐地址
+	</view>
+	<view class="content">
+		<view class="list">
+			<view class="item" wx:for="{{addrData}}" wx:key="{{item.key}}" 
+			data-param="{{index}}" bindtap="chooseAddr">
+				<view class="icon {{item.active?'active':''}}"><view class="circle"></view></view>
+				<view class="info">{{item.name}}<view class="tel">{{item.phone}}</view></view>
+				<view class="addr">{{item.addr}}</view>
+			</view>
+		</view>
+		<view class="btn confirmBtn" bindtap="addrConfirm">确认</view>
+	    <view class="btn addrBtn" bindtap="addrAdd">添加送餐地址</view>
+    </view>
+</view>
+</view>

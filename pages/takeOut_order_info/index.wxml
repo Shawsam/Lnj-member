@@ -1,0 +1,52 @@
+<!--index.wxml-->
+<view class="container {{detail_panel?'noscroll':''}}">
+<loading hidden="{{loaderhide}}">加载中...</loading>   
+<view class="section backcolor"></view>
+<view class="main">
+    <view class="topCon">
+	    <view class="title">
+			<image src="../../image/logo.png" />湖州长兴人民路餐厅
+		</view>
+		<view class="info">
+			<view>总金额：<view class="price">￥18.00</view></view>
+			<view>份数：2 份</view>
+		</view>
+		<view class="tip">查看明细</view>
+    </view>
+
+    <view class="list">
+    	<view class="item">联系人：<view class="desp">小贤</view></view>
+    	<view class="item">电话：<view class="desp">18616932566</view></view>
+    	<view class="item">送餐地址：<view class="desp"></view></view>
+    	<view class="item">订单编号：<view class="desp"></view></view>
+    	<view class="item">预计送达时间：<view class="desp"></view></view>
+    </view>
+
+    <view class="orderPro">
+        <view class="title">订单状态</view>
+        <view class="line"></view>
+        <!-- <icon type="success" size="20" color="green" /> -->
+        <image class="icon" src="../../image/complete.png" />
+        <view class="item odd">
+            <view class="rect"></view>
+        	<view>8-10 10:19</view>
+        	<view>订单提交成功，处理中</view>
+        </view>
+        <!-- <icon type="success" size="20" color="green" /> -->
+        <image class="icon" src="../../image/complete.png" />
+        <view class="item even">
+            <view class="rect"></view>
+        	<view>8-10 10:19</view>
+        	<view>门店已接单</view>
+        </view>
+        <!-- <icon type="waiting" size="20" color="#FECF1D" /> -->
+        <image class="icon" src="../../image/wait.png" />
+        <view class="item odd current">
+            <view class="rect"></view>
+        	<view>8-10 10:19</view>
+        	<view>门店正在配餐</view>
+        </view>
+    </view>
+
+</view>
+</view>

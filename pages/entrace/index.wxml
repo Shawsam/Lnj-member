@@ -1,0 +1,44 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+<view class="section banner">
+    <image src="../../image/index_banner.jpg" />
+</view>   
+<view class="section main">
+    <view class="flexbox cate">
+        <view class="flex-item" bindtap="selfOrder">
+            <image src="../../image/self.png" />
+            <view class="name">自助点餐</view>
+        </view>
+        <view class="flex-item" bindtap="packReserve">
+            <image src="../../image/reserve.png" />
+            <view class="name">打包预订</view>
+        </view>
+        <view class="flex-item" bindtap="takeAway">
+            <image src="../../image/out.png" />
+            <view class="name">外卖送餐</view>
+        </view>
+        <view class="dotLeft"></view>
+        <view class="dotRight"></view>
+    </view>
+</view>
+
+<view class="section bottomCon">
+<!--   <view class="dot"></view> -->
+  <view class="title">加入会员 即刻享有</view>
+  <view class="itemCon flexbox">
+    <view class="item item1">
+        <image class="item_img" src="../../image/1.png" />
+        <view>新人礼</view>
+    </view>
+    <view class="item item2">
+        <image class="item_img" src="../../image/2.png" />
+        <view>充值礼</view>
+    </view>
+    <view class="item item3">
+        <image class="item_img" src="../../image/3.png" />
+        <view>消费奖励</view>
+    </view>
+  </view>
+</view>
+</view>

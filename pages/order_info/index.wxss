@@ -1,0 +1,78 @@
+/**index.wxss**/
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+.container{ height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch; box-sizing:border-box; position:relative; background:#f3f3f3; padding-bottom:110rpx; }
+.backcolor{ background:#2F2E33; height:220rpx; width:100%; }
+
+.topCon{ font:28rpx/60rpx "微软雅黑"; padding:40rpx 0; text-align:center; background:#fff; box-shadow:0 0 12rpx rgba(0, 0,0,0.3);  border-radius:10rpx; width:86%; position:absolute; top:50rpx; left:7%; border-top:20rpx solid #FDD01B;}
+.topCon > view{ text-align:center; margin-bottom:10rpx;}
+.topCon > .title{ font:30rpx/60rpx "微软雅黑"; }
+.topCon > .title icon{  height:60rpx; width:60rpx; vertical-align:middle; margin-right:10rpx; }
+.topCon > .bold{ font:26rpx/36rpx "微软雅黑"; font-weight:bold;  }
+
+
+
+.infoCon1{ background:#fff; padding:200rpx 60rpx 30rpx 60rpx; font:26rpx/40rpx "微软雅黑";}
+.waitPay{ padding:60rpx 60rpx 30rpx 60rpx; }
+.infoCon1 .title{ border-bottom:1px dashed #e8e8e8; line-height:90rpx; }
+.infoCon1 .title view{ display:inline-block; }
+.infoCon1 .title view.desp{ float:right; font:30rpx/90rpx "微软雅黑"; font-weight:bold; }
+.infoCon1 .list{ margin-top:16rpx; }
+.infoCon1 .list .list_item{ overflow:hidden; zoom:1; padding:20rpx 0; font:24rpx/40rpx "微软雅黑";}
+.infoCon1 .list .list_item .info1> view{ display:inline-block; font:26rpx/40rpx "微软雅黑"; vertical-align:top; }
+.infoCon1 .list .list_item .info1 .name{ width:55%; font-weight:bold;}
+.infoCon1 .list .list_item .info1 .name view{ font-weight:bold; display:inline-block; }
+.infoCon1 .list .list_item .info1 .price{ width:20%; text-align:right; font:26rpx/40rpx "微软雅黑"; color:#333;}
+.infoCon1 .list .list_item .info1 .num{ width:25%; text-align:center; font:24rpx/40rpx "微软雅黑"; color:#333;}
+.infoCon1 .list .list_item .info2{ padding-right:40%; }
+.infoCon1 .list .list_item .info2> view{ display:inline-block; }
+.infoCon1 .list .list_item .info2> view{ font:24rpx/40rpx "微软雅黑"; }
+
+.infoCon1 .list .package{  padding:20rpx 0; }
+.infoCon1 .list .package view{ display:inline-block; }
+.infoCon1 .list .package .name{width:80%; font-weight:bold;}
+.infoCon1 .list .package .price{width:20%; text-align:right; color:#333;}
+
+.infoCon1 .list .list_item.card .price{ color:#ff6263; }
+.infoCon1 .list .list_item.card .info1 .name{ width:80%; font-weight:bold; }
+.infoCon1 .list .list_item.card .info1 .price{ width:20%; text-align:right; color:#ff6263;}
+
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+.infoCon2{ background:#fff; margin-top:30rpx; padding:30rpx 60rpx; font:26rpx/40rpx "微软雅黑"; }
+.infoCon2 .title{ border-bottom:1px dashed #e8e8e8; line-height:90rpx; margin-bottom:16rpx;}
+.infoCon2 .item{ line-height:70rpx; }
+.infoCon2 .item view.desp{ float:right; color:#999;}
+
+
+.footer{ z-index:100; position:fixed; bottom:0; height:110rpx; width:100%; background:#fff; box-sizing:border-box; overflow:hidden; zoom:1; }
+.footer .backBtn{ position:absolute; top:0; right:0; height:110rpx;  font:36rpx/110rpx "微软雅黑"; width:100%;  text-align:center; background:#FDD01B; font-weight:bold; }
+.footer .backBtn:active{ opacity:0.6; }
+
+
+.panel_cover{position:fixed; width:100%; height:100%; background:rgba(0,0,0,0.7); top:0; left:0; z-index:105; }
+.panel { z-index:200; position:fixed; box-sizing:border-box; top:150rpx; max-height:80%; width:80%; left:10%; background:#fff; border-radius:10rpx; }
+
+.btnGroup{ z-index:300; position:fixed; top:530rpx; max-height:80%; width:80%; left:10%; }
+.btnGroup view{ display:inline-block; background:#FDD01B; border-radius:30rpx; width:150rpx; height:60rpx; font:26rpx/60rpx "微软雅黑"; font-weight:bold; text-align:center; }
+
+.panel .Con{ background:#fff;  border-radius:10px; box-shadow:0 0 6rpx rgba(0,0,0,0.1);}
+.panel .Con .title{ height:90rpx; line-height:90rpx; text-align:center; background:#FDD01B; border-radius:10rpx 10rpx 0 0; }
+.panel .Con .list{ padding:0 40rpx; }
+.panel .Con .list > view{ height:120rpx; line-height:120rpx; vertical-align:middle; position:relative;  }
+.panel .Con .list > view.wx{ border-top:1px solid #e8e8e8; }
+.panel .Con .list > view image{ height:50rpx; width:50rpx; vertical-align:middle; margin-right:25rpx; }
+.panel .Con .list .choose{ font-size:0; width:32rpx; height:32rpx; border-radius:50%; background:#eee;  display:inline-block; position:absolute; top:44rpx; right:20rpx;}
+.panel .Con .list .choose.active .dot{ font-size:0; width:16rpx; height:16rpx; border-radius:50%; background:#FDD01B;  position:absolute; top:9rpx; right:9rpx; }
+
+
+.panel .tip_panel{ z-index:200; position:fixed; box-sizing:border-box; top:10%; max-height:80%; width:80%; left:10%; background:#fff; border-radius:10rpx; padding-top:90rpx;}
+.panel .tip_panel .hd-title{  z-index:200; position:absolute; top:0; width:100%; height:90rpx; text-align:center; background:#FDD01B; font:30rpx/90rpx "微软雅黑"; font-weight:bold; border-radius:10rpx 10rpx 0 0; }
+.panel .tip_panel .confirmBtn{ font:30rpx/85rpx "微软雅黑"; text-align:center; font-weight:bold; border-top:1px solid #e8e8e8;  }
+.panel .tip_panel .info{ padding:30rpx 0; }
+.panel .tip_panel .info view{ font:28rpx/60rpx "微软雅黑"; text-align:center; }

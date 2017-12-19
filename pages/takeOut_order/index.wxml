@@ -1,0 +1,33 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+<view class="section backcolor"></view>
+<view class="section main">
+	<view class="title">
+		<image src="../../image/order_icon.png" />我的订单
+	</view>
+	<view class="content">
+		<view class="list">
+			<view class="item">
+				<view class="info"><view class="name">老娘舅湖州店</view><view class="time">8-10 10:19</view></view>
+				<view class="info info1">
+					<view>总额：<view class="price">￥<i class="fee">71</i></view></view>
+					<view class="count">共2份</view>
+					<view class="peis">正在配送<image class="diliver" src="../../image/diliver.png" /></view>
+				</view>
+				<image class="arrodow rote" src="../../image/arro_black.png" />
+			</view>
+			<view class="item finished">
+				<view class="info"><view class="name">老娘舅湖州店</view><view class="time">8-10 10:19</view></view>
+				<view class="info info1">
+					<view>总额：<view class="price">￥<i class="fee">71</i></view></view>
+					<view class="count">共2份</view>
+				    <view class="moreBtn" bindtap="oneMore">再来一份</view>
+			    </view>
+			    <image class="state" src="../../image/finish.png" />
+				<image class="arrodow rote" src="../../image/arro_black.png" />
+			</view>
+		</view>
+    </view>
+</view>
+</view>

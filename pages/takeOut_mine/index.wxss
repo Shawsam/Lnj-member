@@ -1,0 +1,21 @@
+/**index.wxss**/
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > .flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+
+.backcolor{ background:#2F2E33; height:210rpx; width:100%; position:absolute; left:0; top:0; z-index:0; }
+.container{ background:#f3f3f3; box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; padding:100rpx 60rpx 60rpx 60rpx;}
+.topCon{ background:#fff; border-radius:10px; text-align:center; box-shadow:2rpx 2rpx 6rpx rgba(0,0,0,0.1); position:relative; padding:0 0 50rpx 0; }
+.topCon .title{ height:110rpx; font:32rpx/110rpx "微软雅黑"; font-weight:bold; text-align:center; background:#FDD01B; border-radius:20rpx 20rpx 0 0; }
+.topCon .name{ text-align:center; font:32rpx/40rpx "微软雅黑"; font-weight:bold;}
+.topCon .phone{ text-align:center; font:30rpx/40rpx "微软雅黑"; font-weight:bold;}
+.topCon .avatar{ height:120rpx; width:120rpx; border:4px solid #fff; border-radius:50%; margin-top:-62rpx; margin-bottom:10rpx; }
+
+.cont{ margin-top:30rpx; background:#fff; font:30rpx/40rpx "微软雅黑"; border-radius:10rpx; padding:0 40rpx; margin-bottom:30rpx; box-shadow:0 0rem 12rpx rgba(0, 0,0,0.3);}
+.con2{position:relative; line-height:110rpx; position:relative; padding-left:100rpx;}
+.arrodow{width:24rpx; height:16rpx; vertical-align:middle; margin-left:20rpx; position:absolute; right:0; top:47rpx; }
+.rote{transform:rotate(-90deg);-ms-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-webkit-transform:rotate(-90deg);-o-transform:rotate(-90deg);}
+.cont .icon{ height:80rpx; width:80rpx; display:inline-block; position:absolute; left:0; top:15rpx; }
+

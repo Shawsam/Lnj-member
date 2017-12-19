@@ -1,0 +1,24 @@
+<!--index.wxml-->
+<view class="container">
+<view class="section backcolor"></view>
+<view class="main">
+     <view class="Con">
+       <view class="title">选择支付方式</view>
+       <view class="list">
+           <view class="account" data-type="1" bindtap="chooseTap"><image src="../../image/family_card.png" />亲情账户
+               <view class="choose {{paytype==1?'active':''}}"><view class="dot"></view></view>
+           </view>
+           <view class="wx" data-type="2" bindtap="chooseTap"><image src="../../image/wechart.png" />微信支付
+               <view class="choose {{paytype==2?'active':''}}"><view class="dot"></view></view>
+           </view>
+       </view>
+
+    </view>
+</view>
+
+
+<view class="footer">
+    <view class="confirmBtn" bindtap="chooseConfirm">确定</view>
+</view>
+
+</view>

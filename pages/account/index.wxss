@@ -1,0 +1,22 @@
+/**index.wxss**/
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+.container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch; position:relative; background:#f3f3f3; padding-bottom:110rpx; }
+
+.footer{ z-index:100; position:fixed; bottom:0; height:110rpx; width:100%; background:#fff; box-sizing:border-box; overflow:hidden; zoom:1; }
+.footer .confirmBtn{ position:absolute; top:0; right:0; height:110rpx;  font:36rpx/110rpx "微软雅黑"; width:100%;  text-align:center; background:#FDD01B; font-weight:bold; }
+.footer .confirmBtn:active{ opacity:0.6; }
+
+.backcolor{ background:#2F2E33; height:300rpx; width:100%; position:absolute; left:0; top:0; z-index:0; }
+.main{ position:relative; padding:80rpx 30rpx;}
+.main .Con{ background:#fff;  border-radius:10px; box-shadow:0 0 6rpx rgba(0,0,0,0.1);}
+.main .Con .title{ height:100rpx; line-height:100rpx; text-align:center; background:#FDD01B; border-radius:20rpx 20rpx 0 0; }
+.main .Con .list{ padding:0 40rpx; }
+.main .Con .list > view{ height:120rpx; line-height:120rpx; vertical-align:middle; position:relative;  }
+.main .Con .list > view.wx{ border-top:1px solid #e8e8e8; }
+.main .Con .list > view image{ height:50rpx; width:50rpx; vertical-align:middle; margin-right:25rpx; }
+.main .Con .list .choose{ font-size:0; width:32rpx; height:32rpx; border-radius:50%; background:#eee;  display:inline-block; position:absolute; top:44rpx; right:20rpx;}
+.main .Con .list .choose.active .dot{ font-size:0; width:16rpx; height:16rpx; border-radius:50%; background:#FDD01B;  position:absolute; top:9rpx; right:9rpx; }
