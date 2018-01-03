@@ -45,7 +45,8 @@ Page({
     var param = { mini:'mini',
                   shopId:app.globalData.shopId,
                   openId:app.globalData.openId };
-
+    
+    console.log(param);
     _this.setData({ loaderhide:false });
     wx.request({
         url: app.globalData.host+'/shop/shopInfo',  
@@ -65,6 +66,8 @@ Page({
                 }else{
                   var shopAddr = provinceName+cityName+zoneName+address;
                 }
+
+                app.globalData.shopName = shopName;
 
                 //店铺信息 回填页面
                 _this.setData({

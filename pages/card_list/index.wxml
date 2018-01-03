@@ -1,4 +1,15 @@
 <!--index.wxml-->
+<view class='wx_dialog_container' hidden="{{!dialogShow}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm'>确定</view>
+        </view>
+    </view>
+</view>
+
+
 <view class="container">
 <view class="main">
      <view class="head"></view>

@@ -35,6 +35,12 @@ Page({
         success: function (res) {
            if(res.data.errcode == -1){
              _this.setData({ moreDisabled:true })
+
+             _this.showDialog("该门店已关店");
+             // wx.showModal({
+             //      content:"该门店已关店",
+             //      showCancel: false
+             // });
            }
 
            wx.request({
@@ -72,6 +78,13 @@ Page({
                                  dcOrderGoodsList.push(orderList[i].dcOrderGoodsList[j]);
                               }
                           }
+                          if(orderList[i].packTotalFee > 0){
+                              var packItem = {};
+                              packItem.goodsName = '餐盒费';
+                              packItem.count = orderList[i].packNum;
+                              packItem.price = (orderList[i].packTotalFee/100).toFixed(2);
+                              dcOrderGoodsList.push(packItem);
+                          }
                           singleData.dcOrderGoodsList = dcOrderGoodsList;
                           _orderList.push(singleData);
                           // console.log(_orderList);
@@ -81,10 +94,11 @@ Page({
                              orderList:_orderList
                         }); 
                     }else{
-                         wx.showModal({
-                              content:res.data.msg,
-                              showCancel: false
-                          });
+                         _this.showDialog(res.data.msg);
+                         // wx.showModal({
+                         //      content:res.data.msg,
+                         //      showCancel: false
+                         //  });
                     }
                   }
               })
@@ -150,5 +164,18 @@ Page({
           },500)
         }
      })
+  },
+
+  //=======提示框=========================================
+  showDialog:function(msg){
+      this.setData({
+        dialogShow:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm:function(){
+      this.setData({
+        dialogShow:false
+      })
   }
 })

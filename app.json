@@ -20,7 +20,8 @@
     "pages/takeOut_shop/index",
     "pages/takeOut_menu/index",
     "pages/takeOut_order_confirm/index",
-    "pages/takeOut_order_info/index"
+    "pages/takeOut_order_info/index",
+    "pages/login/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

@@ -1,6 +1,22 @@
 <!--index.wxml-->
+<view class='wx_dialog_container' hidden="{{!dialogShow}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm'>确定</view>
+        </view>
+    </view>
+</view>
+
 <view class="container">
-<loading hidden="{{loaderhide}}">加载中...</loading> 
+<loading hidden="{{loaderhide}}">正在解析二维码，请稍等</loading> 
+
+<!-- <view class="guide" wx:if="{{!unionId}}">
+    <image class="qrcode" src="../../image/qrcode.png" />
+    <view>扫一扫，关注公众号</view>
+</view> -->
+<view>
 <view class="section banner">
     <image src="../../image/index_banner.jpg" />
 </view>   
@@ -42,3 +58,5 @@
   </view>
 </view>
 </view>
+</view>
+

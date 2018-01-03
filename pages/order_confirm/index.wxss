@@ -1,4 +1,5 @@
 /**index.wxss**/
+@import "../../components/myModal/index.wxss";
 .flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
 .flexbox > .flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
 ::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
@@ -37,13 +38,15 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .sty1.active{ color:#FC8D17; }
 .sty2.active{ color:#FC8D17; }
 
+.couponCon .right{ color:#999; }
+
 .arrodow{width:24rpx; height:16rpx; vertical-align:middle; margin-left:20rpx;}
 .rote{transform:rotate(-90deg);-ms-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-webkit-transform:rotate(-90deg);-o-transform:rotate(-90deg);position:relative;top:-2px;}
 .togg{transform:rotate(-180deg);-ms-transform:rotate(-180deg);-moz-transform:rotate(-180deg);-webkit-transform:rotate(-180deg);-o-transform:rotate(-180deg);position:relative;top:0;}
 .tota_bar{color:#ed145b; font:36rpx/90rpx "微软雅黑"; }
 .payview{ display:inline-block; }
 .tag{ height:50rpx; width:50rpx; vertical-align:middle; margin-right:25rpx; }
-.colored{ color:#e5004f; }
+.colored{ color:#e5004f!important; }
 
 .carditem .info1 > view{ color:#ed145b!important; }
 
@@ -64,6 +67,8 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .panel_cover{position:fixed; width:100%; height:100%; background:rgba(0,0,0,0.7); top:0; left:0; z-index:105; }
 .panel .detail_panel{ z-index:200; position:fixed; box-sizing:border-box; top:10%; max-height:80%; width:80%; left:10%; background:#fff; border-radius:10rpx; padding-top:90rpx;}
 .panel .detail_panel .hd-title{ z-index:200; position:absolute; top:0; width:100%; height:90rpx; text-align:center; background:#FDD01B; font:30rpx/90rpx "微软雅黑"; font-weight:bold; border-radius:10rpx 10rpx 0 0; }
+.panel .detail_panel .hd-title .closeDetail{ position:absolute; top:0; right:0; font:26rpx/90rpx "微软雅黑"; padding:0 30rpx;}
+
 
 .panel .detail_panel .list { padding:10rpx 30rpx; max-height:700rpx; overflow-y:scroll;}
 .panel .detail_panel .list .item{ overflow:hidden; zoom:1; border-bottom:1px dashed #999; padding:20rpx 10rpx; font:28rpx/40rpx "微软雅黑"; position:relative;}

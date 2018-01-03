@@ -38,13 +38,14 @@ Page({
       needsSlide:false,
       loaderhide:true,
       textComplete:true,
-      isSubscribe:0,       //是否预约打包
+      subscribe:0,         //是否预约打包
       subscribeTime:'',    //预约打包时间
+      currentTime:'',
       startTime:'10:00',
-      endTime:'19:00'
+      endTime:'20:00'
 
   },
-
+  
   Init:function(){
       //POST 参数   计算订单信息
       var _this = this;
@@ -56,9 +57,9 @@ Page({
           coupons:JSON.stringify(this.data.coupons),
           dwCoupons:this.data.dwCoupons,
           dinnerType:this.data.dinnerType,
-          subscribe:this.data.isSubscribe
+          subscribe:this.data.subscribe
       }
-      if(this.data.isSubscribe==0){
+      if(this.data.subscribe==0){
          delete param.subscribe;
       }
 
@@ -71,7 +72,7 @@ Page({
           method:'POST',
           success: function (res) {
               //服务器返回的结果
-              // console.log(res);
+              console.log(res);
               if (res.data.errcode == 0) {
                   var resdata = res.data,
                       activity = resdata.activity,
@@ -96,16 +97,17 @@ Page({
                         packTotalFee:resdata.totalPackageFee,
                         packTotalFeeVal:(resdata.totalPackageFee/100).toFixed(2),
                         couponFee:resdata.couponFee,
-                        coupons:coupons,
+                        // coupons:coupons,
                         activity:activity,
                         couponsNum:coupons.length
                   })
      
               } else {
-                  wx.showModal({
-                      content:res.data.msg,
-                      showCancel: false
-                  });
+                  _this.showDialog(res.data.msg);
+                 //  wx.showModal({
+                 //      content:res.data.msg,
+                 //      showCancel: false
+                 // });
               }
 
           },
@@ -145,10 +147,11 @@ Page({
                       })
                   
               } else {
-                 wx.showModal({
-                      content:res.data.msg,
-                      showCancel: false
-                 });
+                 _this.showDialog(res.data.msg);
+                 // wx.showModal({
+                 //      content:res.data.msg,
+                 //      showCancel: false
+                 // });
               }
 
           },
@@ -161,25 +164,33 @@ Page({
 
   onLoad: function (option) {
     var _this = this;
-    var startTime,endTime,
-        currentTime = new Date(),
-        currentHours = currentTime.getHours(),
-        currentTime = currentTime.getMinutes();
-    if(currentHours<10){
-       startTime = '10:00';
-       endTime = '19:00';
-    }else if(currentHours>=19){
-       wx.showModal({content:'当前时间不提供预约打包服务',
-                     showCancel: false,
-                     success: function(res) {
-                              if (res.confirm) {
-                                wx.navigateBack();
-                              }
-                     }
-       });
-    }else{
-       startTime = currentHours+':'+currentTime;
-       endTime = '19:00';
+    
+    if(app.globalData.fromType == 1){
+        var startTime,endTime,
+            currentTime = new Date(),
+            currentHours = currentTime.getHours(),
+            currentTime = currentTime.getMinutes()<10?'0'+currentTime.getMinutes():currentTime.getMinutes();
+        if(currentHours<10){
+           startTime = '10:00';
+           endTime = '20:00';
+           _this.setData({currentTime:startTime})
+           _this.setData({subscribeTime:startTime})
+        }else if(currentHours>=20){
+           _this.showDialog1('当前时间不提供预约打包服务')
+           // wx.showModal({content:'当前时间不提供预约打包服务',
+           //               showCancel: false,
+           //               success: function(res) {
+           //                        if (res.confirm) {
+           //                          wx.navigateBack();
+           //                        }
+           //               }
+           // });
+        }else{
+           startTime = currentHours+':'+currentTime;
+           endTime = '20:00';
+           _this.setData({currentTime:startTime})
+           _this.setData({subscribeTime:startTime})
+        }
     }
 
     //获取全局数据，初始化当前页面
@@ -193,7 +204,7 @@ Page({
     })
 
     //点餐页面传递的参数
-    // console.log(option);
+    // console.log(option.detail_items);
     var cart_items = option.cart_items,
         detail_items = option.detail_items,
         dwCoupons = option.dwCoupons,
@@ -203,14 +214,14 @@ Page({
     //附加参数
     var isMember= 1,
         paytype = 1,
-        isSubscribe = 0,
+        subscribe = 0,
         dinnerType = 1;
     if(!app.globalData.cardNo){       //非会员
         isMember = 0;
         paytype = 2;
     }
     if(app.globalData.fromType == 1){  //打包预订 只能外带
-       isSubscribe = 1;
+       subscribe = 1;
        dinnerType = 2;
     }
    
@@ -221,12 +232,14 @@ Page({
     }else{
         phone = wx.getStorageSync('phone')?wx.getStorageSync('phone'):'';
     }
-
+    
+    console.log(subscribe);
     _this.setData({
        shopName:app.globalData.shopName,
        cardNo:app.globalData.cardNo,
+       userId:app.globalData.userId,
        phone:phone,
-       phoneInput:phone,
+       phoneInput:'',
        cart_items:JSON.parse(cart_items),
        detail_items:JSON.parse(detail_items),
        dwCoupons:dwCoupons,
@@ -234,7 +247,7 @@ Page({
        taoCanNum:taoCanNum,
        isMember:isMember,
        paytype:paytype,
-       isSubscribe:isSubscribe,
+       subscribe:subscribe,
        dinnerType:dinnerType
     }) 
     _this.Init();
@@ -296,17 +309,19 @@ Page({
   phoneConfirmTap:function(){
       var phone = this.data.phoneInput;
       if(phone==''){
-        wx.showModal({
-              content:"请输入手机号码",
-              showCancel: false
-        });
+        this.showDialog('请输入手机号码')
+        // wx.showModal({
+        //       content:"请输入手机号码",
+        //       showCancel: false
+        // });
         return;
       }
       if(!this.is_phone(phone)){
-        wx.showModal({
-              content:"请输入正确的手机号码",
-              showCancel: false
-        });
+        this.showDialog('请输入正确的手机号码')
+        // wx.showModal({
+        //       content:"请输入正确的手机号码",
+        //       showCancel: false
+        // });
         return;
       }
 
@@ -339,10 +354,11 @@ Page({
         taoCanNum = this.data.taoCanNum,
         couponsData = JSON.stringify(this.data.couponsData);
     if(card_num == 0){
-        wx.showModal({
-              content:"暂无可用优惠券",
-              showCancel: false
-        });
+        this.showDialog('暂无可用优惠券')
+        // wx.showModal({
+        //       content:"暂无可用优惠券",
+        //       showCancel: false
+        // });
         return;
     }
 
@@ -365,6 +381,13 @@ Page({
         detail_panel:true
       })
   },
+
+  closeDetailTap:function(){
+      this.setData({
+        detail_panel:false
+      })
+  },
+  
   coverTap:function(){
       this.setData({
         detail_panel:false
@@ -396,28 +419,31 @@ Page({
 
     if(app.globalData.fromType == 1){  //打包预订
       if(subscribeTime == ''){
-          wx.showModal({
-                content:"请选择预订时间",
-                showCancel: false
-          });
+          this.showDialog("请选择预订时间");
+          // wx.showModal({
+          //       content:"请选择预订时间",
+          //       showCancel: false
+          // });
           return;
       }
     }
 
 
-    var phone = this.data.phoneInput;
+    var phone = this.data.phone;
       if(phone==''){
-        wx.showModal({
-              content:"请输入手机号",
-              showCancel: false
-        });
+        this.showDialog("请输入手机号");
+        // wx.showModal({
+        //       content:"请输入手机号",
+        //       showCancel: false
+        // });
         return;
       }
       if(!this.is_phone(phone)){
-        wx.showModal({
-              content:"请输入正确的手机号",
-              showCancel: false
-        });
+        this.showDialog("请输入正确的手机号");
+        // wx.showModal({
+        //       content:"请输入正确的手机号",
+        //       showCancel: false
+        // });
         return;
       }
       this.setData({
@@ -434,7 +460,7 @@ Page({
         userId:app.globalData.userId,                     
         deskNo:app.globalData.deskNo,                    
         cardNo:app.globalData.cardNo,                      
-        mobile:app.globalData.mobile,                       
+        mobile:this.data.phone,                       
         dinnerType:this.data.dinnerType,                   
         payType:this.data.paytype,                      
         isMember:this.data.isMember,                    
@@ -448,16 +474,32 @@ Page({
         packPrice:this.data.packPrice,
         packTotalFee:this.data.packTotalFee,
         dwCoupons:this.data.dwCoupons,
-        isSubscribe:this.data.isSubscribe,
+        subscribe:this.data.subscribe,
         subscribeTime:this.data.subscribeTime
     };
+
+    if(this.data.subscribe==0){
+         delete param.subscribe;
+    }
+    
+    if(this.data.cardNo == undefined ){
+         delete param.cardNo;
+    }
+    
+    console.log(this.data.userId);
+    if(this.data.userId == undefined ){
+         delete param.userId;
+    }
+    
+    
     
     wx.setStorageSync('clearCart',true);
     wx.setStorageSync('items','');
 
 
     _this.setData({ loaderhide:false });
-
+    
+    console.log(param);
     wx.request({
         url: app.globalData.host+"/orderQuery/creatOrder",
         data: param,
@@ -468,7 +510,7 @@ Page({
         success: function(res) {
           _this.setData({ loaderhide:true });
           var resdata = res.data;
-          // console.log(resdata);
+          console.log(res);
 
           if(resdata.errcode == 0){                            //调用接口成功
               var orderId = resdata.data,
@@ -513,31 +555,34 @@ Page({
                   }
               }
               //============生成订单失败============//
-              else{                                             
-                    wx.showModal({                           
-                            content:res.errMsg, 
-                            showCancel: false,
-                            success: function(res) {
-                              if (res.confirm) {
-                                wx.redirectTo({ url: '../order_fail/index' })
-                              }
-                            }
-                    })
+              else{ 
+                    _this.showDialog2(res.data.msg)                                            
+                    // wx.showModal({                           
+                    //         content:res.errMsg, 
+                    //         showCancel: false,
+                    //         success: function(res) {
+                    //           if (res.confirm) {
+                    //             wx.redirectTo({ url: '../order_fail/index' })
+                    //           }
+                    //         }
+                    // })
               } 
           }else{
               var orderId = res.data.data;
               if(orderId){
-                    wx.showModal({                           
-                            content:res.data.msg, 
-                            showCancel: false,
-                            success: function(res) {
-                              if (res.confirm) {
-                                wx.redirectTo({ url: '../order_fail/index' })
-                              }
-                            }
-                    })
+                     _this.showDialog2(res.data.msg)
+                    // wx.showModal({                           
+                    //         content:res.data.msg, 
+                    //         showCancel: false,
+                    //         success: function(res) {
+                    //           if (res.confirm) {
+                    //             wx.redirectTo({ url: '../order_fail/index' })
+                    //           }
+                    //         }
+                    // })
               }else{
-                   wx.showModal({content:resdata.msg,showCancel: false})
+                   _this.showDialog(resdata.msg);
+                   // wx.showModal({content:resdata.msg,showCancel: false})
               }
           }
         }
@@ -551,6 +596,46 @@ Page({
       wx.redirectTo({
          url: '../order_info/index?orderId='+orderId
       })
+  },
+
+
+  //=======提示框=========================================
+  showDialog:function(msg){
+      this.setData({
+        dialogShow:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm:function(){
+      this.setData({
+        dialogShow:false
+      })
+  },
+
+  showDialog1:function(msg){
+      this.setData({
+        dialogShow1:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm1:function(){
+      this.setData({
+        dialogShow1:false
+      })
+      wx.navigateBack();
+  },
+
+  showDialog2:function(msg){
+      this.setData({
+        dialogShow2:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm2:function(){
+      this.setData({
+        dialogShow2:false
+      })
+      wx.redirectTo({ url: '../order_fail/index' })
   }
 
 

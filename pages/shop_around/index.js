@@ -11,7 +11,6 @@ Page({
      jumpLock:false
   },
   onLoad: function (option) {
-
     var _this = this;
     //获取全局数据，初始化当前页面
     app.getUserInfo(function(userInfo){
@@ -21,6 +20,22 @@ Page({
         deskNo:app.globalData.deskNo
       })
     })
+
+    //时间限制
+    var currentTime = new Date(),
+    currentHours = currentTime.getHours(),
+    currentTime = currentTime.getMinutes();
+    if(currentHours>=20){
+       _this.showDialog2('当前时间不提供预约打包服务');
+       // wx.showModal({content:'当前时间不提供预约打包服务',
+       //     showCancel: false,
+       //     success: function(res) {
+       //            if (res.confirm) {
+       //              wx.redirectTo({url:'../../pages/entrace/index'});
+       //            }
+       //     }
+       // });
+    }
 
     var latitude = option.latitude,
         longitude = option.longitude;
@@ -166,5 +181,19 @@ Page({
   },
   onShow:function(){
      wx.clearStorageSync('items');
+  },
+
+  //=======提示框=========================================
+  showDialog2:function(msg){
+      this.setData({
+        dialogShow2:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm2:function(){
+      this.setData({
+        dialogShow:false
+      })
+      wx.redirectTo({url:'../../pages/entrace/index'});
   }
 })

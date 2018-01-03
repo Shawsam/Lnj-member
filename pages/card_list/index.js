@@ -9,8 +9,8 @@ Page({
      taoCanNum:0,
      items:[]
   },
-  onLoad: function (option) {
 
+  onLoad: function (option) {
      var _this = this;
      //获取全局数据，初始化当前页面
      app.getUserInfo(function(userInfo){
@@ -100,10 +100,11 @@ Page({
         }
 
         if(taoCan >= taoCanNum){
-           wx.showModal({
-              content:"已点"+taoCanNum+"份套餐，最多使用"+taoCanNum+"张套餐券",
-              showCancel: false
-          });
+          this.showDialog("已点"+taoCanNum+"份套餐，最多使用"+taoCanNum+"张套餐券");
+          //  wx.showModal({
+          //     content:"已点"+taoCanNum+"份套餐，最多使用"+taoCanNum+"张套餐券",
+          //     showCancel: false
+          // });
           return;
         }
         items[parama].data[paramb].active = !items[parama].data[paramb].active;
@@ -165,5 +166,18 @@ Page({
     wx.navigateBack({
       delta: 1
     })
+  },
+
+    //=======提示框=========================================
+  showDialog:function(msg){
+      this.setData({
+        dialogShow:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm:function(){
+      this.setData({
+        dialogShow:false
+      })
   }
 })

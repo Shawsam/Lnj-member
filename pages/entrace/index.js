@@ -4,18 +4,134 @@ var app = getApp()
 Page({
   data: {
      userInfo:null,
+     unionId:'',
      loaderhide:true,
      jumpLock:false
   },
-  onLoad:function(){
+
+  onLoad:function(options){
 	  var _this = this;
 	  //获取全局数据，初始化当前页面
-    // console.log(app.globalData.userInfo);
+    // app.getUserInfo(function(userInfo){
+    //    var unionId = app.globalData.unionId;
+    //    if(unionId){
+    //      //用户信息
+    //      _this.setData({
+    //          userInfo:userInfo,
+    //          unionId:unionId
+    //      });
+    //    }
+    // })   
+
 	  app.getUserInfo(function(userInfo){
 	     //用户信息
 	     _this.setData({
 	       userInfo:userInfo
 	     })
+       
+       if(options){
+
+         var qrcode = decodeURIComponent(options.q);
+         console.log(qrcode);
+         if(qrcode!='undefined'){
+            _this.setData({ loaderhide:false });
+            var a = qrcode.split('a=')[1];
+            
+            app.globalData.fromType = 2;
+
+            wx.setStorageSync('items',null)
+
+            //调用微信登录接口，获取code
+            wx.login({
+                success: function (r) {
+                    var code = r.code;        //登录凭证
+                    console.log(code);
+                    if (code) {
+
+                      //请求服务器，解密用户信息 获取unionId等加密信息
+                      var param = { mini:'mini',
+                                    jsCode:code,
+                                    a:a
+                                  };
+                      wx.request({
+                          url: app.globalData.host+'/indexForJson', 
+                          method:'GET',
+                          data: param,
+                          success: function (res) {
+                              //服务器返回的结果
+                              console.log(res);
+                              if (res.data.errcode == 0) {
+                                  var orderNum = res.data.data,
+                                     openId = res.data.miniOpenId,
+                                     _openId = res.data.openId,
+                                     userId = res.data.userId,
+                                     shopId = res.data.shopId,
+                                     unionId = res.data.unionId,
+                                     mobile = res.data.mobile,
+                                     cardNo =  res.data.cardNo,
+                                     deskNo =  res.data.deskNo;
+                                     
+                                 app.globalData.shopId = shopId;
+                                 app.globalData.openId = openId;
+                                 app.globalData._openId = _openId;
+                                 app.globalData.userId = userId;
+                                 app.globalData.unionId = unionId;
+                                 app.globalData.mobile = mobile;
+                                 app.globalData.cardNo = cardNo;
+                                 app.globalData.deskNo = deskNo;
+
+                                  //请求门店信息
+                                  var param = { mini:'mini',
+                                                shopId:app.globalData.shopId,
+                                                openId:app.globalData.openId };
+                                  
+
+                                  wx.request({
+                                      url: app.globalData.host+'/shop/shopInfo',  
+                                      data: param,
+                                      success: function (res) {
+                                          //服务器返回的结果
+                                          console.log(res);
+                                          _this.setData({ loaderhide:true });
+                                          if (res.data.errcode == 0) {
+                                              var shopName = res.data.data.shopName;
+                                              app.globalData.shopName = shopName;
+                                              
+                                             //跳转控制
+                                             if(orderNum){
+                                                 wx.navigateTo({
+                                                    url: '../order_list/index',
+                                                    success:function(){
+                                                            setTimeout(function(){
+                                                                   _this.setData({jumpLock:false});
+                                                            },500)
+                                                     }
+                                                 })
+                                             }else{
+                                                 wx.navigateTo({
+                                                    url: '../index/index',
+                                                    success:function(){
+                                                            setTimeout(function(){
+                                                                   _this.setData({jumpLock:false});
+                                                            },500)
+                                                     }
+                                                 })
+                                             }
+
+                                          }
+                                      }
+                                  })
+
+                              }
+                        }
+                      })
+                  }
+              }
+            })
+
+             
+         }
+       }
 	  })
   },
 
@@ -27,6 +143,7 @@ Page({
            openId:app.globalData.openId,
            a:a
       };
+      console.log(param);
 
       wx.setStorageSync('items',null)
       wx.request({
@@ -48,7 +165,7 @@ Page({
 
                  //跳转控制
                  if(orderNum){
-                     wx.redirectTo({
+                     wx.navigateTo({
                         url: '../order_list/index',
                         success:function(){
                                 setTimeout(function(){
@@ -57,7 +174,7 @@ Page({
                          }
                      })
                  }else{
-                     wx.redirectTo({
+                     wx.navigateTo({
                         url: '../index/index',
                         success:function(){
                                 setTimeout(function(){
@@ -68,7 +185,7 @@ Page({
                  }
               }else{
                  console.log('服务器异常');
-                 wx.redirectTo({ url:'../view_state/index?error='+res.statusCode,
+                 wx.navigateTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg='+res.data.msg,
                                  success:function(){
                                   setTimeout(function(){
                                        _this.setData({jumpLock:false});
@@ -85,8 +202,13 @@ Page({
 
      var _this = this;
      //跳转锁定
+
+     var userInfo = _this.data.userInfo;
+     if(!userInfo) return;
+     
      var jumpLock = _this.data.jumpLock;
      if(jumpLock) return;
+
      _this.setData({jumpLock:true});
 
       app.globalData.fromType = 1;
@@ -96,17 +218,34 @@ Page({
            setTimeout(function(){
               _this.setData({jumpLock:false});
            },500)
-
           var latitude = res.latitude,
               longitude = res.longitude;
-          wx.redirectTo({url:'../shop_around/index?latitude='+latitude+'&longitude='+longitude});
+          wx.navigateTo({url:'../shop_around/index?latitude='+latitude+'&longitude='+longitude});
         },
         fail: (res)=>{
            setTimeout(function(){
               _this.setData({jumpLock:false});
            },500)
+          console.log('用户未授权,获取位置信息失败');
 
-          wx.showModal({content:'获取位置信息失败',showCancel:false})
+          wx.showModal({
+              title: '地理位置未授权',
+              content: '如需正常使用，请按确定并在授权管理中选中“地理位置”，然后点按确定。最后再重新进入小程序即可正常使用。',
+              showCancel: false,
+              success: function (res) {
+                  if (res.confirm) {
+                      //进入二次授权页面
+                      wx.openSetting({
+                          success: function(res) {
+                              var location_Athority = res.authSetting['scope.userLocation'];
+                              _this.setData({location_Athority:location_Athority})
+                              _this.onLoad();
+                          }
+                      });
+                  }
+              }
+          })
+
         }
       })
   },
@@ -114,6 +253,9 @@ Page({
   selfOrder:function(){
      var _this = this;
      //跳转锁定
+     var userInfo = _this.data.userInfo;
+     if(!userInfo) return;
+
      var jumpLock = _this.data.jumpLock;
      if(jumpLock) return;
      _this.setData({jumpLock:true});
@@ -122,11 +264,26 @@ Page({
 
      wx.scanCode({
         onlyFromCamera: true,
-        success: (res) => {           
+        success: (res) => {        
+           console.log(res);
            var a = res.result.split('a=')[1];                             //二维码参数
-           a && _this.codeToInfo(a);
+           if(a){
+              _this.codeToInfo(a)
+           }else{
+              _this.showDialog('无法识别该二维码');
+               setTimeout(function(){
+                _this.setData({jumpLock:false});
+               },500)
+           }
         },
         fail: (res) =>{
+           var errMsg;
+           if(res.errMsg == 'scanCode:fail cancel'){
+               errMsg = '扫码已取消';
+           }else{
+               errMsg = '未发现二维码';
+           }
+           _this.showDialog(errMsg);
            setTimeout(function(){
               _this.setData({jumpLock:false});
            },500)
@@ -136,8 +293,31 @@ Page({
   //3、外卖送餐
   takeAway:function(){
       app.globalData.fromType = 3;
-      // wx.showModal({content:'敬请期待...',showCancel:false})
-      // return;
+
+      var userInfo = this.data.userInfo;
+      if(!userInfo) return;
+     
+      this.showDialog('敬请期待...');
+      return;
       wx.switchTab({url: '/pages/takeOut_index/index'})
+  },
+
+  // 跳转登录页面
+  jionTap:function(){
+      wx.navigateTo({url:'/pages/login/index'});
+  },
+
+  //=======提示框=========================================
+  showDialog:function(msg){
+      this.setData({
+        dialogShow:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm:function(){
+      this.setData({
+        dialogShow:false
+      })
   }
+
 })

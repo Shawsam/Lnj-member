@@ -32,6 +32,7 @@ Page({
   },
   onLoad: function () {
      var _this = this;
+
      //获取全局数据，初始化当前页面
      app.getUserInfo(function(userInfo){
       //用户信息
@@ -212,10 +213,12 @@ Page({
                 })
             } else {
                 _this.setData({ loaderhide:true });
-                wx.showModal({
-                    content:res.data.msg,
-                    showCancel: false
-                });
+
+                _this.showDialog1(res.data.msg);
+                // wx.showModal({
+                //     content:res.data.msg,
+                //     showCancel: false
+                // });
             }
 
         },
@@ -335,7 +338,8 @@ Page({
          for(var i in stockList){
              if(stockList[i].id == panel_data.stockId){        //根据库存id匹配出库存数量
                  if(_count>=stockList[i].stock){
-                    wx.showModal({content:"没有更多库存！", showCancel: false});
+                    this.showDialog('没有更多库存！');
+                    //wx.showModal({content:"没有更多库存！", showCancel: false});
                     this.setData({addLock1:false});
                     return;
                  }
@@ -346,7 +350,8 @@ Page({
       //工作餐(受限于所持券数量)
       if(panel_data.isWork){    
          if(work_num_choosed>=work_num){
-              wx.showModal({content:"您只有"+work_num+"张工作餐券！", showCancel: false});
+              this.showDialog("您只有"+work_num+"张亲情套餐券！");
+              //wx.showModal({content:"您只有"+work_num+"张亲情套餐券！", showCancel: false});
               this.setData({addLock1:false});
               return;
          }
@@ -360,7 +365,8 @@ Page({
       var ticketNum = panel_data.ticketNum;
       if(ticketNum){
          if(_count>=ticketNum){
-              wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
+              this.showDialog("您只有"+ticketNum+"张会员商品尊享券！");
+              // wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
               this.setData({addLock1:false});
               return;
          }
@@ -423,7 +429,8 @@ Page({
       var data = panel_data.sideDcGoodsCategoryList[parama].sideGoodsList[paramb];
       if( data.stockId){
         if(data.stockNum==0 || data.stockNum == data.minCount){
-            wx.showModal({content:"该配菜已售完，请选择其他配菜！", showCancel: false});
+            this.showDialog("该配菜已售完，请选择其他配菜！");
+            //wx.showModal({content:"该配菜已售完，请选择其他配菜！", showCancel: false});
             return;
         }
       }
@@ -576,7 +583,12 @@ Page({
             info_j:paramb
      });
   },
-
+  
+  closeInfoTap:function(){
+      this.setData({
+            info_panel:false
+      })
+  },
   infoAdd:function(){
       var _items = this.data.items,
           work_num = this.data.work_num,
@@ -601,7 +613,8 @@ Page({
          for(var i in stockList){
              if(stockList[i].id == panel_data.stockId){        //根据库存id匹配出库存数量
                  if(_count>=stockList[i].stock){
-                    wx.showModal({content:"没有更多库存！", showCancel: false});
+                    this.showDialog("没有更多库存！");
+                    //wx.showModal({content:"没有更多库存！", showCancel: false});
                     this.setData({addLock2:false});
                     return;
                  }
@@ -612,7 +625,8 @@ Page({
       //工作餐(受限于所持券数量)
       if(panel_data.isWork){          
          if(work_num_choosed>=work_num){
-              wx.showModal({content:"您只有"+work_num+"张工作餐券！", showCancel: false});
+              this.showDialog("您只有"+work_num+"张亲情套餐券！");
+              //wx.showModal({content:"您只有"+work_num+"张亲情套餐券！", showCancel: false});
               this.setData({addLock2:false});
               return;
          }
@@ -626,7 +640,8 @@ Page({
       var ticketNum = panel_data.ticketNum;
       if(ticketNum){
          if(_count>=ticketNum){
-              wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
+              this.showDialog("您只有"+ticketNum+"张会员商品尊享券！");
+              //wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
               this.setData({addLock2:false});
               return;
          }
@@ -641,25 +656,44 @@ Page({
       
       this.computed(_items);                                          
 
-      if(panel_data.type == 3){
-         for(var i in panel_data.sideDcGoodsCategoryList){
-           for(var j in panel_data.sideDcGoodsCategoryList[i].sideGoodsList){
-              if(j == 0){
-                  panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active = true;
-              }else{
-                  panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active = false;        
-              }
-           }
-      }
 
-      this.setData({
-          choose_panel:true,
-          info_panel:false,
-          detail_panel:false,
-          panel_i:parama,
-          panel_j:paramb,
-          panel_data:panel_data
-        });
+      //对应套餐的处理 1单品，2配菜，3套餐
+      var confirmDisabled;
+      if(panel_data.type == 3){
+         console.log( panel_data.sideDcGoodsCategoryList)
+         for(var i in panel_data.sideDcGoodsCategoryList){
+           var subNum = panel_data.sideDcGoodsCategoryList[i].sideGoodsList.length;   //配菜数量
+           var m = 0;
+           for(var j in panel_data.sideDcGoodsCategoryList[i].sideGoodsList){
+              if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum === 0 || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].isSoldOut){
+                m++;
+              }
+           }  
+           if(m >= subNum){
+              confirmDisabled = true;
+           }else{
+              panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].active = true;
+           }
+            
+   //      if(j == 0){
+   //          if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].isSoldOut){
+   //             confirmDisabled = true;
+   //          }else{
+   //             panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active = true;
+   //          }
+   //      }else{
+   //          panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active = false;        
+   //      }
+         }
+         this.setData({
+              choose_panel:true,
+              detail_panel:false,
+              info_panel:false,
+              panel_i:parama,
+              panel_j:paramb,
+              confirmDisabled:confirmDisabled,
+              panel_data:panel_data,
+         });
       }
 
   },
@@ -747,7 +781,8 @@ Page({
          for(var i in stockList){
              if(stockList[i].id == panel_data.stockId){        //根据库存id匹配出库存数量
                  if(_count>=stockList[i].stock){
-                    wx.showModal({content:"没有更多库存！", showCancel: false});
+                    this.showDialog('没有更多库存！');
+                    //wx.showModal({content:"没有更多库存！", showCancel: false});
                     this.setData({addLock3:false});
                     return;
                  }
@@ -758,7 +793,8 @@ Page({
       //工作餐(受限于所持券数量)
       if(panel_data.isWork){          
          if(work_num_choosed>=work_num){
-              wx.showModal({content:"您只有"+work_num+"张工作餐券！", showCancel: false});
+              this.showDialog("您只有"+work_num+"张亲情套餐券！");
+              //wx.showModal({content:"您只有"+work_num+"张亲情套餐券！", showCancel: false});
               this.setData({addLock3:false});
               return;
          }
@@ -773,7 +809,8 @@ Page({
       var ticketNum = panel_data.ticketNum;
       if(ticketNum){
          if(_count>=ticketNum){
-              wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
+              this.showDialog("您只有"+ticketNum+"张会员商品尊享券！");
+              //wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
               this.setData({addLock3:false});
               return;
          }
@@ -784,27 +821,53 @@ Page({
       _items[parama].mainGoodsList[paramb].count = _count+1;
       this.computed(_items);
 
+
+      //对应套餐的处理 1单品，2配菜，3套餐
+      var confirmDisabled;
       if(panel_data.type == 3){
+         console.log( panel_data.sideDcGoodsCategoryList)
          for(var i in panel_data.sideDcGoodsCategoryList){
+           var subNum = panel_data.sideDcGoodsCategoryList[i].sideGoodsList.length;   //配菜数量
+           var m = 0;
            for(var j in panel_data.sideDcGoodsCategoryList[i].sideGoodsList){
-              if(j == 0){
-                  panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active = true;
-              }else{
-                  panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active = false;        
+              if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum === 0 || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].isSoldOut){
+                m++;
               }
-
+           }  
+           if(m >= subNum){
+              confirmDisabled = true;
+           }else{
+              panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].active = true;
            }
-      }
-      this.setData({
-          choose_panel:true,
-          detail_panel:false,
-          info_panel:false,
-          panel_i:parama,
-          panel_j:paramb,
-          panel_data:panel_data
-        });
+            
+   //      if(j == 0){
+   //          if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].isSoldOut){
+   //             confirmDisabled = true;
+   //          }else{
+   //             panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active = true;
+   //          }
+   //      }else{
+   //          panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active = false;        
+   //      }
+         }
+         this.setData({
+              choose_panel:true,
+              detail_panel:false,
+              info_panel:false,
+              panel_i:parama,
+              panel_j:paramb,
+              confirmDisabled:confirmDisabled,
+              panel_data:panel_data,
+         });
       }
 
+
+  },
+
+  closeDetailTap:function(){
+      this.setData({
+            detail_panel:false
+      })
   },
 
   cartEmpty:function(){
@@ -820,6 +883,7 @@ Page({
       })
       wx.setStorageSync('items',null);
       wx.setStorageSync('work_num_choosed',0);
+      this.setData({ work_num_choosed:0 }); 
   },
   
   //去结算
@@ -879,7 +943,7 @@ Page({
            singe_items.price = cart_items[i].price;
            singe_items.count = 1;
            singe_items.merId = cart_items[i].shopId;
-           singe_items.depId = cart_items[i].merId;
+           // singe_items.depId = cart_items[i].merId;
            singe_items.categoryId = cart_items[i].categoryId;
            singe_items.categoryName = cart_items[i].categoryName;
            singe_items.categoryDescription = cart_items[i].categoryDescription;
@@ -901,7 +965,7 @@ Page({
                      singe_items.price = food.price;
                      singe_items.count = 1;
                      singe_items.merId = food.shopId;
-                     singe_items.depId = food.merId;
+                     singe_items.depId = cart_items[i].goodsId;
                      singe_items.categoryId = food.categoryId;
                      singe_items.categoryName = food.categoryName;
                      singe_items.categoryDescription = food.categoryDescription;
@@ -924,7 +988,7 @@ Page({
              singe_items.price = cart_items[i].price;
              singe_items.count = cart_items[i].count;
              singe_items.merId = cart_items[i].shopId;
-             singe_items.depId = cart_items[i].merId;
+             singe_items.depId = cart_items[i].goodsId;
              singe_items.categoryId = cart_items[i].categoryId;
              singe_items.categoryName = cart_items[i].categoryName;
              singe_items.categoryDescription = cart_items[i].categoryDescription;
@@ -963,5 +1027,34 @@ Page({
             },500)
         }
      })
-  }
+  },
+
+
+//=======提示框=========================================
+  showDialog:function(msg){
+      this.setData({
+        dialogShow:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm:function(){
+      this.setData({
+        dialogShow:false
+      })
+  },
+
+  showDialog1:function(msg){
+      this.setData({
+        dialogShow1:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm1:function(){
+      this.setData({
+        dialogShow1:false
+      })
+      wx.reLaunch({url:'../../pages/entrace/index'});
+  },
+
+
 })

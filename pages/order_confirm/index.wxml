@@ -1,4 +1,35 @@
 <!--index.wxml-->
+<view class='wx_dialog_container' hidden="{{!dialogShow}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm'>确定</view>
+        </view>
+    </view>
+</view>
+
+<view class='wx_dialog_container' hidden="{{!dialogShow1}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm1'>确定</view>
+        </view>
+    </view>
+</view>
+
+<view class='wx_dialog_container' hidden="{{!dialogShow2}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm2'>确定</view>
+        </view>
+    </view>
+</view>
+
+
 <view class="container {{detail_panel?'noscroll':''}}">
 <loading hidden="{{loaderhide}}">加载中...</loading>   
 <view class="header">
@@ -11,17 +42,17 @@
 
 <view class="main">
 
-    <view class="cont timeChoose" wx:if="{{isSubscribe==1}}">
+    <view class="cont timeChoose" wx:if="{{subscribe==1}}">
 	    <view class="con2">
-	       <picker mode="time" value="{{subscribeTime}}" start="{{startTime}}" end="{{endTime}}" bindchange="bindTimeChange">
+	       <picker mode="time" value="{{startTime}}" start="{{startTime}}" end="{{endTime}}" bindchange="bindTimeChange">
              <view class="picker">预约时间</view>
-             <view class="right">{{subscribeTime?subscribeTime:'请选择'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+             <view class="right">{{subscribeTime==currentTime?'立即取餐':subscribeTime}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
            </picker>
         </view>
 	</view>
 
 
-	<view class="cont" wx:if="{{isSubscribe==0}}">
+	<view class="cont" wx:if="{{subscribe==0}}">
 		  <view class="con1">用餐方式
 		      <view class="right">
 		           <view class="sty1 {{dinnerType==1?'active':''}}" data-type="1" bindtap="dinnerTypeTap">
@@ -76,11 +107,11 @@
 	</view>  -->
 
 	<view class="cont">
-	    <view class="con2" bindtap="openCardList">优惠券
+	    <view class="con2 couponCon" bindtap="openCardList">优惠券
 <!-- 	    <view wx:if="{{couponsNum}}" class="right colored">已选择{{couponsNum}}张<image class="arrodow rote" src="../../image/arrodow.png" /></view> -->
-	        <view wx:if="{{couponsNum}}" class="right colored">-￥{{couponFee/100}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+	        <view wx:if="{{couponsNum && couponFee>0 }}" class="right colored">-￥{{couponFee/100}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 
-	       <view wx:if="{{!couponsNum}}"  class="right">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+	       <view wx:if="{{!couponsNum || couponFee==0}}"  class="right {{card_num?'colored':''}}">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 	    </view>
 	</view>
 
@@ -96,7 +127,9 @@
 
 <view class="panel" hidden="{{!detail_panel}}">
     <view class="detail_panel">
-        <view class="hd-title">订单明细</view>
+        <view class="hd-title">订单明细
+            <view class="closeDetail"  bindtap="closeDetailTap">关闭</view>
+        </view>
         <view class="list">
         	<view wx:key="{{item.categoryId}}" wx:for="{{cart_items}}">
                     <view wx:if="{{!item.sideDcGoodsCategoryList}}">

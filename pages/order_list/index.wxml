@@ -1,4 +1,14 @@
 <!--index.wxml-->
+<view class='wx_dialog_container' hidden="{{!dialogShow}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm'>确定</view>
+        </view>
+    </view>
+</view>
+
 <view class="container">
 <loading hidden="{{loaderhide}}">加载中...</loading> 
 <view class="section backcolor"></view>
@@ -14,7 +24,7 @@
                 <view class="time">订单时间：{{item.orderTime}}
                     <view class="total_fee">￥{{item.totalFee}}</view>
                </view>
-               <view class="time" wx:if="{{item.subscribeTime}}">预约时间：{{item.subscribeTime}}</view>
+               <view class="time" wx:if="{{item.isSubscribe}}">预约时间：{{item.subscribeTime}}</view>
             </view>
             <view class="order">
                 <view wx:if="{{!item.slide}}">

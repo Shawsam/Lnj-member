@@ -1,4 +1,6 @@
 /**index.wxss**/
+@import "../../components/myModal/index.wxss";
+
 .flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
 .flexbox > .flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
 ::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
@@ -10,11 +12,11 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑";  background:#f3f3f3; }
 .main{ position:relative; padding:80rpx 30rpx;}
 .main .list{ padding:30rpx; }
 .main .list .list_item{ margin:0 0 90rpx 0; background:#fff; border-radius:10rpx; box-shadow:0 0 12rpx rgba(0, 0,0,0.3);}
-.main .list .list_item .top{ position:relative; padding:20rpx 30rpx; background:#FDD01B; border-radius:10rpx 10rpx 0 0;}
+.main .list .list_item .top{ font:24rpx/36rpx "微软雅黑"; position:relative; padding:20rpx 30rpx; background:#FDD01B; border-radius:10rpx 10rpx 0 0;}
 .main .list .list_item .top .info{ font:24rpx/36rpx "微软雅黑"; margin-top:6rpx; margin-bottom:4rpx; padding-right:150rpx; position:relative; }
 .main .list .list_item .top .info view{ display:inline-block; }
 .main .list .list_item .top .info .dinnerNo{ margin-right:20rpx; }
-.main .list .list_item .top .info .total{ position:absolute; right:0; top:0; font:24rpx/36rpx "微软雅黑";}
+.main .list .list_item .top .info .total{ position:absolute; right:0; top:0; font:26rpx/36rpx "微软雅黑";}
 .main .list .list_item .top .time{  padding-right:150rpx; position:relative; }
 .main .list .list_item .top .total_fee{ position:absolute; right:0; top:0; font:33rpx/36rpx "微软雅黑"; font-weight:bold; }
 

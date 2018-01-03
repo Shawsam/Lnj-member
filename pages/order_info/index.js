@@ -78,10 +78,11 @@ Page({
                   items:items
               })
             }else{
-                 wx.showModal({
-                      content:res.data.msg,
-                      showCancel: false
-                  });
+                 _this.showDialog(res.data.msg);
+                 // wx.showModal({
+                 //      content:res.data.msg,
+                 //      showCancel: false
+                 //  });
             }
  
           }
@@ -137,15 +138,16 @@ Page({
           });
 
           if(res.data.errcode == 100){       //errorcode = 100 已经支付
-               wx.showModal({    
-                    content:'该订单已支付',
-                    showCancel: false,
-                    success: function(res) {
-                       if (res.confirm) {
-                         wx.navigateBack();
-                       }
-                    }
-               });
+                _this.showDialog1('该订单已支付')
+               // wx.showModal({    
+               //      content:'该订单已支付',
+               //      showCancel: false,
+               //      success: function(res) {
+               //         if (res.confirm) {
+               //           wx.navigateBack();
+               //         }
+               //      }
+               // });
           }else if(res.data.errcode == 0){   //支付成功状态 生成订单成功                            
               var tradeInfo = res.data;
               
@@ -183,10 +185,11 @@ Page({
 
 
           }else{
-               wx.showModal({                //其他错误
-                    content:res.data.msg,
-                    showCancel: false
-               });
+               _this.showDialog(res.data.msg);
+               // wx.showModal({                //其他错误
+               //      content:res.data.msg,
+               //      showCancel: false
+               // });
 
           }
         }
@@ -197,6 +200,36 @@ Page({
   confirmTrade:function(){
       this.setData({ tip_panel:false});
       wx.navigateBack();
-  }
+  },
+
+
+  //=======提示框=========================================
+  showDialog:function(msg){
+      this.setData({
+        dialogShow:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm:function(){
+      this.setData({
+        dialogShow:false
+      })
+  },
+
+  showDialog1:function(msg){
+      this.setData({
+        dialogShow1:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm1:function(){
+      this.setData({
+        dialogShow1:false
+      })
+      wx.navigateBack();
+  },
+
+
+
 
 })

@@ -1,7 +1,10 @@
 //app.js
+var host = "https://weixin.chinauff.com/lnj-weixin/console/dc";
+var host_dev = "https://demo.i-manji.com/lnj-weixin/console/dc";
+
 App({
   globalData: {
-     host:'https://demo.i-manji.com/lnj-weixin/console/dc',
+     host:host,
      userId:'',           //用户userId
      openId:'',           //小程序openId
      _openId:'',          //公众号_openId
@@ -45,7 +48,7 @@ App({
                                 data: param,
                                 success: function (res) {
                                     //服务器返回的结果
-                                    // console.log(res);
+                                    console.log(res);
                                     if (res.data.errcode == 0) {
                                        var openId = res.data.miniOpenId,
                                            _openId = res.data.openId,
@@ -59,33 +62,54 @@ App({
                                        _this.globalData.unionId = unionId;
                                        _this.globalData.mobile = mobile;
                                        _this.globalData.cardNo = cardNo;
+
+                                       // if (getCurrentPages().length != 0) {
+                                       //    getCurrentPages()[getCurrentPages().length - 1].onLoad()
+                                       // }
                                        
                                     } else {
                                        console.log('服务器异常');
-                                       wx.redirectTo({ url:'../view_state/index?error='+res.statusCode})
+                                       wx.redirectTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg='+errorMsg})
                                     }
 
                                 },
                                 fail: function () {
                                     console.log('系统错误')
-                                    wx.redirectTo({ url:'../view_state/index?error=500'})
+                                    wx.redirectTo({ url:'../view_state/index?errorMsg='+errorMsg})
                                 }
                             })
                         },
                         fail: function () {
-                            console.log('获取用户信息失败')
-                            wx.redirectTo({ url:'../view_state/index?error=500'})
+                            console.log('用户未授权,获取用户信息失败');
+                            wx.showModal({
+                                title: '用户未授权',
+                                content: '如需正常使用，请按确定并在授权管理中选中“用户信息”，然后点按确定。最后再重新进入小程序即可正常使用。',
+                                showCancel: false,
+                                success: function (res) {
+                                    if (res.confirm) {
+                                        //进入二次授权页面
+                                        wx.openSetting({
+                                            success: function(res) {
+                                                var user_Athority = res.authSetting['scope.userInfo'];
+                                                getCurrentPages()[getCurrentPages().length - 1].onLoad()
+                                            }
+                                        });
+                                    }
+                                }
+                            })
                         }
                     })
 
                 } else {
                     console.log('获取用户登录态失败' + r.errMsg)
-                    wx.redirectTo({ url:'../view_state/index?error=500'})
+                    var errorMsg = '获取用户登录态失败' + r.errMsg;
+                    wx.redirectTo({ url:'../view_state/index?errorMsg='+errorMsg })
                 }
             },
             fail: function () {
                  console.log('登陆失败')
-                 wx.redirectTo({ url:'../view_state/index?error=500'})
+                 var errorMsg = '登录失败';
+                 wx.redirectTo({ url:'../view_state/index?errorMsg='+errorMsg })
             }
         })
       }
@@ -93,12 +117,11 @@ App({
   onShow:function(scene){
     if(scene.path == "pages/takeOut_addr_add/index"){
         this.getUserInfo();
-        return;
     };
-    if(getCurrentPages()[0] && getCurrentPages()[0].route != 'pages/entrace/index'){
-        wx.reLaunch({url:'../../pages/entrace/index'});
-        this.getUserInfo();
-    }
+    // if(getCurrentPages()[0] && getCurrentPages()[0].route != 'pages/entrace/index'){
+    //     wx.reLaunch({url:'../../pages/entrace/index'});
+    //     this.getUserInfo();
+    // }
   },
   onHide:function(){
     this.globalData.userInfo = null;            //会员状态的改变，用户进公众号再进入小程序

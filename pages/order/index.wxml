@@ -1,4 +1,25 @@
 <!--index.wxml-->
+<view class='wx_dialog_container' hidden="{{!dialogShow}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm'>确定</view>
+        </view>
+    </view>
+</view>
+
+<view class='wx_dialog_container' hidden="{{!dialogShow1}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm1'>确定</view>
+        </view>
+    </view>
+</view>
+
+
 <view class="container">
 <loading hidden="{{loaderhide}}">加载中...</loading>  
 <view class="header">
@@ -11,18 +32,20 @@
 <view class="main">
     <view class="tab_list {{detail_panel||choose_panel?'noscroll':''}}">
         <view wx:key="{{item.categoryId}}" wx:for="{{items}}" class="tab {{item.active?'active':''}}" data-param="{{index}}"  bindtap="tabTap">
-           <image src="{{item.active?item.picture:item.onPicture}}" />
+           <image wx:if="{{item.active}}" src="{{item.onPicture}}" />
+           <image wx:if="{{!item.active}}" src="{{item.picture}}" />
            <view>{{item.name}}</view>
         </view>
     </view>
 
     <view class="item_list {{detail_panel||choose_panel?'noscroll':''}}">
         <view wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:if="{{item.active}}" wx:for-index="i">
+           <view class="title">{{item.name}}</view>
            <view class="item"  wx:key="{{item.goodsId}}" wx:for="{{item.mainGoodsList}}" wx:for-index="j">    
                 <view class="shade {{item.stockNum==0?'show':''}}"></view>
                 <image bindtap="infoScan" data-paramA="{{i}}" data-paramB="{{j}}" src="{{item.centerImg}}" alt="{{item.name}}"/>
                 <view class="name words_line2">{{item.name}}</view>
-                <view class="desp">{{item.description}}</view>
+                <view class="desp">{{item.description?item.description:''}}</view>
                 <view class="stock_state" wx:if="{{item.stockNum==0}}" >已售罄</view>
                 <view class="price_bar">￥<view class="price">{{item.priceVal}}</view>
                 </view>
@@ -46,11 +69,12 @@
 <view class="panel" hidden="{{!(detail_panel||choose_panel||info_panel)}}">
 
     <view class="info_panel" wx:if="{{info_panel}}">
+        <view class="closeInfo"  bindtap="closeInfoTap">关闭</view>
         <view class="img">
             <image src="{{infoData.centerImg}}" />
         </view>
         <view class="text name">{{infoData.name}}</view>
-        <view class="text desp">{{infoData.description}}</view>
+        <view class="text desp">{{infoData.description?infoData.description:''}}</view>
         <view class="handle">
             <view class="price_bar">￥<view class="price">{{infoData.priceVal}}</view></view>
             <view class="quantity">
@@ -62,7 +86,10 @@
     </view>
 
     <view class="detail_panel" wx:if="{{detail_panel}}">
-        <view class="hd-title">订单明细<view class="cartEmpty" catchtap="cartEmpty">清空</view></view>
+        <view class="hd-title">订单明细
+          <view class="cartEmpty" catchtap="cartEmpty">清空</view>
+          <view class="closeDetail"  bindtap="closeDetailTap">关闭</view>
+        </view>
         <view class="list">
             <view wx:for="{{items}}" wx:key="{{item.categoryId}}"  wx:for-index="i">
                 <view wx:key="{{item.goodsId}}" wx:for="{{item.mainGoodsList}}" wx:for-index="j">

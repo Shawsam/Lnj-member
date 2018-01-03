@@ -1,4 +1,25 @@
 <!--index.wxml-->
+<view class='wx_dialog_container' hidden="{{!dialogShow}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm'>确定</view>
+        </view>
+    </view>
+</view>
+
+<view class='wx_dialog_container' hidden="{{!dialogShow1}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm1'>确定</view>
+        </view>
+    </view>
+</view>
+
+
 <view class="container">
 <loading hidden="{{loaderhide}}">加载中...</loading> 
 <view class="section backcolor"></view>
@@ -22,6 +43,9 @@
        <view class="title">
             <icon type="success" size="27" color="#FDD01B" />已出餐！
       </view>
+      <view class="bold">送餐号: {{order.dinnerNo}}</view>
+      <view class="bold">{{shopName}} | 桌号: {{deskNo}}</view>
+      <view>请耐心等待，不要远离您的座位！</view>
     </view>
 
     <view class="topCon" wx:if="{{order.status==9}}">
@@ -59,7 +83,7 @@
 
 
            <view wx:if="{{order.coupons.length}}">
-               <view class="list_item card" wx:for="{{order.coupons}}" wx:key="{{item.couponNo}}"> 
+               <view class="list_item card" wx:for="{{order.coupons}}" wx:key="{{item.couponNo}}"  wx:if="{{item.type!=5}}"> 
                  <view class="info1">
                    <view class="name">{{item.typeName}}</view>
                    <view class="price">-￥{{item.single}}</view>
