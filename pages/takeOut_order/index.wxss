@@ -6,16 +6,17 @@
 page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 
 .backcolor{ background:#2F2E33; height:240rpx; width:100%; position:absolute; left:0; top:0; z-index:0; }
-.container{ background:#f3f3f3; box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; padding:100rpx 60rpx 60rpx 60rpx;}
+.container{ background:#f3f3f3; box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; padding:100rpx 60rpx 60rpx 60rpx; box-sizing:content-box;}
 .main{ background:#fff; border-radius:10px; box-shadow:2rpx 2rpx 6rpx rgba(0,0,0,0.1); position:relative; }
 .main .title{ height:110rpx; font:32rpx/110rpx "微软雅黑"; font-weight:bold; text-align:center; background:#FDD01B; border-radius:20rpx 20rpx 0 0; }
 .main .title image{ height:70rpx; width:69rpx; display:inline-block; vertical-align:middle; margin-right:15rpx;}
 .main .content{ padding:0 30rpx 30rpx 30rpx;  }
 .main .content .list{ max-height:780rpx; overflow-y:scroll;padding:40rpx 0 0 0; }
 .main .content .list .item{ padding:30rpx; position:relative; border-radius:20rpx; background:#FDD01B; overflow:hidden; margin-bottom:25rpx; }
+
+.main .content .list .item .topinfo .name{ font:32rpx/40rpx "微软雅黑"; font-weight:bold;}
+.main .content .list .item .topinfo .time{ font:30rpx/40rpx "微软雅黑"; color:#333; }
 .main .content .list .item .info view{ display:inline-block; }
-.main .content .list .item .info .name{ font:32rpx/40rpx "微软雅黑"; font-weight:bold;}
-.main .content .list .item .info .time{ font:30rpx/40rpx "微软雅黑"; margin-left:20rpx; }
 .main .content .list .item .info1{ margin-top:40rpx; }
 .main .content .list .item .info .price{ color:#CA1119;  }
 .main .content .list .item .info .price .fee{ font:32rpx/40rpx "微软雅黑"; font-weight:bold; }
@@ -27,6 +28,6 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .main .content .list .item .info .moreBtn{ background:#CA1119; color:#fff; border-radius:8rpx; padding:2rpx 10rpx; }
 .main .content .list .item.finished .state{ height:175rpx; width:175rpx; position:absolute; right:15rpx; top:-50rpx; }
 
-.main .content .list .item .arrodow{width:30rpx; height:20rpx; vertical-align:middle;  position:absolute; right:30rpx; top:80rpx;}
+.main .content .list .item .arrodow{width:30rpx; height:20rpx; vertical-align:middle;  position:absolute; right:30rpx; top:100rpx;}
 .main .content .list .item .rote{transform:rotate(-90deg);-ms-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-webkit-transform:rotate(-90deg);-o-transform:rotate(-90deg);}
-
+.main .content .list .noMore{ text-align:center; color:#999; }

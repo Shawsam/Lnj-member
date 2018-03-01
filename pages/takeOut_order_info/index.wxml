@@ -1,52 +1,140 @@
 <!--index.wxml-->
-<view class="container {{detail_panel?'noscroll':''}}">
+<view class="container {{detail_panel || type_panel || tip_panel || reason_panel?'noscroll':''}}">
 <loading hidden="{{loaderhide}}">加载中...</loading>   
 <view class="section backcolor"></view>
 <view class="main">
     <view class="topCon">
 	    <view class="title">
-			<image src="../../image/logo.png" />湖州长兴人民路餐厅
+			<image src="../../image/logo.png" />{{shopName}}
 		</view>
 		<view class="info">
-			<view>总金额：<view class="price">￥18.00</view></view>
-			<view>份数：2 份</view>
+			<view>总金额：<view class="price">￥{{totalFeeVal}}</view></view>
+			<view>份数：{{items}}份</view>
 		</view>
-		<view class="tip">查看明细</view>
+		<view class="tip" bindtap="openDetail">查看明细</view>
     </view>
 
     <view class="list">
-    	<view class="item">联系人：<view class="desp">小贤</view></view>
-    	<view class="item">电话：<view class="desp">18616932566</view></view>
-    	<view class="item">送餐地址：<view class="desp"></view></view>
-    	<view class="item">订单编号：<view class="desp"></view></view>
-    	<view class="item">预计送达时间：<view class="desp"></view></view>
+    	<view class="item"><view class="tag">联系人：</view><view class="desp">{{name}}</view></view>
+    	<view class="item"><view class="tag">电话：</view><view class="desp">{{mobile}}</view></view>
+    	<view class="item"><view class="tag">送餐地址：</view><view class="desp">{{address}}</view></view>
+    	<view class="item"><view class="tag">订单编号：</view><view class="desp">{{orderNo}}</view></view>
+    	<view class="item" wx:if="{{arrive_Time}}"><view class="tag">预计送达时间：</view><view class="desp">{{arrive_Time}}</view></view>
+        <view class="item"><view class="tag">支付方式：</view><view class="desp">{{payType==1?'亲情账户支付':'微信支付'}}</view></view>
+        <view wx:if="{{riderName}}" class="item"><view class="tag">骑手姓名：</view><view class="desp">{{riderName}}</view></view>
+        <view wx:if="{{riderTel}}" class="item"><view class="tag">骑手联系方式：</view><view class="desp">{{riderTel}}</view></view>
     </view>
 
     <view class="orderPro">
         <view class="title">订单状态</view>
         <view class="line"></view>
-        <!-- <icon type="success" size="20" color="green" /> -->
-        <image class="icon" src="../../image/complete.png" />
-        <view class="item odd">
-            <view class="rect"></view>
-        	<view>8-10 10:19</view>
-        	<view>订单提交成功，处理中</view>
-        </view>
-        <!-- <icon type="success" size="20" color="green" /> -->
-        <image class="icon" src="../../image/complete.png" />
-        <view class="item even">
-            <view class="rect"></view>
-        	<view>8-10 10:19</view>
-        	<view>门店已接单</view>
-        </view>
-        <!-- <icon type="waiting" size="20" color="#FECF1D" /> -->
-        <image class="icon" src="../../image/wait.png" />
-        <view class="item odd current">
-            <view class="rect"></view>
-        	<view>8-10 10:19</view>
-        	<view>门店正在配餐</view>
+        <view class="proCon">
+            <view wx:for="{{axisList}}" wx:key="{{index}}">
+                <image class="icon complete" src="../../image/complete.png" />
+                <image class="icon wait" src="../../image/wait.png" />
+                <view class="item">
+                    <view class="rect"></view>
+                	<view>{{item.createTimeVal}}</view>
+                	<view>{{item.statusdesc}}</view>
+                </view>
+            </view>
         </view>
     </view>
-
 </view>
+<view bindtap="coverTap" class="panel_cover" hidden="{{!(detail_panel || type_panel || tip_panel || reason_panel)}}"></view>
+<view class="panel" hidden="{{!detail_panel}}">
+    <view class="detail_panel">
+        <view class="hd-title">订单明细<view class="closeDetail" bindtap="closePanel">关闭</view></view>
+        <view class="list">
+            <view wx:if="{{!item.parentId }}" wx:for="{{goodsList}}" wx:key="{{index}}">
+                <view class="item" wx:if="{{item.issetfood == 0 }}">
+                    <view class="info1">
+                        <view class="name">{{item.name}}</view>
+                        <view class="num">x{{item.count}}</view>
+                        <view class="price">￥{{item.price}}</view>
+                    </view>
+                </view>
+                <view class="item" wx:if="{{item.issetfood == 1 }}">
+                    <view class="info1">
+                        <view class="name">{{item.name}}</view>
+                        <view class="num">x{{item.count}}</view>
+                        <view class="price">￥{{item.priceVal}}</view>
+                    </view>
+                </view>
+            </view>
+            <view class="item box" wx:if="{{packTotalFee}}">
+                <view class="info1">
+                    <view class="name">餐盒费</view>
+                    <view class="num"></view>
+                    <view class="price">￥{{packTotalFeeVal}}</view>
+                </view>
+            </view>
+            <view class="item diliver" wx:if="{{deliverFee}}">
+                <view class="info1">
+                    <view class="name">配送费</view>
+                    <view class="num"></view>
+                    <view class="price">￥{{deliverFeeVal}}</view>
+                </view>
+            </view>
+            <view class="item discount" wx:if="{{discountFee}}">
+                <view class="info1">
+                    <view class="name">满30减15活动</view>
+                    <view class="num"></view>
+                    <view class="price">-￥{{discountFeeVal}}</view>
+                </view>
+            </view>
+        </view>
+    </view>
+</view>
+
+<view class="panel" hidden="{{!type_panel}}">
+     <view class="Con">
+       <view class="title">选择支付方式</view>
+       <view class="list">
+           <view class="account" data-type="1" bindtap="chooseTap"><image src="../../image/family_card.png" />亲情账户
+               <view class="choose {{paytype==1?'active':''}}"><view class="dot"></view></view>
+           </view>
+           <view class="wx" data-type="2" bindtap="chooseTap"><image src="../../image/wechart.png" />微信支付
+               <view class="choose {{paytype==2?'active':''}}"><view class="dot"></view></view>
+           </view>
+       </view>
+    </view>
+    <view class="btnGroup flexbox">
+        <view class="cancel" bindtap="coverTap">取消</view>
+        <view class="confirm" bindtap="confirmChoose">确定</view>
+    </view>
+</view>
+
+<view class="panel" hidden="{{!tip_panel}}">
+  <view class="tip_panel">
+    <view class="hd-title">支付完成</view>
+    <view class="info">
+      <view>本次消费：￥{{tradeInfo.bala}}</view>
+      <view>支付方式：{{tradeInfo.paytype}}</view>
+      <view>账户余额：￥{{tradeInfo.totalBala}}</view>
+    </view>
+    <view class="confirmBtn" bindtap="confirmTrade">确定</view>
+  </view>
+</view>
+
+<view class="panel" hidden="{{!reason_panel}}">
+  <view class="reason_panel">
+    <view class="hd-title">退单理由<view class="closeDetail" bindtap="closeReason">关闭</view></view>
+    <view class="info">
+        <textarea placeholder="请输入退单理由" maxlength="50" bindinput="textFun" value="{{reason}}" rows="3"></textarea>
+    </view>
+    <view class="confirmBtn" bindtap="confirmReason">确定</view>
+  </view>
+</view>
+
+<view class="footer flexbox" wx:if="{{ !applyBackOrderStatus && status!=4 && status!= 7 && status !=9 && fourtyTimeBelow }}">
+    <view wx:if="{{!applyBackOrderStatus && status!=4 && status!= 7 && status !=9 && fourtyTimeBelow}}" class="cancelBtn btn" bindtap="cancelFun">申请退单</view>
+    <view wx:if="{{status==1}}" class="payBtn btn" bindtap="payFun">继续支付</view>
+</view>
+
+<view class="footer flexbox" wx:if="{{status==1}}">
+    <view wx:if="{{!applyBackOrderStatus && status!=4 && status!= 7 && status !=9 }}" class="cancelBtn btn" bindtap="cancelFun">申请退单</view>
+    <view wx:if="{{status==1}}" class="payBtn btn" bindtap="payFun">继续支付</view>
+</view>
+
 </view>

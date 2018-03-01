@@ -14,7 +14,8 @@ Page({
      paytype:1,
      type_panel:false,
      tip_panel:false,
-     tradeInfo:'' 
+     tradeInfo:'',
+     isMember:0 
    },
 
    onLoad: function (option) {
@@ -22,9 +23,10 @@ Page({
        _this.setData({
           deskNo:app.globalData.deskNo,
           shopName:app.globalData.shopName,
-          shopInfo:app.globalData.shopInfo
+          shopInfo:app.globalData.shopInfo,
+          isMember:app.globalData.userId?1:0
        })
-
+  
       var orderId = option.orderId;
       _this.setData({ loaderhide:false });
       wx.request({
@@ -117,21 +119,27 @@ Page({
   confirmChoose:function(){
     var _this = this;
     _this.setData({ loaderhide:false });
-
-    wx.request({
-        url: app.globalData.host+"/orderQuery/payOrder",
-        method:'POST',
-        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
-        data:{
+    
+    var param = {
            mini:'mini',
            userId:app.globalData.userId,
            openId:app.globalData.openId,
            orderId:this.data.order.orderId,
            payType:this.data.paytype
-        },
+    };
+
+    if(param.userId == undefined ){
+         delete param.userId;
+    }
+
+    wx.request({
+        url: app.globalData.host+"/orderQuery/payOrder",
+        data:param,
+        method:'POST',
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+       
         success: function(res) {
           //服务器返回数据
-          // console.log(res);
           _this.setData({ 
             loaderhide:true,
             type_panel:false

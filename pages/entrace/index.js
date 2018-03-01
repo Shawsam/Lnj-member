@@ -6,7 +6,8 @@ Page({
      userInfo:null,
      unionId:'',
      loaderhide:true,
-     jumpLock:false
+     jumpLock:false,
+     canIUseWebView: wx.canIUse('web-view')
   },
 
   onLoad:function(options){
@@ -32,7 +33,6 @@ Page({
        if(options){
 
          var qrcode = decodeURIComponent(options.q);
-         console.log(qrcode);
          if(qrcode!='undefined'){
             _this.setData({ loaderhide:false });
             var a = qrcode.split('a=')[1];
@@ -118,6 +118,14 @@ Page({
                                                  })
                                              }
 
+                                          }else{
+                                             wx.navigateTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg='+res.data.msg,
+                                                             success:function(){
+                                                              setTimeout(function(){
+                                                                   _this.setData({jumpLock:false});
+                                                              },500)
+                                                             }
+                                             })
                                           }
                                       }
                                   })
@@ -184,7 +192,6 @@ Page({
                      })
                  }
               }else{
-                 console.log('服务器异常');
                  wx.navigateTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg='+res.data.msg,
                                  success:function(){
                                   setTimeout(function(){
@@ -293,13 +300,49 @@ Page({
   //3、外卖送餐
   takeAway:function(){
       app.globalData.fromType = 3;
-
+      
+      //微信版本过低，不支持web-view
+      var canIUseWebView = this.data.canIUseWebView;
+      if(!canIUseWebView){
+        wx.showModal({
+          content:'当前微信版本过低，需要使用该功能请更新至最新版本。',
+          showCancel:false
+        })
+        return;
+      }
+      
       var userInfo = this.data.userInfo;
       if(!userInfo) return;
-     
-      this.showDialog('敬请期待...');
-      return;
-      wx.switchTab({url: '/pages/takeOut_index/index'})
+      
+
+      var unionId = app.globalData.unionId;
+      console.log(unionId);
+      if(unionId == 0){
+        wx.showModal({
+          content:'请稍后重试',
+          showCancel:false
+        })
+        return;
+      }
+
+      if(unionId == undefined){
+        wx.showModal({
+          content:'请先关注老娘舅公众号',
+          showCancel:false
+        })
+        return;
+      }
+
+      var userId = app.globalData.userId;
+      console.log('USERID='+userId);
+      if(!userId){
+         app.globalData.userInfo = null;  
+         wx.navigateTo({url: '/pages/login/index'})
+      }else{
+         wx.switchTab({url:'/pages/takeOut_index/index'})
+      }
+
+      
   },
 
   // 跳转登录页面

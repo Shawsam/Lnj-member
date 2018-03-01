@@ -1,0 +1,18 @@
+<!--index.wxml-->
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+<view class="section backcolor"></view>
+<view class="section main">
+	<view class="title">
+		<image src="../../image/addr_add.png" />编辑送餐地址
+	</view>
+	<view class="content">
+        <view class="fm"><input bindinput="nameBlur" maxlength="15" placeholder="请输入收货人姓名" value="{{name}}" /></view>
+        <view class="fm"><input bindinput="phoneBlur" type="number" maxlength="11" placeholder="请输入手机号码" value="{{mobile}}" /></view>
+        <view class="fm" bindtap="mapChoose">{{addr?addr:'请选择地址'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+        <view class="fm"><input bindinput="addrBlur" maxlength="30" placeholder="请输入详细地址" value="{{address}}" value="{{address}}" /></view>
+	    <view class="btn confirmBtn" bindtap="editConfirm">确认</view>
+	    <view class="btn delBtn" bindtap="delAddrFun">删除</view>
+    </view>
+</view>
+</view>

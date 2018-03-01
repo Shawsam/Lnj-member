@@ -1,0 +1,12 @@
+<!--index.wxml-->
+<view class="container">
+<view class="section backcolor"></view>
+<view class="main">
+     <image class="fail_icon" src="../../image/one_dot.png" />
+     <view class="title">付款失败</view>
+     <view class="text">不要灰心，点击下方<view class="bold">“返回”</view>按钮，</view>
+     <view class="text">让我们换个姿势再来一次！</view>
+     <image class="dot" src="../../image/two_dot.png" />
+     <view class="backBtn" bindtap="backFun" >返回</view>
+</view>
+</view>

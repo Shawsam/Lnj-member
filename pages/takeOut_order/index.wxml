@@ -7,27 +7,37 @@
 		<image src="../../image/order_icon.png" />我的订单
 	</view>
 	<view class="content">
-		<view class="list">
-			<view class="item">
-				<view class="info"><view class="name">老娘舅湖州店</view><view class="time">8-10 10:19</view></view>
-				<view class="info info1">
-					<view>总额：<view class="price">￥<i class="fee">71</i></view></view>
-					<view class="count">共2份</view>
-					<view class="peis">正在配送<image class="diliver" src="../../image/diliver.png" /></view>
+		<scroll-view class="list" scroll-y bindscrolltolower="ScrollLower"  bindscrolltoupper="ScrollUpper">
+			<view wx:for="{{orderList}}" wx:key="{{index}}">
+				<view class="item" wx:if="{{item.status!=8}}" data-param="{{item.orderId}}" bindtap="openDetails">
+					<view class="topinfo">
+						<view class="name">{{item.shopName}}</view>
+					    <view class="time">{{item.orderTime}}</view>
+					</view>
+					<view class="info info1">
+						<view>总额：<view class="price">￥<i class="fee">{{item.totalFee}}</i></view></view>
+						<view class="count">共{{item.items}}份</view>
+						<view class="peis">{{item.statusDesp}}<!-- <image wx:if="{{item.status==3}}" class="diliver" src="../../image/diliver.png" /> --></view>
+					</view>
+					<image class="arrodow rote" src="../../image/arro_black.png" />
 				</view>
-				<image class="arrodow rote" src="../../image/arro_black.png" />
+
+				<view class="item finished" wx:if="{{item.status==8}}" data-param="{{item.orderId}}" bindtap="openDetails">
+					<view class="topinfo">
+						<view class="name">{{item.shopName}}</view>
+					    <view class="time">{{item.orderTime}}</view>
+					</view>
+					<view class="info info1">
+						<view>总额：<view class="price">￥<i class="fee">{{item.totalFee}}</i></view></view>
+						<view class="count">共{{item.items}}份</view>
+					    <view class="moreBtn" data-a="{{item.shopId}}" data-b="{{item.shopName}}" catchtap="oneMore">再来一份</view>
+				    </view>
+				    <image class="state" src="../../image/finish.png" />
+					<image class="arrodow rote" src="../../image/arro_black.png" />
+				</view>
 			</view>
-			<view class="item finished">
-				<view class="info"><view class="name">老娘舅湖州店</view><view class="time">8-10 10:19</view></view>
-				<view class="info info1">
-					<view>总额：<view class="price">￥<i class="fee">71</i></view></view>
-					<view class="count">共2份</view>
-				    <view class="moreBtn" bindtap="oneMore">再来一份</view>
-			    </view>
-			    <image class="state" src="../../image/finish.png" />
-				<image class="arrodow rote" src="../../image/arro_black.png" />
-			</view>
-		</view>
+			<view wx:if="{{noMore}}" class="noMore">没有更多</view>
+		</scroll-view>
     </view>
 </view>
 </view>

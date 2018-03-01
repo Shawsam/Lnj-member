@@ -7,11 +7,11 @@
 		<image src="../../image/addr_add.png" />添加送餐地址
 	</view>
 	<view class="content">
-        <view class="fm"><input placeholder="请输入收货人姓名" /></view>
-        <view class="fm"><input type="number" maxlength="11" placeholder="请输入手机号码" /></view>
+        <view class="fm"><input bindinput="nameBlur" maxlength="15" placeholder="请输入收货人姓名" /></view>
+        <view class="fm"><input bindinput="phoneBlur" type="number" maxlength="11" placeholder="请输入手机号码" /></view>
         <view class="fm" bindtap="mapChoose">{{addr.name?addr.name:'请选择地址'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
-        <view class="fm"><input placeholder="请输入详细地址" value="{{addr.address}}" /></view>
-	    <view class="btn">确认</view>
+        <view class="fm"><input bindinput="addrBlur" maxlength="30" placeholder="请输入详细地址" value="{{addr.address}}" /></view>
+	    <view class="btn" bindtap="addConfirm">确认</view>
     </view>
 </view>
 </view>

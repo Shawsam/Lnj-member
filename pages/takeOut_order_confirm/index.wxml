@@ -1,59 +1,89 @@
 <!--index.wxml-->
 <view class="container {{detail_panel?'noscroll':''}}">
 <loading hidden="{{loaderhide}}">加载中...</loading>   
+<loading hidden="{{loaderhide1}}">下单中...</loading>   
 <view class="section backcolor"></view>
 <view class="main">
 
     <view class="topCon">
 	    <view class="title">
-			<image src="../../image/logo.png" />湖州长兴人民路餐厅
+			<image src="../../image/logo.png" />{{shopName}}
 		</view>
 		<view class="info">
-			<view>收货人：小贤 先生</view>
-			<view>电话：18671458863</view>
-			<view>地址：东方威尼斯旅行社</view>
+			<view>收货人：{{chooseAddr.name}} {{userInfo.gender==1?'先生':'女士'}}</view>
+			<view>电话：{{chooseAddr.mobile}} </view>
+			<view>地址：{{chooseAddr.address}} </view>
 			<view class="edit" bindtap="editAddr">修改</view>
 		</view>
-		<view class="tip"><image src="../../image/count.png" />预计送达时间<view class="time">11:25</view></view>
+		<view class="tip"><image src="../../image/count.png" />预计送达时间<view class="time">{{arrivalTime}}</view></view>
     </view>
   
     <view class="list">
-        <view class="total"><view class="name">订单总价</view><view class="price">￥36.00</view></view>
-	    <view class="item">
-	        <view class="name">梅干菜扣肉套餐</view>
-	        <view class="num">x1</view>
-	        <view class="price">￥18.00</view>
+        <view class="total"><view class="name">订单总价</view><view class="price">￥{{totalFeeVal}}</view></view>
+	    <view wx:for="{{cart_items}}" wx:key="{{index}}">
+	    	<view class="item" wx:if="{{item.issetfood == 0 }}">
+		    	<view class="name">{{item.name}}</view>
+		        <view class="num">x{{item.count}}</view>
+		        <view class="price">￥{{item.price}}</view>
+	    	</view>
+	    	<view class="item" wx:if="{{item.issetfood == 1 }}">
+		    	<view class="name">{{item.name}}</view>
+		        <view class="num">x1</view>
+		        <view class="price">￥{{item.price}}</view>
+	    	</view>
 	    </view>
-	    <view class="item">
-	        <view class="name">梅干菜扣肉套餐</view>
-	        <view class="num">x1</view>
-	        <view class="price">￥18.00</view>
+	    <view class="item box" wx:if="{{totalBoxFee>0}}">
+	        <view class="name">餐盒费</view>
+	        <view class="num"></view>
+	        <view class="price">￥{{totalBoxFeeVal}}</view>
 	    </view>
-	    <view class="item coupon">
-	        <view class="name">10元优惠券</view>
-	        <view class="num">x1</view>
-	        <view class="price">-￥10.00</view>
+	    <view class="item diliver" wx:if="{{deliveryFee>0}}">
+	        <view class="name">配送费</view>
+	        <view class="num"></view>
+	        <view class="price">￥{{deliveryFeeVal}}</view>
+	    </view>
+	    <view class="item coupon" wx:if="{{discountFee>0}}">
+	        <view class="name">满30减15活动</view>
+	        <view class="num"></view>
+	        <view class="price">-￥{{discountFeeVal}}</view>
 	    </view>
     </view>
 
-	<view class="cont">
+<!--
+    <view class="cont">
 	    <view class="con2" bindtap="openCardList">优惠券
 	    	<view wx:if="{{couponsNum}}" class="right colored">已选择{{couponsNum}}张<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 
 	       <view wx:if="{{!couponsNum}}"  class="right">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 	    </view>
+	</view> 
+-->
+
+    <view class="cont">
+	    <picker  class="con2" bindchange="bindPickerChange" value="{{indexNum}}" range="{{array}}">用餐人数
+	    	<view class="right">{{array[indexNum]}}人<image class="arrodow rote" src="../../image/arrodow.png" />
+            </view>
+	    </picker>
 	</view>
 
-	<view class="cont {{needsSlide?'slide':''}}">
-	  <view class="con2">备注(选填)
+<!-- 	<view class="cont {{needsSlide?'slide':''}}">
+	  <view class="con2">备注（选填）可输入特殊需求
 	      <view class="right1"  bindtap="needsSlideTap"><image class="arrodow" src="../../image/arrodow.png" /></view>
 		  <view class="hide_cont">
-		      <view class="tips">可输入特殊需求</view>
 		      <view class="text" wx:if="{{textComplete}}" bindtap="demandFocus">{{caution}}</view>
-              <textarea focus="{{!textComplete}}" wx:if="{{!textComplete}}" id="demand" bindblur="demandBlur" value="{{caution}}" rows="3"></textarea>
+              <textarea maxlength="50" focus="{{!textComplete}}" wx:if="{{!textComplete}}" id="demand" bindblur="demandBlur" value="{{caution}}" rows="3"></textarea>
 		  </view>
 	  </view>
-	</view> 
+	</view>  -->
+<!-- 
+	<view class="cont {{needsSlide?'slide':''}}">
+	  <view class="con2">备注（选填）可输入特殊需求
+	      <view class="right1"  bindtap="needsSlideTap"><image class="arrodow" src="../../image/arrodow.png" /></view>
+		  <view class="hide_cont">
+              <textarea maxlength="50" id="demand" bindblur="demandBlur" value="{{caution}}" rows="3"></textarea>
+		  </view>
+	  </view>
+	</view>  -->
 
     <view class="cont">
 	    <view class="con2" bindtap="openAccount">支付方式
@@ -65,13 +95,11 @@
 	    </view>
 	</view>
 
-
-
 </view>
 
 <view class="footer">
-    <view class="userfee">需支付：￥<i class="fee">26.00</i></view>
-    <view class="discount">已优惠：￥10.00</view>
+    <view class="userfee">需支付：￥<i class="fee">{{userFeeVal}}</i></view>
+    <view class="discount">已优惠：￥{{discountFeeVal}}</view>
     <view bindtap="orderSubmit" class="checkBtn">确认下单</view>
 </view>
 
@@ -80,7 +108,7 @@
 
 <view class="panel"  hidden="{{!tip_panel}}">
 	<view class="tip_panel">
-		<view class="hd-title">消费提醒</view>
+		<view class="hd-title">支付完成</view>
 		<view class="info">
 			<view>本次消费：￥{{tradeInfo.bala}}</view>
 			<view>支付方式：{{tradeInfo.paytype}}</view>

@@ -9,12 +9,16 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .topbar{ background:#FDD01B; color:#000; text-align:center; padding:14rpx 0;}
 .topbar view{ display:inline-block;color:#f00; }
 .main{ padding:0 30rpx; }
-.main .item{ padding:30rpx 100rpx 30rpx 250rpx; min-height:140rpx; position:relative; border-top:1px solid #999; }
+.main .empty{ text-align:center; padding:100rpx 0; }
+.main .empty image{ width:100rpx; height:100rpx; display:inline-block;  }
+.main .empty view{ color:#999; }
+
+.main .item{ padding:30rpx 80rpx 30rpx 250rpx; min-height:140rpx; position:relative; border-top:1px solid #999; }
 .main .item:nth-child(1){ border:none;  }
 .main .item .shop_img{ position:absolute; left:25rpx; top:30rpx; width:200rpx; height:140rpx; border-radius:10rpx; box-shadow:4rpx 4rpx 8rpx rgba(0,0,0,0.5);}
 .main .item .arrodow{width:30rpx; height:20rpx; vertical-align:middle;  position:absolute; right:30rpx; top:91rpx;}
 .main .item .rote{transform:rotate(-90deg);-ms-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-webkit-transform:rotate(-90deg);-o-transform:rotate(-90deg);}
-.main .item .name{font:30rpx/40rpx "微软雅黑";  min-height:40rpx; color:#000; font-weight:bold;}
+.main .item .name{font:30rpx/40rpx "微软雅黑";  min-height:40rpx; color:#000; font-weight:bold; overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
 .main .item .time{ margin-top:10rpx; color:#593900; font-weight:bold; }
 .main .item .time .tag{ font:26rpx/40rpx "微软雅黑"; display:inline-block; padding-right:20rpx; background:#FDD01B; border:2px solid #FABF00; margin-right:15rpx; border-radius:20rpx 0 0 20rpx; }
 .main .item .time .tag image{ display:inline-block; height:40rpx; width:40rpx; vertical-align:bottom; margin-right:5rpx;}

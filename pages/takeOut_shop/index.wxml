@@ -1,27 +1,17 @@
 <!--index.wxml-->
 <view class="container">
 <loading hidden="{{loaderhide}}">加载中...</loading> 
-<view class="topbar">附近有<view>5</view>家餐厅可为您提供配送服务</view>
+<view class="topbar">附近有<view>{{shopList.length}}</view>家餐厅可为您提供配送服务</view>
 <view class="section main">
-    <view class="item" bindtap="enterShop">
-        <image class="shop_img" src="../../image/door.png" />
-        <view class="name">湖州长兴人民路餐厅</view>
-        <view class="time"><view class="tag"><image src="../../image/clock.png" />预计送餐时间</view>40分钟</view>
-        <view class="dist"><image src="../../image/address.png" />1km</view>
-        <image class="arrodow rote" src="../../image/arro_black.png" />
+    <view class="empty" wx:if="{{shopList.length == 0}}">
+        <image src="../../image/empty.png" />
+        <view>附近暂无餐厅</view>
     </view>
-    <view class="item" bindtap="enterShop">
+    <view class="item" bindtap="enterShop" wx:for="{{shopList}}" wx:key="{{index}}" data-param="{{index}}">
         <image class="shop_img" src="../../image/door.png" />
-        <view class="name">湖州长兴人民路餐厅</view>
-        <view class="time"><view class="tag"><image src="../../image/clock.png" />预计送餐时间</view>40分钟</view>
-        <view class="dist"><image src="../../image/address.png" />1km</view>
-        <image class="arrodow rote" src="../../image/arro_black.png" />
-    </view>
-    <view class="item" bindtap="enterShop">
-        <image class="shop_img" src="../../image/door.png" />
-        <view class="name">湖州长兴人民路餐厅</view>
-        <view class="time"><view class="tag"><image src="../../image/clock.png" />预计送餐时间</view>40分钟</view>
-        <view class="dist"><image src="../../image/address.png" />1km</view>
+        <view class="name">{{item.sname}}</view>
+        <view class="time"><view class="tag"><image src="../../image/clock.png" />预计送餐时间</view>{{item.distanceTime}}分钟</view>
+        <view class="dist"><image src="../../image/address.png" />{{item.distance}}km</view>
         <image class="arrodow rote" src="../../image/arro_black.png" />
     </view>
 </view>

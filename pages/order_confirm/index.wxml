@@ -94,12 +94,28 @@
 	       </view>
 	    </view>
 	</view>
+ 
+    <view class="cont" wx-if="{{InvoiceEnable}}">
+	    <view class="con2">发票是否需要
+	       <view class="right">
+	          <view bindtap="chooseItem" data-param="1" class="chooseItem {{isInvoice==1?'active':''}}">
+	          	<image wx:if="{{isInvoice==0}}" src="../../image/choose.png" />
+	          	<image wx:if="{{isInvoice==1}}" src="../../image/choosed.png" />是
+	          </view>
+	       	  <view bindtap="chooseItem" data-param="0" class="chooseItem {{isInvoice==0?'active':''}}">
+	       	  	<image wx:if="{{isInvoice==1}}" src="../../image/choose.png" />
+	       	  	<image wx:if="{{isInvoice==0}}" src="../../image/choosed.png" />否
+	       	  </view>
+	       </view>
+	    </view>
+	</view>
+
 
 <!-- 	<view class="cont {{needsSlide?'slide':''}}">
-	  <view class="con2">发票或更多需求
+	  <view class="con2">更多需求
 	      <view class="right1"  bindtap="needsSlideTap"><image class="arrodow" src="../../image/arrodow.png" /></view>
 		  <view class="hide_cont">
-		      <view class="tips">如需发票，请到店取餐时接洽服务员</view>
+	      <view class="tips">如需发票，请到店取餐时接洽服务员</view> 
 		      <view class="text" wx:if="{{textComplete}}" bindtap="demandFocus">{{caution}}</view>
               <textarea focus="{{!textComplete}}" wx:if="{{!textComplete}}" id="demand" bindblur="demandBlur" value="{{caution}}" rows="3"></textarea>
 		  </view>
@@ -199,7 +215,7 @@
 
 <view class="panel"  hidden="{{!tip_panel}}">
 	<view class="tip_panel">
-		<view class="hd-title">消费提醒</view>
+		<view class="hd-title">支付完成</view>
 		<view class="info">
 			<view>本次消费：￥{{tradeInfo.bala}}</view>
 			<view>支付方式：{{tradeInfo.paytype}}</view>

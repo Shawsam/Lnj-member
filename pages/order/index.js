@@ -81,7 +81,14 @@ Page({
                })
                wx.setStorageSync('work_num',work_num); 
                
-               var menuData = res.data.data;        //菜单数据
+       
+               var date = new Date();
+               var year = date.getFullYear();    //年
+               var month = date.getMonth() + 1;  //月
+               var day = date.getDate();         //日
+               var currentTime = date.getTime();  //当前时间戳
+
+               var menuData = res.data.data;           //菜单数据
                for(var i in menuData){       
                    var reg = /^http/;
                    if(reg.test(menuData[i].onPicture)){
@@ -116,6 +123,35 @@ Page({
                    for (var j in mainGoodsList){
                       
                       var singeItem = mainGoodsList[j];
+                      
+                      // singeItem.available_today_times  = '17:00-21:00,23:00-23:59';
+                      var timeArray = [];
+
+                      if(singeItem.availableTodayTimes){
+                          var available_times = singeItem.availableTodayTimes.split(',');
+                          
+
+                          for(var a in available_times){
+                             var _available_times = available_times[a].split('-');
+                             for(var b in _available_times){
+                                var timeStamp = new Date(year+'/'+month+'/'+day+' '+_available_times[b]).getTime();
+                                timeArray.push(timeStamp);
+                             }
+                          }
+                          
+                          var groupNum = Math.ceil(timeArray.length/2);
+                          var record = 0;
+                          for(var g=0; g<=groupNum; g++){
+                            if(currentTime >= timeArray[2*g] && currentTime<= timeArray[2*g+1]){
+                                record++;
+                                // console.log(currentTime);
+                                // console.log(timeArray[2*g]);
+                                // console.log(timeArray[2*g+1]);
+                            }
+                          }
+                          if(record == 0) singeItem.NotAvailable = true;
+                      }
+
 
                       singeItem.categoryId = menuData[i].categoryId;
                       singeItem.categoryName = menuData[i].name;
@@ -209,7 +245,7 @@ Page({
                    cart_fee:'0.00',
                    detail_panel:false,
                    choose_panel:false,
-                   info_panel:false,
+                   info_panel:false
                 })
             } else {
                 _this.setData({ loaderhide:true });
@@ -271,13 +307,14 @@ Page({
                 var singeItem = items[i].mainGoodsList[j];  
                 if(singeItem){           
                     if(singeItem.sideDcGoodsCategoryList && singeItem.sideDcGoodsCategoryList.length >0){
-                        if(singeItem.cart_items.length > 0){
                           //根据主菜数据        ==>  计算得出数量金额
-                          for(var k in singeItem.cart_items){
-                              cart_num = cart_num + 1;
-                              cart_fee = cart_fee + 1*singeItem.cart_items[k].priceVal;
+                          if(singeItem.cart_items.length > 0){
+                            for(var k in singeItem.cart_items){
+                                cart_num = cart_num + 1;
+                                cart_fee = cart_fee + 1*singeItem.cart_items[k].priceVal;
+                            }
+                            
                           }
-                          
                           //所选配菜数据可操作  ==> 计算得出配菜库存
                           for(var m in singeItem.sideDcGoodsCategoryList){
                               for(var n in singeItem.sideDcGoodsCategoryList[m].sideGoodsList){
@@ -295,7 +332,7 @@ Page({
                                   }
                               }
                           }
-                        }
+
 
                     }else{
                           cart_num = cart_num + singeItem.count;

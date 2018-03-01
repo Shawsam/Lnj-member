@@ -6,6 +6,7 @@ Page({
       error:''
    },
    onLoad: function (option) {
+       console.log(option);
        this.setData({
           error:option.error,
           errorMsg:option.errorMsg

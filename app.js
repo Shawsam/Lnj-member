@@ -4,11 +4,11 @@ var host_dev = "https://demo.i-manji.com/lnj-weixin/console/dc";
 
 App({
   globalData: {
-     host:host,
+     host:host_dev,
      userId:'',           //用户userId
      openId:'',           //小程序openId
      _openId:'',          //公众号_openId
-     unionId:'',          //unionId
+     unionId:0,          //unionId
      shopId:'',           //当前店铺id
      shopName:'',         //当前店铺名    
      orderNum:0,          //当前店铺订单数量
@@ -33,7 +33,7 @@ App({
                         withCredentials: true,
                         success: function (res) {
                             //基本信息
-                            // console.log(res);
+                            console.log(res);
                             _this.globalData.userInfo = res.userInfo;
                             typeof cb == "function" && cb(_this.globalData.userInfo);
 
@@ -48,6 +48,7 @@ App({
                                 data: param,
                                 success: function (res) {
                                     //服务器返回的结果
+                                    console.log('信息');
                                     console.log(res);
                                     if (res.data.errcode == 0) {
                                        var openId = res.data.miniOpenId,
@@ -74,8 +75,8 @@ App({
 
                                 },
                                 fail: function () {
-                                    console.log('系统错误')
-                                    wx.redirectTo({ url:'../view_state/index?errorMsg='+errorMsg})
+                                    console.log('网络错误，请重试')
+                                    wx.redirectTo({ url:'../view_state/index?errorMsg=网络错误，请重试'})
                                 }
                             })
                         },
@@ -102,14 +103,14 @@ App({
 
                 } else {
                     console.log('获取用户登录态失败' + r.errMsg)
-                    var errorMsg = '获取用户登录态失败' + r.errMsg;
-                    wx.redirectTo({ url:'../view_state/index?errorMsg='+errorMsg })
+                    var errMsg = '获取用户登录态失败' + r.errMsg;
+                    wx.redirectTo({ url:'../view_state/index?errorMsg='+errMsg })
                 }
             },
             fail: function () {
                  console.log('登陆失败')
-                 var errorMsg = '登录失败';
-                 wx.redirectTo({ url:'../view_state/index?errorMsg='+errorMsg })
+                 var errMsg = '登录失败';
+                 wx.redirectTo({ url:'../view_state/index?errorMsg='+errMsg })
             }
         })
       }

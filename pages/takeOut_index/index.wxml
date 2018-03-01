@@ -1,17 +1,19 @@
 <!--index.wxml-->
 <view class="container">
 <loading hidden="{{loaderhide}}">加载中...</loading> 
-<view class="topbar">前天约有<view>19987</view>人选择在老娘舅订餐</view>
+<view class="topbar">昨日约有<view>{{person}}</view>人选择在老娘舅订餐</view>
+<image class="return" bindtap="Return" src="../../image/backTo.png" />
 <view class="section banner">
     <image src="../../image/takeOut_banner.jpg" />
 </view>   
 <view class="section main">
-    <view class="user">{{userInfo.nickName}}<view class="sex">{{userInfo.gender==1?'先生':'女士'}}</view></view>
+    <view class="user">{{userInfo.nickName}}<view wx:if="{{userInfo.gender==1}}" class="sex">先生</view><view wx:if="{{userInfo.gender==2}}" class="sex">女士</view>
+    </view>
     <view class="welcome">欢迎回来</view>
     <view>
         <view class="btnCon" bindtap="Enter">
-        <image class="btnImg" src="../../image/enter.png" />
-        <image class="avatar" src="{{userInfo.avatarUrl}}" />
+           <image class="btnImg" src="../../image/enter.png" />
+           <image class="avatar" src="{{userInfo.avatarUrl}}" />
         </view>
     </view>
 </view>

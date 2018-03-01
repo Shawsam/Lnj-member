@@ -16,11 +16,13 @@
     "pages/takeOut_mine/index",
     "pages/takeOut_addr/index",
     "pages/takeOut_addr_add/index",
+    "pages/takeOut_addr_edit/index",
     "pages/takeOut_myaddr/index",
     "pages/takeOut_shop/index",
     "pages/takeOut_menu/index",
     "pages/takeOut_order_confirm/index",
     "pages/takeOut_order_info/index",
+    "pages/takeOut_order_fail/index",
     "pages/login/index"
   ],
   "window":{

@@ -10,8 +10,11 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .main{ background:#fff; border-radius:10px; box-shadow:2rpx 2rpx 6rpx rgba(0,0,0,0.1); position:relative; }
 .main .title{ height:110rpx; font:32rpx/110rpx "微软雅黑"; font-weight:bold; text-align:center; background:#FDD01B; border-radius:20rpx 20rpx 0 0; }
 .main .title image{ height:70rpx; width:69rpx; display:inline-block; vertical-align:middle; margin-right:15rpx;}
-.main .content{ padding:0 30rpx 70rpx 30rpx;  }
-.main .content .list{ max-height:700rpx; overflow-y:scroll; }
+.main .content{ padding:0 0 70rpx 0; }
+.main .content .list{ max-height:700rpx; overflow-y:scroll; padding:0 30rpx;}
+.main .content .list .empty{ text-align:center; padding-top:60rpx; }
+.main .content .list .empty image{ width:100rpx; height:100rpx; display:inline-block;  }
+.main .content .list .empty view{ color:#999; }
 .main .content .list .item{ padding:40rpx; position:relative; padding-left:54rpx; border-top:1px solid #e8e8e8; }
 .main .content .list .item .icon{ position:absolute; left:5rpx; top:74rpx; height:29rpx; width:29rpx; border-radius:50%; border:1px solid #ccc;}
 .main .content .list .item .icon.active .circle{  position:absolute; background:#FDD01B; left:5rpx; top:5rpx; height:20rpx; width:20rpx; border-radius:50%; }

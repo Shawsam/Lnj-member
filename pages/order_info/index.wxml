@@ -82,7 +82,7 @@
           </view>
 
 
-           <view wx:if="{{order.coupons.length}}">
+          <view wx:if="{{order.coupons.length}}">
                <view class="list_item card" wx:for="{{order.coupons}}" wx:key="{{item.couponNo}}"  wx:if="{{item.type!=5}}"> 
                  <view class="info1">
                    <view class="name">{{item.typeName}}</view>
@@ -102,7 +102,8 @@
       <view class="item">下单时间<view class="desp">{{order.orderTime}}</view></view>
       <view class="item">付款时间<view class="desp">{{order.payTime}}</view></view>
       <view class="item" wx:if="{{order.subscribeTime}}">预约时间<view class="desp">{{order.subscribeTime}}</view></view>
-<!--  <view class="item">备注信息<view class="desp">{{order.caution?order.caution:'无'}}</view></view> -->
+      <view class="item" wx:if="{{order.isInvoice}}">是否需要发票<view class="desp">{{order.isInvoice?'是':'否'}}</view></view>
+      <view class="item">备注信息<view class="desp">{{order.caution?order.caution:'无'}}</view></view>
       <view class="item">支付方式<view class="desp">{{order.payTypeDesc}}</view></view>
     </view>
 
@@ -121,7 +122,7 @@
      <view class="Con">
        <view class="title">选择支付方式</view>
        <view class="list">
-           <view class="account" data-type="1" bindtap="chooseTap"><image src="../../image/family_card.png" />亲情账户
+           <view wx-if="{{isMember}}" class="account" data-type="1" bindtap="chooseTap"><image src="../../image/family_card.png" />亲情账户
                <view class="choose {{paytype==1?'active':''}}"><view class="dot"></view></view>
            </view>
            <view class="wx" data-type="2" bindtap="chooseTap"><image src="../../image/wechart.png" />微信支付

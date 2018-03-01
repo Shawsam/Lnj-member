@@ -1,4 +1,6 @@
 //index.js
+import { formatTime } from '../../utils/util.js'
+
 //获取应用实例
 var app = getApp()
 Page({
@@ -7,534 +9,330 @@ Page({
       cardNo:'',
       shopName:'',
       cart_items:[],
-      detail_items:[],  //明细 
-      dwCoupons:[],     //会员商品券对应商品
-      activity:[],      //活动折扣信息
-      coupons:[],       //选择的优惠券
-      couponsNum:0,     //选择了多少张
-      card_num:0,       //一共多少张
-      goodsId:'',       //单品数据
-      taoCanNum:'',     //套餐数据
-      couponsData:[],
-      totalFee:0,                 
+      totalFee:0, 
+      totalFeeVal:'0.00',                
       userFee:0,
       userFeeVal:'0.00',
       discountFee:0,
       discountFeeVal:'0.00',
-      packNum:0,
-      packPrice:0,
-      packTotalFee:0,
-      couponFee:0,
+      totalBoxNum:0,
+      totalBoxFee:0,
       dinnerType:1,     //用餐方式
       paytype:1,        //支付方式
       phone:'',         //联系方式
       phoneInput:'', 
       caution:'',
       needs:'',         //更多需求
-      isMember:1,       //会员 有userid则是会员否则为非会员
       tip_panel:false,
       tradeInfo:'',
       phoneSlide:false,
       needsSlide:false,
       loaderhide:true,
+      loaderhide1:true,
       textComplete:true,
-      isSubscribe:0,      //是否预约打包
-      subscribeTime:'',    //预约打包时间
-      startTime:'10:00',
-      endTime:'19:00'
+      array:[1,2,3,4,5,6,7,8,9,10],
+      indexNum:0
+  },
+  
+  onLoad: function (option) {
+    var _this = this;
 
+    //获取全局数据，初始化当前页面
+    app.getUserInfo(function(userInfo){
+      //用户信息
+      _this.setData({
+        userInfo:userInfo
+      })
+    })
+
+    //点餐页面传递的参数
+    // console.log(option);
+    var cart_items = option.cart_items,
+        detail_items = option.detail_items;
+    //读取缓存地址
+    var chooseAddr = wx.getStorageSync('chooseAddr');
+    var distanceTime = app.globalData.distanceTime?app.globalData.distanceTime:40;
+    var currentTime = new Date().getTime();
+    var arrivalTimeStamp = formatTime(currentTime + distanceTime*60*1000);
+    var arrivalTime = arrivalTimeStamp.substr(10,6);
+
+    console.log(cart_items);
+    _this.setData({
+       shopName:app.globalData.shopName,
+       distanceTime:distanceTime,
+       arrivalTime:arrivalTime,
+       arrivalTimeStamp:arrivalTimeStamp,
+       cardNo:app.globalData.cardNo,
+       phone:app.globalData.mobile,
+       phoneInput:app.globalData.mobile,
+       cart_items:JSON.parse(cart_items),
+       detail_items:JSON.parse(detail_items),
+       chooseAddr:JSON.parse(chooseAddr)
+    })
+
+    console.log(this.data.detail_items);
+
+    
+    //请求订单计算接口
+    var param = {
+        mini:'mini',
+        storeid:app.globalData.shopId,
+        goodsDetail:JSON.stringify(this.data.detail_items),
+    }
+    _this.setData({ loaderhide:false });
+    wx.request({
+        url: app.globalData.host+'/waimai/goods/jsOrderPrice', 
+        data:param,
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        method:'POST',
+        success: function (res) {
+            //服务器返回的结果
+            console.log(res);
+            _this.setData({ loaderhide:true });
+            if (res.data.errcode == 0) {
+                var resdata = res.data;
+                _this.setData({
+                  totalFee:resdata.totalFee,                 
+                  userFee:resdata.userFee,
+                  discountFee:resdata.discountFee,
+                  totalBoxNum:resdata.totalBoxNum,
+                  totalBoxFee:resdata.totalBoxFee,
+                  deliveryFee:resdata.deliveryFee,
+                  deliveryFeeVal:(resdata.deliveryFee).toFixed(2),
+                  totalFeeVal:(resdata.totalFee).toFixed(2),
+                  userFeeVal:(resdata.userFee).toFixed(2),
+                  discountFee:resdata.discountFee,
+                  discountFeeVal:(resdata.discountFee).toFixed(2),
+                  totalBoxFeeVal:(resdata.totalBoxFee).toFixed(2)
+                })
+   
+            } else {
+                wx.showModal({
+                    content:res.data.msg,
+                    showCancel: false
+               });
+            }
+        },
+        fail: function () {
+            console.log('系统错误')
+        }
+    })
   },
 
-  // Init:function(){
-  //     //POST 参数   计算订单信息
-  //     var _this = this;
-  //     var param = {
-  //         mini:'mini',
-  //         shopId:app.globalData.shopId,
-  //         openId:app.globalData.openId,
-  //         goodsDetail:JSON.stringify(this.data.detail_items),
-  //         coupons:JSON.stringify(this.data.coupons),
-  //         dwCoupons:this.data.dwCoupons,
-  //         dinnerType:this.data.dinnerType,
-  //         subscribe:this.data.isSubscribe
-  //     }
-  //     _this.setData({ loaderhide:false });
+  onShow: function(){
+    var _this = this;
+    wx.getStorage({
+      key:'paytype',
+      success: function(res) {
+          var data = res.data;
+          _this.setData({
+              paytype:data
+          })
+      } 
+    })
+  },
 
-  //     wx.request({
-  //         url: app.globalData.host+'/orderQuery/jsOrderPrice', 
-  //         data:param,
-  //         header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
-  //         method:'POST',
-  //         success: function (res) {
-  //             //服务器返回的结果
-  //             // console.log(res);
-  //             if (res.data.errcode == 0) {
-  //                 var resdata = res.data,
-  //                     activity = resdata.activity,
-  //                     coupons = resdata.coupons;
+   bindPickerChange: function(e) {
+    this.setData({
+      indexNum: e.detail.value
+    })
+  },
 
-  //                 if(activity){
-  //                     activity = JSON.parse(activity);
-  //                 }
-  //                 if(coupons){
-  //                     coupons = JSON.parse(coupons);
-  //                 }
-                  
-  //                 _this.setData({
-  //                       userFee:resdata.userFee,
-  //                       packTotalFee:resdata.packageFee,
-  //                       totalFee:resdata.totalOrderFee,                 
-  //                       userFee:resdata.userFee,
-  //                       userFeeVal:(resdata.userFee/100).toFixed(2),
-  //                       discountFee:resdata.discountFee,
-  //                       packNum:resdata.packageCount,
-  //                       packPrice:resdata.packageFee,
-  //                       packTotalFee:resdata.totalPackageFee,
-  //                       packTotalFeeVal:(resdata.totalPackageFee/100).toFixed(2),
-  //                       couponFee:resdata.couponFee,
-  //                       coupons:coupons,
-  //                       activity:activity,
-  //                       couponsNum:coupons.length
-  //                 })
-     
-  //             } else {
-  //                 wx.showModal({
-  //                     content:res.data.msg,
-  //                     showCancel: false
-  //                 });
-  //             }
-
-  //         },
-  //         fail: function () {
-  //             console.log('系统错误')
-  //         }
-  //     })
-
-
-  //     //优惠券数量   优惠券信息
-  //     var param = {
-  //       mini:'min',
-  //       shopId:app.globalData.shopId,
-  //       openId:app.globalData.openId,
-  //       taoCanNum:this.data.taoCanNum,
-  //       goodsId:this.data.goodsId
-  //     }
-
-  //     wx.request({
-  //         url: app.globalData.host+'/coupon/couponList', 
-  //         data:param, 
-  //         success: function (res) {
-  //             //服务器返回的结果
-  //             // console.log(res);
-  //             _this.setData({ loaderhide:true });
-  //             if (res.data.errcode == 0) {
-  //                 var feiTaoCanList = res.data.feiTaoCanList,
-  //                     taoCanList = res.data.taoCanList,
-  //                     otherList = res.data.otherList,
-  //                     a = feiTaoCanList?feiTaoCanList.length:0,
-  //                     b = taoCanList?taoCanList.length:0,
-  //                     c = otherList?otherList.length:0;
-
-  //                     _this.setData({
-  //                        couponsData:res.data,
-  //                        card_num:a+b+c
-  //                     })
-                  
-  //             } else {
-  //                wx.showModal({
-  //                     content:res.data.msg,
-  //                     showCancel: false
-  //                });
-  //             }
-
-  //         },
-  //         fail: function () {
-  //             console.log('系统错误')
-  //         }
-  //     })
-
-  // },
-
-  // onLoad: function (option) {
-  //   var _this = this;
-  //   var startTime,endTime,
-  //       currentTime = new Date(),
-  //       currentHours = currentTime.getHours(),
-  //       currentTime = currentTime.getMinutes();
-  //   if(currentHours<10){
-  //      startTime = '10:00';
-  //      endTime = '19:00';
-  //   }else if(currentHours>=19){
-  //      wx.showModal({content:'当前时间不提供预约打包服务',
-  //                    showCancel: false,
-  //                    success: function(res) {
-  //                             if (res.confirm) {
-  //                               wx.navigateBack();
-  //                             }
-  //                    }
-  //      });
-  //   }else{
-  //      startTime = currentHours+':'+currentTime;
-  //      endTime = '19:00';
-  //   }
-
-  //   //获取全局数据，初始化当前页面
-  //   app.getUserInfo(function(userInfo){
-  //     //用户信息
-  //     _this.setData({
-  //       userInfo:userInfo,
-  //       startTime:startTime,
-  //       endTime:endTime
-  //     })
-  //   })
-
-  //   //点餐页面传递的参数
-  //   // console.log(option);
-  //   var cart_items = option.cart_items,
-  //       detail_items = option.detail_items,
-  //       dwCoupons = option.dwCoupons,
-  //       goodsId = option.goodsId,
-  //       taoCanNum = option.taoCanNum;
-   
-  //   //附加参数
-  //   var isMember= 1,
-  //       paytype = 1,
-  //       isSubscribe = 0,
-  //       dinnerType = 1;
-  //   if(!app.globalData.cardNo){       //非会员
-  //       isMember = 0;
-  //       paytype = 2;
-  //   }
-  //   if(app.globalData.fromType == 1){  //打包预订 只能外带
-  //      isSubscribe = 1;
-  //      dinnerType = 2;
-  //   }
-   
-
-  //   _this.setData({
-  //      shopName:app.globalData.shopName,
-  //      cardNo:app.globalData.cardNo,
-  //      phone:app.globalData.mobile,
-  //      phoneInput:app.globalData.mobile,
-  //      cart_items:JSON.parse(cart_items),
-  //      detail_items:JSON.parse(detail_items),
-  //      dwCoupons:dwCoupons,
-  //      goodsId:goodsId,
-  //      taoCanNum:taoCanNum,
-  //      isMember:isMember,
-  //      paytype:paytype,
-  //      isSubscribe:isSubscribe,
-  //      dinnerType:dinnerType
-  //   }) 
-  //   _this.Init();
-  // },
-
-  // onShow: function(){
-  //   var _this = this;
-  //   wx.getStorage({
-  //     key:'paytype',
-  //     success: function(res) {
-  //         var data = res.data;
-  //         _this.setData({
-  //             paytype:data
-  //         })
-  //     } 
-  //   })
-
-    
-  //   wx.getStorage({
-  //     key:'choosed_card',
-  //     success: function(res) {
-  //        // console.log(res.data);
-  //        _this.setData({
-  //           coupons:JSON.parse(res.data)
-  //        });
-         
-  //        _this.Init();        
-  //     } 
-  //   })
-
-  // },
-
-  // //预约时间
-  // bindTimeChange:function(e){
-  //    this.setData({subscribeTime:e.detail.value})
-  // },
-
-  // //用餐方式
-  // dinnerTypeTap:function(e){     
-  //      if(app.globalData.fromType == 1) return;             
-  //      var dinnerType = e.currentTarget.dataset.type;
-  //      this.setData({
-  //          dinnerType:dinnerType
-  //      })
-  //      this.Init();
-  // },
+  //更多需求
+  needsSlideTap:function(){
+       this.setData({
+           needsSlide:!this.data.needsSlide,
+           textComplete:!this.data.textComplete
+       })
+  },
   
-  // //手机号码
-  // phoneSlideTap:function(){
-  //      this.setData({
-  //          phoneSlide:!this.data.phoneSlide
-  //      })
-  // },
-  // phoneInput:function(e){
+  //跳转到 账户选择
+  openAccount:function(){
+     if(!app.globalData.cardNo) return;
+     wx.navigateTo({
+        url: '../account/index?type='+this.data.paytype
+     })
+  },
+  
+  // demandInput:function(e){
   //     this.setData({
-  //        phoneInput: e.detail.value
+  //        caution: e.detail.value
   //     })
   // },
-  // phoneConfirmTap:function(){
-  //     var phone = this.data.phoneInput;
-  //     if(phone==''){
-  //       wx.showModal({
-  //             content:"请输入手机号码",
-  //             showCancel: false
-  //       });
-  //       return;
-  //     }
-  //     if(!this.is_phone(phone)){
-  //       wx.showModal({
-  //             content:"请输入正确的手机号码",
-  //             showCancel: false
-  //       });
-  //       return;
-  //     }
-  //     this.setData({
-  //        phone:phone,
-  //        phoneSlide:false
-  //     })
+  demandFocus:function(e){
+    console.log(1);
+    this.setData({
+      textComplete:false
+    })
+  },
 
-  // },
-  // is_phone:function(str){
-  //   var reg=/^1([3789]\d|4[57]|5[012356789])\d{8}$/;
-  //   if(reg.test(str))
-  //     return true;
-  //   else
-  //     return false;
-  // },
-  
-  // //更多需求
-  // needsSlideTap:function(){
-  //      this.setData({
-  //          needsSlide:!this.data.needsSlide
-  //      })
-  // },
-  
-  // //跳转到 优惠券选择
-  // openCardList:function(){
-  //   var card_num = this.data.card_num,
-  //       taoCanNum = this.data.taoCanNum,
-  //       couponsData = JSON.stringify(this.data.couponsData);
-  //   if(card_num == 0){
-  //       wx.showModal({
-  //             content:"暂无可用优惠券",
-  //             showCancel: false
-  //       });
-  //       return;
-  //   }
-
-  //   wx.navigateTo({
-  //       url: '../card_list/index?couponsData='+couponsData+'&taoCanNum='+taoCanNum
-  //   })
-  // },
-  
-  // //跳转到 账户选择
-  // openAccount:function(){
-  //    if(!app.globalData.cardNo) return;
-  //    wx.navigateTo({
-  //       url: '../account/index?type='+this.data.paytype
-  //    })
-  // },
-  
-  // //打开订单明细
-  // detailTap:function(){
-  //     this.setData({
-  //       detail_panel:true
-  //     })
-  // },
-  // coverTap:function(){
-  //     this.setData({
-  //       detail_panel:false
-  //     })
-  // },
-
-  // // demandInput:function(e){
-  // //     this.setData({
-  // //        caution: e.detail.value
-  // //     })
-  // // },
-  // demandFocus:function(e){
-  //   this.setData({
-  //     textComplete:false
-  //   })
-  // },
-
-  // demandBlur:function(e){
-  //   this.setData({
-  //     caution: e.detail.value,
-  //     textComplete:true
-  //   })
-  // },
+  demandBlur:function(e){
+    console.log(2);
+    this.setData({
+      caution: e.detail.value,
+      textComplete:true
+    })
+  },
  
 
-  // //表单校验，提交数据
-  // orderSubmit:function(){
-  //   var phone = this.data.phoneInput;
-  //     if(phone==''){
-  //       wx.showModal({
-  //             content:"请输入手机号",
-  //             showCancel: false
-  //       });
-  //       return;
-  //     }
-  //     if(!this.is_phone(phone)){
-  //       wx.showModal({
-  //             content:"请输入正确的手机号",
-  //             showCancel: false
-  //       });
-  //       return;
-  //     }
-  //     this.setData({
-  //        phone:phone,
-  //        phoneSlide:false
-  //     })
-
-  //   var _this = this,
-
-  //   param= {
-  //       mini:'mini',
-  //       shopId:app.globalData.shopId,
-  //       openId:app.globalData.openId,                
-  //       userId:app.globalData.userId,                     
-  //       deskNo:app.globalData.deskNo,                    
-  //       cardNo:app.globalData.cardNo,                      
-  //       mobile:app.globalData.mobile,                       
-  //       dinnerType:this.data.dinnerType,                   
-  //       payType:this.data.paytype,                      
-  //       isMember:this.data.isMember,                    
-  //       coupons:JSON.stringify(this.data.coupons),                     
-  //       // caution:this.data.caution,                       
-  //       goodsDetail:JSON.stringify(this.data.detail_items),                      
-  //       totalFee:this.data.totalFee,                 
-  //       userFee:this.data.userFee,
-  //       discountFee:this.data.discountFee,
-  //       packNum:this.data.packNum,
-  //       packPrice:this.data.packPrice,
-  //       packTotalFee:this.data.packTotalFee,
-  //       dwCoupons:this.data.dwCoupons,
-  //       isSubscribe:this.data.isSubscribe,
-  //       subscribeTime:this.data.subscribeTime
-  //   };
+  //表单校验，提交数据
+  orderSubmit:function(){
+    var phone = this.data.phoneInput;
+      if(phone==''){
+        wx.showModal({
+              content:"请输入手机号",
+              showCancel: false
+        });
+        return;
+      }
+      if(!this.is_phone(phone)){
+        wx.showModal({
+              content:"请输入正确的手机号",
+              showCancel: false
+        });
+        return;
+      }
+      this.setData({
+         phone:phone,
+         phoneSlide:false
+      })
     
-  //   wx.setStorageSync('clearCart',true);
-  //   wx.setStorageSync('items','');
+    console.log(this.data.chooseAddr.id);
+    var _this = this,
+    param= {
+        mini:'mini',
+        storeid:app.globalData.shopId,
+        openId:app.globalData.openId,                
+        userId:app.globalData.userId, 
+        addressId:this.data.chooseAddr.id,                                                      
+        payType:this.data.paytype,                                                                                               
+        caution:this.data.caution,                       
+        goodsDetail:JSON.stringify(this.data.detail_items),                      
+        totalFee:this.data.totalFee,                 
+        userFee:this.data.userFee,
+        discountFee:this.data.discountFee,
+        totalBoxNum:this.data.totalBoxNum,
+        totalBoxFee:this.data.totalBoxFee,
+        deliveryFee:this.data.deliveryFee,
+        people:parseInt(this.data.indexNum)+1,
+        arriveNendTime:this.data.distanceTime
 
+    };
+    
+    wx.setStorageSync('clearCart',true);
+    wx.setStorageSync('items','');
+    wx.removeStorage({key:'paytype'});
 
-  //   _this.setData({ loaderhide:false });
+    _this.setData({ loaderhide1:false });
+    console.log(param);
+    wx.request({
+        url: app.globalData.host+"/waimai/goods/creatOrder",
+        data: param,
+        header: {  
+          "Content-Type": "application/x-www-form-urlencoded"  
+        }, 
+        method:'POST',
+        success: function(res) {
+          _this.setData({ loaderhide1:true });
+          var resdata = res.data;
+          console.log(resdata);
 
-  //   wx.request({
-  //       url: app.globalData.host+"/orderQuery/creatOrder",
-  //       data: param,
-  //       header: {  
-  //         "Content-Type": "application/x-www-form-urlencoded"  
-  //       }, 
-  //       method:'POST',
-  //       success: function(res) {
-  //         _this.setData({ loaderhide:true });
-  //         var resdata = res.data;
-  //         // console.log(resdata);
+          if(resdata.errcode == 0){                            //调用接口成功
+              var orderId = resdata.data,
+                  tradeInfo = resdata;
+              console.log(tradeInfo);
 
-  //         if(resdata.errcode == 0){                            //调用接口成功
-  //             var orderId = resdata.data,
-  //                 tradeInfo = resdata;
-  //             console.log(tradeInfo);
+              //============生成订单成功============//
+              if(orderId){
+                  //调微信支付
+                  if(resdata.paySign){                            
+                     wx.requestPayment({
+                       'timeStamp': resdata.timeStamp,
+                       'nonceStr': resdata.nonceStr,
+                       'package': resdata.packages,
+                       'signType': resdata.signType,
+                       'paySign': resdata.paySign,
+                       'success':function(res){
+                           wx.redirectTo({
+                             url: '../takeOut_order_info/index?orderId='+orderId
+                           })
+                        },
+                       'fail':function(res){
+                            wx.redirectTo({ url: '../takeOut_order_fail/index' })
+                        }
+                    }) 
+                  }
+                  //调用账户支付
+                  else{
+                    if(!tradeInfo.bala){
+                        wx.redirectTo({
+                           url: '../takeOut_order_info/index?orderId='+orderId
+                        })
+                        return;
+                    }
 
-  //             //============生成订单成功============//
-  //             if(orderId){
-  //                 //调微信支付
-  //                 if(resdata.paySign){                            
-  //                    wx.requestPayment({
-  //                      'timeStamp': resdata.timeStamp,
-  //                      'nonceStr': resdata.nonceStr,
-  //                      'package': resdata.packages,
-  //                      'signType': resdata.signType,
-  //                      'paySign': resdata.paySign,
-  //                      'success':function(res){
-  //                          wx.redirectTo({
-  //                            url: '../order_info/index?orderId='+orderId
-  //                          })
-  //                       },
-  //                      'fail':function(res){
-  //                           wx.redirectTo({ url: '../order_fail/index' })
-  //                       }
-  //                   }) 
-  //                 }
-  //                 //调用账户支付
-  //                 else{
-  //                   if(!tradeInfo.bala){
-  //                       wx.redirectTo({
-  //                          url: '../order_info/index?orderId='+orderId
-  //                       })
-  //                       return;
-  //                   }
+                     tradeInfo.paytype = '亲情账户';
+                     _this.setData({ 
+                        tip_panel:true,
+                        tradeInfo:tradeInfo
+                     });
 
-  //                    tradeInfo.paytype = '会员卡';
-  //                    _this.setData({ 
-  //                       tip_panel:true,
-  //                       tradeInfo:tradeInfo
-  //                    });
-
-  //                 }
-  //             }
-  //             //============生成订单失败============//
-  //             else{                                             
-  //                   wx.showModal({                           
-  //                           content:res.errMsg, 
-  //                           showCancel: false,
-  //                           success: function(res) {
-  //                             if (res.confirm) {
-  //                               wx.redirectTo({ url: '../order_fail/index' })
-  //                             }
-  //                           }
-  //                   })
-  //             } 
-  //         }else{
-  //             var orderId = res.data.data;
-  //             if(orderId){
-  //                   wx.showModal({                           
-  //                           content:res.data.msg, 
-  //                           showCancel: false,
-  //                           success: function(res) {
-  //                             if (res.confirm) {
-  //                               wx.redirectTo({ url: '../order_fail/index' })
-  //                             }
-  //                           }
-  //                   })
-  //             }else{
-  //                  wx.showModal({content:resdata.msg,showCancel: false})
-  //             }
-  //         }
-  //       }
-  //   })
-  // },
+                  }
+              }
+              //============生成订单失败============//
+              else{                                             
+                    wx.showModal({                           
+                            content:res.errMsg, 
+                            showCancel: false,
+                            success: function(res) {
+                              if (res.confirm) {
+                                wx.redirectTo({ url: '../takeOut_order_fail/index' })
+                              }
+                            }
+                    })
+              } 
+          }else{
+              var orderId = res.data.data;
+              if(orderId){
+                    wx.showModal({                           
+                            content:res.data.msg, 
+                            showCancel: false,
+                            success: function(res) {
+                              if (res.confirm) {
+                                wx.redirectTo({ url: '../takeOut_order_fail/index' })
+                              }
+                            }
+                    })
+              }else{
+                   wx.showModal({content:resdata.msg,showCancel: false})
+              }
+          }
+        }
+    })
+  },
 
   confirmTrade:function(){
-      var orderId = 100;
+      var orderId = this.data.tradeInfo.data;
       this.setData({ tip_panel:false});
 
       wx.redirectTo({
          url: '../takeOut_order_info/index?orderId='+orderId
       })
   },
-  orderSubmit:function(){
-       var tradeInfo = {
-            bala:28,
-            paytype:'会员账户',
-            totalBala:'100000'
-       }
-       this.setData({ 
-          tip_panel:true,
-          tradeInfo:tradeInfo
-       });
+  is_phone:function(str){
+    var reg=/^1\d{10}$/;
+    if(reg.test(str))
+      return true;
+    else
+      return false;
+  },
+  editAddr:function(){
+    if(getCurrentPages()[getCurrentPages().length-2].route == "pages/takeOut_addr/index"){
+         wx.navigateBack({delta: 3})
+    }else{
+         wx.navigateTo({ url:'../takeOut_addr/index'})
+    }
+
   }
 
 })

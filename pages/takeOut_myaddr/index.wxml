@@ -8,39 +8,15 @@
 	</view>
 	<view class="content">
 		<view class="list">
-			<view class="item">
-				<view class="info">小贤<view class="tel">1399999999</view></view>
-				<view class="addr">上海市黄浦区陆家浜路上海市黄浦区陆家浜路</view>
-				<image class="arrodow rote" src="../../image/arrodow.png" />
+	        <view class="empty" wx:if="{{addrData.length==0}}">
+				<image src="../../image/empty.png" />
+				<view>暂无地址</view>
 			</view>
-			<view class="item">
-				<view class="info">小贤<view class="tel">1399999999</view></view>
-				<view class="addr">上海市黄浦区陆家浜路</view>
-				<image class="arrodow rote" src="../../image/arrodow.png" />
-			</view>
-			<view class="item">
-				<view class="info">小贤<view class="tel">1399999999</view></view>
-				<view class="addr">上海市黄浦区陆家浜路</view>
-				<image class="arrodow rote" src="../../image/arrodow.png" />
-			</view>
-			<view class="item">
-				<view class="info">小贤<view class="tel">1399999999</view></view>
-				<view class="addr">上海市黄浦区陆家浜路</view>
-				<image class="arrodow rote" src="../../image/arrodow.png" />
-			</view>
-			<view class="item">
-				<view class="info">小贤<view class="tel">1399999999</view></view>
-				<view class="addr">上海市黄浦区陆家浜路</view>
-				<image class="arrodow rote" src="../../image/arrodow.png" />
-			</view>
-			<view class="item">
-				<view class="info">小贤<view class="tel">1399999999</view></view>
-				<view class="addr">上海市黄浦区陆家浜路</view>
-				<image class="arrodow rote" src="../../image/arrodow.png" />
-			</view>
-			<view class="item">
-				<view class="info">小贤<view class="tel">1399999999</view></view>
-				<view class="addr">上海市黄浦区陆家浜路</view>
+
+			<view class="item" wx:for="{{addrData}}" wx:key="{{item.key}}" 
+			data-param="{{index}}" bindtap="editAddr">
+				<view class="info">{{item.name}}<view class="tel">{{item.mobile}}</view></view>
+				<view class="addr">{{item.address}}</view>
 				<image class="arrodow rote" src="../../image/arrodow.png" />
 			</view>
 		</view>

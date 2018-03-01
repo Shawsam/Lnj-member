@@ -42,11 +42,12 @@
         <view wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:if="{{item.active}}" wx:for-index="i">
            <view class="title">{{item.name}}</view>
            <view class="item"  wx:key="{{item.goodsId}}" wx:for="{{item.mainGoodsList}}" wx:for-index="j">    
-                <view class="shade {{item.stockNum==0?'show':''}}"></view>
+                <view class="shade {{item.stockNum==0?'show':''}} {{item.NotAvailable?'show':''}}"></view>
                 <image bindtap="infoScan" data-paramA="{{i}}" data-paramB="{{j}}" src="{{item.centerImg}}" alt="{{item.name}}"/>
                 <view class="name words_line2">{{item.name}}</view>
                 <view class="desp">{{item.description?item.description:''}}</view>
-                <view class="stock_state" wx:if="{{item.stockNum==0}}" >已售罄</view>
+                <view class="stock_state" wx:if="{{!item.NotAvailable && item.stockNum==0}}" >已售罄</view>
+                <view class="stock_state" wx:if="{{item.NotAvailable}}" >不在销售时段内</view>
                 <view class="price_bar">￥<view class="price">{{item.priceVal}}</view>
                 </view>
                 <view class="quantity">
@@ -75,6 +76,7 @@
         </view>
         <view class="text name">{{infoData.name}}</view>
         <view class="text desp">{{infoData.description?infoData.description:''}}</view>
+        <view class="text time">销售时段：{{infoData.availableTodayTimes?infoData.availableTodayTimes:'不限时段'}}</view>
         <view class="handle">
             <view class="price_bar">￥<view class="price">{{infoData.priceVal}}</view></view>
             <view class="quantity">
@@ -149,7 +151,7 @@
                 <view class="item_name">{{item.name}}<view class="desp"> ({{item.description}})</view></view>
                 <view class="item_info">
                     <view wx:key="{{item.goodsId}}" wx:for="{{item.sideGoodsList}}" wx:for-index="j" data-paramA="{{i}}" data-paramB="{{j}}"
-                     class="item {{item.isSoldOut==1?'disabled':item.active?'active':''}}                     {{item.stockNum === 0 || item.minCount>=item.stockNum?'disabled':''}}" data-param="{{item.isSoldOut}}"bindtap="chooseTap">{{item.name}}{{item.price>0?'+￥'+item.price/100:''}}</view>
+                     class="item {{item.isSoldOut==1?'disabled':item.active?'active':''}}                     {{item.stockNum === 0 || item.minCount>=item.stockNum?'disabled':''}}" data-param="{{item.isSoldOut}}" bindtap="chooseTap">{{item.name}}{{item.price>0?'+￥'+item.price/100:''}}</view>
                 </view>
             </view>
         </view>
@@ -163,7 +165,7 @@
         <view class="item_num">+{{cart_num}}</view>
     </view>
     <view class="total_fee">￥<i class="fee">{{cart_fee}}</i></view>
-    <view class="detailBtn" data-param="{{cart_num}}" bindtap="detailTap" >明细</view>
+    <view class="detailBtn" data-param="{{cart_num}}" bindtap="detailTap">明细</view>
     <view class="checkBtn {{cart_num>0?'num':'none'}}"  data-param="{{cart_num>0?'true':'false'}}" bindtap="orderConfirmTap">去结算</view>
 </view>
 

@@ -6,15 +6,15 @@
 	<view class="title"></view>
 	<image class="avatar" src="{{userInfo.avatarUrl}}" />
 	<view class="name">{{userInfo.nickName}}</view>
-	<view class="phone">13567898856</view>
+	<view class="phone">{{mobile}}</view>
 </view>
 <view class="list">
-    <view class="cont">
+<!--<view class="cont">
 	    <view class="con2" bindtap="openInfo">
 		    <image class="icon" src="../../image/list1.png" />信息管理
 		    <image class="arrodow rote" src="../../image/arrodow.png" />
 	    </view>
-	</view>
+	</view> -->
 	<view class="cont">
 	    <view class="con2" bindtap="openOrder">
 	      <image class="icon" src="../../image/list2.png" />订单管理

@@ -12,7 +12,7 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .topCon .title image{ height:50rpx; width:150rpx; display:inline-block; vertical-align:middle; margin-right:15rpx;}
 .topCon .info{ padding:35rpx 150rpx 90rpx 35rpx; position:relative;  }
 .topCon .info view{ font:28rpx/45rpx "微软雅黑"; }
-.topCon .info .edit{ position:absolute; padding:30rpx; right:30rpx; top:50rpx; height:30rpx; line-height:30rpx; border-left:1px solid #5A3A01; color:#5A3A01; }
+.topCon .info .edit{ position:absolute; padding:30rpx 25rpx; right:25rpx; top:50rpx; height:30rpx; line-height:30rpx; border-left:1px solid #5A3A01; color:#5A3A01; }
 .topCon .tip{ position:absolute; padding-left:15rpx; bottom:-35rpx; left:50%; margin-left:-200rpx;  font:30rpx/70rpx "微软雅黑"; height:70rpx; width:400rpx; text-align:center;  background:#FDD01B; box-shadow:0 10rpx 20rpx rgba(255, 198,0,0.5); border-radius:40px; }
 .topCon .tip image{ position:absolute; height:60rpx; width:60rpx; display:inline-block; top:5rpx; left:5rpx; }
 .topCon .tip .time{ display:inline-block; font-weight:bold; margin-left:10rpx; }
@@ -32,6 +32,7 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .main .list .item .price{ width:20%; text-align:right; color:#333;}
 .main .list .item .num{ width:25%; text-align:center; color:#333;}
 .main .list .coupon .price{ color:#E82B63; }
+
 
 .main .cont{ background:#fff; border-radius:10rpx; padding:0 40rpx; margin-bottom:30rpx; box-shadow:0 0rem 12rpx rgba(0, 0,0,0.3);}
 .main .cont .con1 view{ display:inline-block; }

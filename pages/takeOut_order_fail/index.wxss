@@ -1,0 +1,21 @@
+/**index.wxss**/
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+.container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch; position:relative; padding-bottom:110rpx; }
+
+.footer{ z-index:100; position:fixed; bottom:0; height:110rpx; width:100%; background:#fff; box-sizing:border-box; overflow:hidden; zoom:1; }
+.footer .confirmBtn{ position:absolute; top:0; right:0; height:110rpx;  font:36rpx/110rpx "微软雅黑"; width:100%;  text-align:center; background:#FDD01B; font-weight:bold; }
+.footer .confirmBtn:active{ opacity:0.6; }
+
+.backcolor{ background:#2F2E33; height:300rpx; width:100%; position:absolute; left:0; top:0; z-index:0; }
+.main{ position:relative; padding:80rpx 50rpx; text-align:center;}
+.main .fail_icon{ width:496rpx; height:355rpx; }
+.main .title{ font:44rpx/100rpx "微软雅黑"; font-weight:bold; margin:40rpx 0;}
+.main .dot{ width:73rpx; height:110rpx; margin:30rpx 0;}
+.main .text{ font:30rpx/40rpx "微软雅黑"; margin:20rpx 0;}
+.main .text view{ display:inline-block; font-weight:bold; }
+.main .backBtn{ height:100rpx; width:600rpx; margin:0 auto; font:36rpx/100rpx "微软雅黑"; border-radius:50rpx; text-align:center; background:#FDD01B; font-weight:bold; }
+.main .backBtn:active{ opacity:0.6; }

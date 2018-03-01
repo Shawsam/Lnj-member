@@ -32,6 +32,7 @@ Page({
       caution:'',
       needs:'',         //更多需求
       isMember:1,       //会员 有userid则是会员否则为非会员
+      isInvoice:0,      //是否需要发票
       tip_panel:false,
       tradeInfo:'',
       phoneSlide:false,
@@ -152,6 +153,34 @@ Page({
                  //      content:res.data.msg,
                  //      showCancel: false
                  // });
+              }
+
+          },
+          fail: function () {
+              console.log('系统错误')
+          }
+      })
+
+      var param = {
+        mini:'min',
+        shopId:app.globalData.shopId,
+        openId:app.globalData.openId
+      }
+      wx.request({
+          url: app.globalData.host+'/shop/shopInfo2', 
+          data:param, 
+          success: function (res) {
+              //服务器返回的结果
+              if (res.data.errcode == 0) {
+                var InvoiceEnable = res.data.shop.isInvoice;
+                _this.setData({
+                  InvoiceEnable:InvoiceEnable
+                })
+              } else {
+                 wx.showModal({
+                      content:res.data.msg,
+                      showCancel: false
+                 });
               }
 
           },
@@ -334,7 +363,7 @@ Page({
 
   },
   is_phone:function(str){
-    var reg=/^1([3789]\d|4[57]|5[012356789])\d{8}$/;
+    var reg=/^1\d{10}$/;
     if(reg.test(str))
       return true;
     else
@@ -411,6 +440,13 @@ Page({
       textComplete:true
     })
   },
+  //是否需要发票
+  chooseItem:function(e){
+     var param = e.currentTarget.dataset.param;
+     this.setData({
+      isInvoice:param
+     })
+  },
  
 
   //表单校验，提交数据
@@ -465,7 +501,8 @@ Page({
         payType:this.data.paytype,                      
         isMember:this.data.isMember,                    
         coupons:JSON.stringify(this.data.coupons),                     
-        // caution:this.data.caution,                       
+        caution:this.data.caution,
+        isInvoice:this.data.isInvoice,                       
         goodsDetail:JSON.stringify(this.data.detail_items),                      
         totalFee:this.data.totalFee,                 
         userFee:this.data.userFee,
@@ -546,7 +583,7 @@ Page({
                         return;
                     }
 
-                     tradeInfo.paytype = '会员卡';
+                     tradeInfo.paytype = '亲情账户';
                      _this.setData({ 
                         tip_panel:true,
                         tradeInfo:tradeInfo
