@@ -47,7 +47,7 @@
                 <view class="name words_line2">{{item.name}}</view>
                 <view class="desp">{{item.description?item.description:''}}</view>
                 <view class="stock_state" wx:if="{{!item.NotAvailable && item.stockNum==0}}" >已售罄</view>
-                <view class="stock_state" wx:if="{{item.NotAvailable}}" >不在销售时段内</view>
+                <view class="stock_state" wx:if="{{item.NotAvailable}}" >当前时段暂不可售</view>
                 <view class="price_bar">￥<view class="price">{{item.priceVal}}</view>
                 </view>
                 <view class="quantity">
@@ -76,10 +76,11 @@
         </view>
         <view class="text name">{{infoData.name}}</view>
         <view class="text desp">{{infoData.description?infoData.description:''}}</view>
-        <view class="text time">销售时段：{{infoData.availableTodayTimes?infoData.availableTodayTimes:'不限时段'}}</view>
+        <view class="text time" wx-if="{{!infoData.NotAvailable && infoData.stockNum==0}}">已售罄</view>
+        <view class="text time" wx-if="{{infoData.availableTodayTimes}}">{{infoData.availableTodayTimes=='00:00-00:00'?'当前时段暂不可售':'销售时段：'+infoData.availableTodayTimes}}</view>
         <view class="handle">
             <view class="price_bar">￥<view class="price">{{infoData.priceVal}}</view></view>
-            <view class="quantity">
+            <view class="quantity" wx-if="{{!infoData.NotAvailable && infoData.stockNum!=0}}">
                <view class="minus" catchtap="infoMinus"><image src="../../image/cut.png" /></view>
                <view  class="number">{{infoData.count}}</view>
                <view class="plus addcart"  catchtap="infoAdd"><image src="../../image/add.png" /></view>

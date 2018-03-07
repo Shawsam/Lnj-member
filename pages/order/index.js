@@ -124,7 +124,7 @@ Page({
                       
                       var singeItem = mainGoodsList[j];
                       
-                      // singeItem.available_today_times  = '17:00-21:00,23:00-23:59';
+                      //singeItem.availableTodayTimes  = '00:00-00:00';
                       var timeArray = [];
 
                       if(singeItem.availableTodayTimes){
@@ -301,6 +301,23 @@ Page({
          cart_fee = 0;
 
      //console.log(items);
+
+      //全部配菜数据
+      var _allminArray = [];
+      for(var i in items){   
+           for(var j in items[i].mainGoodsList){
+                var singeItem = items[i].mainGoodsList[j];  
+                if(singeItem){     
+                    for(var tt in singeItem.minArray){
+                      for(var ss in singeItem.minArray[tt]){
+                        _allminArray.push(singeItem.minArray[tt][ss]);
+                      }
+                    }
+                }
+          }
+      }
+
+     
      //从菜单数据中取出购物车数据 菜单列表 数量 金额
      for(var i in items){   
            for(var j in items[i].mainGoodsList){
@@ -315,18 +332,19 @@ Page({
                             }
                             
                           }
+
                           //所选配菜数据可操作  ==> 计算得出配菜库存
                           for(var m in singeItem.sideDcGoodsCategoryList){
                               for(var n in singeItem.sideDcGoodsCategoryList[m].sideGoodsList){
                                   var _stockId = singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].stockId;
                                   var _minCount = 0;
                                   if(_stockId){
-                                      for(var i in singeItem.minArray){
-                                        for(var j in singeItem.minArray[i]){
-                                             if(singeItem.minArray[i][j].stockId == _stockId){
+                                      // console.log(_allminArray);
+                                      for(var ii in _allminArray){             
+                                             //console.log(_allminArray[ii])
+                                             if(_allminArray[ii].stockId == _stockId){
                                                  _minCount++;
                                              }
-                                        }
                                       }
                                       singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].minCount = _minCount;
                                   }
@@ -421,7 +439,9 @@ Page({
            var subNum = panel_data.sideDcGoodsCategoryList[i].sideGoodsList.length;   //配菜数量
            var m = 0;
            for(var j in panel_data.sideDcGoodsCategoryList[i].sideGoodsList){
-              if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum === 0 || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].isSoldOut){
+              if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum === 0 
+                || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].isSoldOut
+                || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].minCount >= panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum){
                 m++;
               }
            }  
@@ -702,7 +722,9 @@ Page({
            var subNum = panel_data.sideDcGoodsCategoryList[i].sideGoodsList.length;   //配菜数量
            var m = 0;
            for(var j in panel_data.sideDcGoodsCategoryList[i].sideGoodsList){
-              if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum === 0 || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].isSoldOut){
+              if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum === 0 
+                || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].isSoldOut
+                || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].minCount >= panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum){
                 m++;
               }
            }  
@@ -867,7 +889,9 @@ Page({
            var subNum = panel_data.sideDcGoodsCategoryList[i].sideGoodsList.length;   //配菜数量
            var m = 0;
            for(var j in panel_data.sideDcGoodsCategoryList[i].sideGoodsList){
-              if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum === 0 || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].isSoldOut){
+              if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum === 0 
+                || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].isSoldOut
+                || panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].minCount >= panel_data.sideDcGoodsCategoryList[i].sideGoodsList[m].stockNum){
                 m++;
               }
            }  

@@ -9,7 +9,7 @@ Page({
        console.log(option);
        this.setData({
           error:option.error,
-          errorMsg:option.errorMsg
+          errorMsg:option.errorMsg?option.errorMsg:'服务器出错了'
        })
    },
    backFun:function(){
