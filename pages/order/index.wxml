@@ -19,6 +19,24 @@
     </view>
 </view>
 
+<view class='wx_dialog_container' hidden="{{!showTime}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>
+          <view wx:if="{{dataTime.length==1}}">
+              <view>{{dataTime[0]=='00:00-00:00'?'当前时段暂不可售':'销售时段：'+dataTime[0]}}</view>
+          </view>
+          <view wx:if="{{dataTime.length!=1}}">
+              <view>销售时段：</view>
+              <view wx:key="{{index}}" wx:for="{{dataTime}}">{{item}}</view>
+          </view>
+        </view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='cancelTime'>确定</view>
+        </view>
+    </view>
+</view>
+
 
 <view class="container">
 <loading hidden="{{loaderhide}}">加载中...</loading>  

@@ -30,3 +30,7 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .bottomCon .itemCon .item{ display:inline-block; margin:0 30rpx;}
 .bottomCon .itemCon .item_img{ height:70rpx; width:70rpx; }
 
+.footer{ z-index:100; position:fixed; bottom:0; height:100rpx; width:100%; background:#fff; box-sizing:border-box; overflow:hidden; zoom:1; }
+.footer image{ height:50rpx; width:50rpx; display:block; padding-top:10rpx; margin-bottom:-5rpx; }
+.footer view{ color:#c6a113; font-size:20rpx; text-align:center; }
+.footer view.active{ color:#f26522 }

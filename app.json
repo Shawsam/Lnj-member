@@ -1,6 +1,7 @@
 {
   "pages":[
     "pages/entrace/index",
+    "pages/entrace_list/index",
     "pages/shop_around/index",
     "pages/index/index",
     "pages/order/index",
@@ -32,9 +33,9 @@
     "navigationBarTextStyle":"black"
   },
   "tabBar": {
-    "color":"#666",
-    "selectedColor":"#FDD01B",
-    "backgroundColor":"#fff",
+    "color":"#c6a113",
+    "selectedColor":"#f26522",
+    "backgroundColor":"#fdcf1d",
     "borderStyle":"white",
     "list": [{
       "pagePath": "pages/takeOut_index/index",
@@ -45,7 +46,7 @@
       "pagePath": "pages/takeOut_order/index",
       "iconPath":"image/order.png",
       "selectedIconPath":"image/order_active.png",
-       "text": "订单"
+      "text": "订单"
     },{
       "pagePath": "pages/takeOut_mine/index",
       "iconPath":"image/mine.png",

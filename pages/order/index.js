@@ -380,27 +380,47 @@ Page({
           paramb = e.currentTarget.dataset.paramb,
           _count = _items[parama].mainGoodsList[paramb].count,
           panel_data = _items[parama].mainGoodsList[paramb];      //当前菜品数据
+     
+    if(panel_data.NotAvailable){
+        // wx.showToast({
+        //   title: panel_data.availableTodayTimes=='00:00-00:00'?'当前时段暂不可售':'销售时段：'+panel_data.availableTodayTimes,
+        //   icon: 'none',
+        //   duration: 1500
+        // })
 
-     //点击锁定
-     if(panel_data.type == 3){
+        this.showTime(panel_data.availableTodayTimes)
+        // wx.showModal({
+        //   content: '销售时段：'+panel_data.availableTodayTimes,
+        //   showCancel:false
+        // })
+        return;
+    }
+
+    if(panel_data.stockNum == 0){
+        this.showDialog('已售罄！');
+        return;
+    }
+
+    //点击锁定
+    if(panel_data.type == 3){
         var tapLock = this.data.addLock1;
         if(tapLock) return;
         this.setData({addLock1:true});
-     }
+    }
 
-      //所有菜品(受限于库存） stockId为null 表示不受库存约束
-      if(panel_data.stockId){
-         for(var i in stockList){
-             if(stockList[i].id == panel_data.stockId){        //根据库存id匹配出库存数量
-                 if(_count>=stockList[i].stock){
-                    this.showDialog('没有更多库存！');
-                    //wx.showModal({content:"没有更多库存！", showCancel: false});
-                    this.setData({addLock1:false});
-                    return;
-                 }
-             }
-         }
-      }
+    //所有菜品(受限于库存） stockId为null 表示不受库存约束
+    if(panel_data.stockId){
+       for(var i in stockList){
+           if(stockList[i].id == panel_data.stockId){        //根据库存id匹配出库存数量
+               if(_count>=stockList[i].stock){
+                  this.showDialog('没有更多库存！');
+                  //wx.showModal({content:"没有更多库存！", showCancel: false});
+                  this.setData({addLock1:false});
+                  return;
+               }
+           }
+       }
+    }
 
       //工作餐(受限于所持券数量)
       if(panel_data.isWork){    
@@ -1116,6 +1136,21 @@ Page({
       })
       wx.reLaunch({url:'../../pages/entrace/index'});
   },
+
+  showTime:function(data){
+      var data = data.split(',')
+      this.setData({
+        showTime:true,
+        dataTime:data
+      })
+  },
+
+  cancelTime:function(){
+      this.setData({
+        showTime:false
+      })
+  },
+
 
 
 })

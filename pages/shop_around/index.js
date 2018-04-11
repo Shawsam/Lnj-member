@@ -180,7 +180,7 @@ Page({
       })
   },
   onShow:function(){
-     wx.clearStorageSync('items');
+     wx.removeStorageSync('items');
   },
 
   //=======提示框=========================================

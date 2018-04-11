@@ -26,7 +26,7 @@ Page({
       packTotalFee:0,
       couponFee:0,
       dinnerType:1,     //用餐方式
-      paytype:1,        //支付方式
+      paytype:2,        //支付方式
       phone:'',         //联系方式
       phoneInput:'', 
       caution:'',
@@ -242,12 +242,12 @@ Page({
    
     //附加参数
     var isMember= 1,
-        paytype = 1,
+        // paytype = 1,
         subscribe = 0,
         dinnerType = 1;
     if(!app.globalData.cardNo){       //非会员
         isMember = 0;
-        paytype = 2;
+        // paytype = 2;
     }
     if(app.globalData.fromType == 1){  //打包预订 只能外带
        subscribe = 1;
@@ -259,6 +259,7 @@ Page({
     if(app.globalData.mobile){
         phone = app.globalData.mobile;
     }else{
+        console.log(wx.getStorageSync('phone'))
         phone = wx.getStorageSync('phone')?wx.getStorageSync('phone'):'';
     }
     
@@ -275,7 +276,7 @@ Page({
        goodsId:goodsId,
        taoCanNum:taoCanNum,
        isMember:isMember,
-       paytype:paytype,
+       // paytype:paytype,
        subscribe:subscribe,
        dinnerType:dinnerType
     }) 

@@ -10,9 +10,15 @@ Page({
     orderList:[],
     loaderhide:true,
     jumpLock:false,
-    moreDisabled:false
+    moreDisabled:false,
+    indexPage:false
   },
   onLoad: function() {
+
+    if(getCurrentPages().length==1){
+      this.setData({indexPage:true})
+    }
+
      var _this = this;
      //获取全局数据，初始化当前页面
      app.getUserInfo(function(userInfo){
@@ -114,7 +120,7 @@ Page({
   },
 
   onHide() {
-      isInitSelfShow = false;
+    isInitSelfShow = false;
   },
 
   slideFun:function(e){
@@ -164,6 +170,10 @@ Page({
           },500)
         }
      })
+  },
+
+  Return:function(){
+    wx.redirectTo({url:'../../pages/entrace/index'});
   },
 
   //=======提示框=========================================

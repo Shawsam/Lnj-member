@@ -8,6 +8,11 @@
 	</view>
 	<view class="content">
 		<scroll-view class="list" scroll-y bindscrolltolower="ScrollLower"  bindscrolltoupper="ScrollUpper">
+	        <view class="empty" wx:if="{{orderList.length==0}}">
+				<image src="../../image/empty.png" />
+				<view>暂无订单</view>
+			</view>
+
 			<view wx:for="{{orderList}}" wx:key="{{index}}">
 				<view class="item" wx:if="{{item.status!=8}}" data-param="{{item.orderId}}" bindtap="openDetails">
 					<view class="topinfo">

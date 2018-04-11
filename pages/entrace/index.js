@@ -350,6 +350,23 @@ Page({
       wx.navigateTo({url:'/pages/login/index'});
   },
 
+  JumpToList:function(){
+
+      var _this = this
+      var jumpLock = _this.data.jumpLock
+      if(jumpLock) return
+      _this.setData({jumpLock:true})
+
+      wx.navigateTo({
+          url: '../entrace_list/index',
+          success:function(){
+                  setTimeout(function(){
+                         _this.setData({jumpLock:false});
+                  },500)
+           }
+       })
+  },
+
   //=======提示框=========================================
   showDialog:function(msg){
       this.setData({

@@ -41,7 +41,7 @@
 
 <view class="section bottomCon">
 <!--   <view class="dot"></view> -->
-  <view class="title">加入会员 即刻享有</view>
+<!--   <view class="title">加入会员 即刻享有</view>
   <view class="itemCon flexbox">
     <view class="item item1">
         <image class="item_img" src="../../image/1.png" />
@@ -55,8 +55,15 @@
         <image class="item_img" src="../../image/3.png" />
         <view>消费奖励</view>
     </view>
-  </view>
+  </view> -->
 </view>
+
+<view class="footer flexbox">
+    <view class="active"><image src="../../image/index_active.png" />首页</view>
+    <view bindtap="JumpToList"><image src="../../image/order.png" />订单</view>
+</view>
+
+
 </view>
 </view>
 

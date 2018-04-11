@@ -70,7 +70,7 @@ App({
                                        
                                     } else {
                                        console.log('服务器异常');
-                                       wx.redirectTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg='+errorMsg})
+                                       wx.redirectTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg=服务器异常'})
                                     }
 
                                 },

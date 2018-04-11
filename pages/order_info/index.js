@@ -91,8 +91,9 @@ Page({
       })
   },
   backFun:function(){
-    // console.log(getCurrentPages()[getCurrentPages().length-2])
-    if(getCurrentPages()[getCurrentPages().length-2].route == "pages/order_list/index"){
+    console.log(getCurrentPages()[getCurrentPages().length-2].route)
+    if(getCurrentPages()[getCurrentPages().length-2].route == "pages/order_list/index" ||
+       getCurrentPages()[getCurrentPages().length-2].route == "pages/entrace_list/index"){
          wx.navigateBack();
     }else{
          wx.reLaunch({ url:'../order_list/index'})

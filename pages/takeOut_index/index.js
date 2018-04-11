@@ -17,24 +17,24 @@ Page({
 	     })
 	  })
     
-    //请求菜单数据
-    var param = { mini:'mini'};
-    _this.setData({ loaderhide:false });
-    wx.request({
-        url: app.globalData.host+'/waimai/goods/selectOrderPeopleCount',  
-        data: param,
-        method:'POST',
-        header: {  "Content-Type": "application/x-www-form-urlencoded" },
-        success: function (res) {
-            //服务器返回的结果
-            _this.setData({ loaderhide:true });
-            if (res.data.errcode == 0) { 
-                _this.setData({person:res.data.data})
-            }else{
-               _this.setData({person:15465})
-            }
-        }
-    })
+    // //请求菜单数据
+    // var param = { mini:'mini'};
+    // _this.setData({ loaderhide:false });
+    // wx.request({
+    //     url: app.globalData.host+'/waimai/goods/selectOrderPeopleCount',  
+    //     data: param,
+    //     method:'POST',
+    //     header: {  "Content-Type": "application/x-www-form-urlencoded" },
+    //     success: function (res) {
+    //         //服务器返回的结果
+    //         _this.setData({ loaderhide:true });
+    //         if (res.data.errcode == 0) { 
+    //             _this.setData({person:res.data.data})
+    //         }else{
+    //            _this.setData({person:15465})
+    //         }
+    //     }
+    // })
 
   },
   Enter:function(){

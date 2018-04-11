@@ -31,7 +31,7 @@ Page({
                 _this.setData({ loaderhide:true });
                 if (res.data.errcode == 0) {
                     var addrData = res.data.data;
-                    if(addrData) addrData[0].active = true;
+                    if(addrData.length>0) addrData[0].active = true;
                     _this.setData({ 
                       addrData:addrData,
                       chooseAddr:addrData[0]

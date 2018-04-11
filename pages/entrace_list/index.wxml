@@ -1,0 +1,69 @@
+<!--index.wxml-->
+<view class='wx_dialog_container' hidden="{{!dialogShow}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm'>确定</view>
+        </view>
+    </view>
+</view>
+
+<view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
+
+    <scroll-view scroll-y  bindscrolltolower="ScrollLower"  bindscrolltoupper="ScrollUpper">
+        <view class="section backcolor"></view>
+        <view class="main">
+            <view class="list" >
+                <view class="empty" wx:if="{{orderList.length==0}}">
+                        <image src="../../image/empty.png" />
+                        <view>暂无订单</view>
+                </view>
+
+                <view class="list_item" bindtap="infoTap" data-param="{{item.orderId}}" data-shopId="{{item.shopId}}"  data-deskId="{{item.deskId}}"  wx:key="{{item.orderId}}" wx:for="{{orderList}}">
+                    <view class="top">
+                        <view class="info">
+                            <view class="dinnerNo" wx:if="{{item.status==2}}">送餐号：{{item.dinnerNo}}</view>
+                            <view class="order_state">订单状态：{{item.statusDesc}}</view>
+                            <view class="total">{{item.isSubscribe?'打包预订'
+                            :(item.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}}</view>
+                        </view>
+                        <view class="time">订单时间：{{item.orderTime}}
+                            <view class="total_fee">￥{{item.totalFee}}</view>
+                       </view>
+                       <view class="time" wx:if="{{item.isSubscribe}}">预约时间：{{item.subscribeTime}}</view>
+                    </view>
+                    <view class="order">
+                        <view wx:if="{{!item.slide}}">
+                            <view class="order_item" wx:for="{{item.dcOrderGoodsList}}" wx:key="{{item.dcOrderGoodsList.id}}" wx:if="{{index<2}}">
+                                <view class="name">{{item.goodsName}}</view>
+                                <view class="num">x{{item.count}}</view>
+                                <view class="price">￥{{item.price}}</view>
+                            </view>
+                            <view class="blurCon" wx:if="{{item.dcOrderGoodsList.length>2}}"></view>
+                            <view class="slide" data-param="{{index}}" catchtap="slideFun"  wx:if="{{item.dcOrderGoodsList.length>2}}"><image class="slideImg" src="../../image/slideDown.png" />查看全部</view>
+                        </view>
+
+                        <view wx:if="{{item.slide}}">
+                            <view class="order_item" wx:for="{{item.dcOrderGoodsList}}" wx:key="{{item.dcOrderGoodsList.id}}">
+                                <view class="name">{{item.goodsName}}</view>
+                                <view class="num">x{{item.count}}</view>
+                                <view class="price">￥{{item.price}}</view>
+                            </view>
+                            <view class="slide" data-param="{{index}}" catchtap="slideFun"  wx:if="{{item.dcOrderGoodsList.length>2}}"><image class="slideImg" src="../../image/slideUp.png" />收起</view>
+                        </view>
+                    </view>         
+                </view>
+                <view wx:if="{{noMore}}" class="noMore">没有更多</view> 
+        </view>
+        </view>
+    </scroll-view>  
+
+<view class="footer flexbox">
+    <view bindtap="JumpToEntrace"><image src="../../image/index.png" />首页</view>
+    <view class="active"><image src="../../image/order_active.png" />订单</view>
+</view>
+
+
+</view>
