@@ -49,14 +49,20 @@ Page({
              // });
            }
 
-           wx.request({
-                  url: app.globalData.host+"/orderQuery/orderList",
-                  data:{
+           var param = {
                      mini:'mini',
                      shopId:app.globalData.shopId,
                      openId:app.globalData.openId,
+                     userId:app.globalData.userId,
                      deskNo:app.globalData.deskNo
-                  },
+           }
+           if(app.globalData.userId == undefined ){
+               delete param.userId;
+           }
+           
+           wx.request({
+                  url: app.globalData.host+"/orderQuery/orderList",
+                  data: param,
                   success: function(res) {
                     //服务器返回数据
                     console.log(res);

@@ -124,7 +124,12 @@ Page({
                       
                       var singeItem = mainGoodsList[j];
                       
-                      //singeItem.availableTodayTimes  = '00:00-00:00';
+                      //处理iSoldOut = 1
+                      if(singeItem.isSoldOut == 1){
+                         singeItem.stockNum = 0
+                      }
+
+                      //singeItem.availableTodayTimes  = '00:00-00:00'; 处理销售时段
                       var timeArray = [];
 
                       if(singeItem.availableTodayTimes){

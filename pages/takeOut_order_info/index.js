@@ -178,7 +178,7 @@ Page({
             type_panel:false
           });
 
-          if(res.data.errcode == 0){         //支付成功状态 生成订单成功                            
+          if(res.data.errcode == 0){   //支付成功状态 生成订单成功                            
               var tradeInfo = res.data;
               
               console.log(tradeInfo);
@@ -222,7 +222,7 @@ Page({
                     }
                });
 
-           }
+          }
         }
     })
   },
