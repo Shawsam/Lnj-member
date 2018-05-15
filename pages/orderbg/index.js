@@ -29,8 +29,6 @@ Page({
      addLock3:false,
      jumpLock:false,
      confirmDisabled:false,
-     itemHeight:parseInt(wx.getSystemInfoSync().screenWidth/750*290),
-     fillHeight:wx.getSystemInfoSync().windowHeight - wx.getSystemInfoSync().screenWidth/750*280,
   },
   onLoad: function () {
      var _this = this;
@@ -241,35 +239,18 @@ Page({
                       }
 
                    }  
-               }
+                }
 
                 _this.setData({ loaderhide:true });
                 
-
-                //menuData 是处理完的菜单数据
                 wx.setStorageSync('menuData',menuData)
-
-                var itemHeight = _this.data.itemHeight,  
-                heightArray = [0]                  //范围数组
-                var _scrollHeight = 0
-                menuData.map(function(item){
-                    if(item.mainGoodsList.length==0){
-                       _scrollHeight = _scrollHeight + itemHeight
-                    }else{
-                       _scrollHeight = _scrollHeight + item.mainGoodsList.length*itemHeight
-                    }
-                    heightArray.push(_scrollHeight)
-                })
-                console.log(heightArray)
-
                 _this.setData({
                    items:menuData,
                    cart_num:0,
                    cart_fee:'0.00',
                    detail_panel:false,
                    choose_panel:false,
-                   info_panel:false,
-                   heightArray:heightArray
+                   info_panel:false
                 })
             } else {
                 _this.setData({ loaderhide:true });
@@ -307,8 +288,15 @@ Page({
     var _items = this.data.items,
         index = e.currentTarget.dataset.param;
 
-    this.setData({toView:'v_'+index})
-
+    for(var i in _items){
+        if(i==index){
+           _items[i].active = true;
+        }
+        else{
+           _items[i].active = false;
+        }
+    }
+    this.setData({items:_items})
   },
 
   //处理数据变化 数据全依赖于items
@@ -1167,23 +1155,6 @@ Page({
         showTime:false
       })
   },
-
-  productScroll:function(e){
-      var scrollTop = e.detail.scrollTop,
-          heightArray = this.data.heightArray,
-          items = this.data.items
-          
-      for(var i=0; i<=heightArray.length;  i++){
-          if(scrollTop>=heightArray[i] && scrollTop<=heightArray[i+1]){
-              items.map(function(item,n){
-                 n == i?items[n].active = true
-                       :items[n].active = false
-              })
-              this.setData({items:items})
-          }
-      }
-
-  }
 
 
 

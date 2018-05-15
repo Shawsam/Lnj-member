@@ -7,6 +7,7 @@ Page({
    },
    onLoad: function (option) {
        console.log(option);
+       if(option.errorMsg == 'undefined') option.errorMsg = '服务器出错了';
        this.setData({
           error:option.error,
           errorMsg:option.errorMsg?option.errorMsg:'服务器出错了'

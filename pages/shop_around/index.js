@@ -1,16 +1,26 @@
-//index.js
+var page = 1,items=[],noMore=false
+
 //获取应用实例
 var app = getApp()
+
 Page({
   data: {
      userInfo:null,
      items:[],
-     searchResult:[],
      keyInput:'',
      loaderhide:true,
      jumpLock:false
   },
   onLoad: function (option) {
+    //分页数据重置
+    page = 1,items =[]
+    //页面参数
+    this.setData({
+       latitude:option.latitude,
+       longitude:option.longitude,
+       items:items
+    })
+
     var _this = this;
     //获取全局数据，初始化当前页面
     app.getUserInfo(function(userInfo){
@@ -36,78 +46,81 @@ Page({
        //     }
        // });
     }
+    this.fetchData()
 
-    var latitude = option.latitude,
-        longitude = option.longitude;
-    //经纬度 => 请求店铺列表
-    var param = { mini:'mini',
-                  openId:app.globalData.openId,
-                  latitudes:latitude,
-                  longitudes:longitude,
-                  pageNo:1,
-                  pageCount:9
-                };
-
-    _this.setData({ loaderhide:false });
-    wx.request({
-        url: app.globalData.host+'/shop/nearShopList',  
-        data: param,
-        success: function (res) {
-            //服务器返回的结果
-            console.log(res);
-            _this.setData({ loaderhide:true });
-            if (res.data.errcode == 0) {
-              var resdata = res.data.data,
-                  items = [];
-
-              for(var i in resdata){
-                if(resdata[i].status==1 && resdata[i].isSub==0){
-                    var shopName = resdata[i].shopName,
-                        shopId = resdata[i].shopId,
-                        provinceName = resdata[i].provinceName,
-                        cityName = resdata[i].cityName,
-                        zoneName = resdata[i].zoneName,
-                        address = resdata[i].address;
-                    if(provinceName == cityName){
-                      var shopAddr = cityName+ ' ' + zoneName +' '+ address;
-                    }else{
-                      var shopAddr = provinceName+cityName+zoneName+address;
-                    }
-                    var singleData = {};
-                        singleData.shopName = shopName;
-                        singleData.shopAddr = shopAddr;
-                        singleData.shopId = shopId;
-                    items.push(singleData);
-                }
-              }
-              _this.setData({items:items});
-              _this.setData({searchResult:items});
-
-            } else {
-                console.log('服务器异常');
-                wx.redirectTo({ url:'../view_state/index?error='+res.statusCode})
-            }
-        }
-    })
   },
+  loadMore:function(){
+     if(noMore){
+        wx.showModal({content:'没有更多门店',showCancel:false})
+        return
+     } 
+     page = page + 1
+     console.log(page)
+     this.fetchData(page)
+  },
+  
+  fetchData:function(){
+      // 请求店铺列表
+
+      var _this = this,
+          param = { mini:'mini',
+                    openId:app.globalData.openId,
+                    latitudes:this.data.latitude,
+                    longitudes:this.data.longitude,
+                    pageNo:page,
+                    pageCount:5,
+                    shopName:encodeURI(this.data.keyInput)
+                  };
+
+        _this.setData({ loaderhide:false });
+        wx.request({
+            url: app.globalData.host+'/shop/nearShopListByPage',  
+            data: param,
+            success: function (res) {
+                //服务器返回的结果
+                console.log(res);
+                _this.setData({ loaderhide:true });
+                if (res.data.errcode == 0) {
+                  var resdata = res.data.data
+                  if(resdata.length==0){
+                    noMore = true
+                  }
+
+                  for(var i in resdata){
+                    if(resdata[i].status==1 && resdata[i].isSub==0){
+                        var shopName = resdata[i].shopName,
+                            shopId = resdata[i].shopId,
+                            provinceName = resdata[i].provinceName,
+                            cityName = resdata[i].cityName,
+                            zoneName = resdata[i].zoneName,
+                            address = resdata[i].address,
+                            distance = resdata[i].distance;
+                        if(provinceName == cityName){
+                          var shopAddr = cityName+ ' ' + zoneName +' '+ address;
+                        }else{
+                          var shopAddr = provinceName+cityName+zoneName+address;
+                        }
+                        var singleData = {};
+                            singleData.shopName = shopName;
+                            singleData.shopAddr = shopAddr;
+                            singleData.shopId = shopId;
+                            singleData.distance = distance;
+                        items.push(singleData);
+                    }
+                  }
+                  _this.setData({items:items});
+
+                } else {
+                    console.log('服务器异常');
+                    wx.redirectTo({ url:'../view_state/index?error='+res.statusCode})
+                }
+            }
+        })
+  },
+
   searchFun: function(){
-    var items = this.data.items,
-        key = this.data.keyInput.replace(/(^\s*)|(\s*$)/g,""),
-        _items = [];
-    
-    for(var i in items){
-      if(key){
-          var str = JSON.stringify(items[i]);
-          if(str.indexOf(key)>0){
-              _items.push(items[i]);
-          }
-        }else{
-          _items.push(items[i]);
-        }
-
-    }
-    this.setData({searchResult:_items})
-
+    page = 1,items=[],noMore = false
+    this.fetchData()
   },
   keyInput: function(e){
       this.setData({

@@ -16,11 +16,20 @@
     <image class="searchBtn" bindtap="searchFun" src="../../image/search.png" />
 </view>   
 <view class="section main">
-    <view class="item" wx:for="{{searchResult}}" data-param="{{item.shopId}}" wx:key="{{index}}" bindtap="enterShop">
-        <image class="shop_img" src="../../image/door.png" />
-        <view class="shop"><image class="shop_icon" src="../../image/mendian.png" />{{item.shopName}}</view>
-        <view class="addr"><image class="addr_icon" src="../../image/location.png" />{{item.shopAddr}}</view>
-        <image class="arrodow rote" src="../../image/arrodow.png" />
+    <view wx:if="{{items.length > 0}}">
+        <view class="item" wx:for="{{items}}" data-param="{{item.shopId}}" wx:key="{{index}}" bindtap="enterShop">
+            <image class="shop_img" src="../../image/door.png" />
+            <view class="shop"><image class="shop_icon" src="../../image/mendian.png" />{{item.shopName}}({{item.distance}}km)</view>
+            <view class="addr"><image class="addr_icon" src="../../image/location.png" />{{item.shopAddr}}</view>
+            <image class="arrodow rote" src="../../image/arrodow.png" />
+        </view>
+        <view class="loadMore" bindtap="loadMore">加载更多</view>
     </view>
+
+    <view class="empty" wx:if="{{items.length == 0}}">
+        <image src="../../image/empty.png" />
+        <view>没有任何数据</view>
+    </view>
+
 </view>
 </view>
