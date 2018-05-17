@@ -31,6 +31,7 @@ Page({
      confirmDisabled:false,
      itemHeight:parseInt(wx.getSystemInfoSync().screenWidth/750*290),
      fillHeight:wx.getSystemInfoSync().windowHeight - wx.getSystemInfoSync().screenWidth/750*280,
+     currentIndex:0
   },
   onLoad: function () {
      var _this = this;
@@ -304,10 +305,10 @@ Page({
 
   //切换菜单类
   tabTap: function(e){
-    var _items = this.data.items,
+    var items = this.data.items,
         index = e.currentTarget.dataset.param;
-
-    this.setData({toView:'v_'+index})
+    console.log(index)
+    this.setData({ toView:'v_'+index})
 
   },
 
@@ -1169,17 +1170,25 @@ Page({
   },
 
   productScroll:function(e){
+      var _this = this
       var scrollTop = e.detail.scrollTop,
           heightArray = this.data.heightArray,
           items = this.data.items
-          
+  
       for(var i=0; i<=heightArray.length;  i++){
-          if(scrollTop>=heightArray[i] && scrollTop<=heightArray[i+1]){
+          if(scrollTop>=heightArray[i] && scrollTop<heightArray[i+1]){
+              var currentIndex = this.data.currentIndex
+              if(i==currentIndex) return
+      
               items.map(function(item,n){
-                 n == i?items[n].active = true
-                       :items[n].active = false
+                 if(n==i){
+                    items[n].active = true
+                    _this.setData({toTabView:'tab_'+n})
+                 }else{
+                    items[n].active = false
+                 }
               })
-              this.setData({items:items})
+              this.setData({items:items,currentIndex:i})
           }
       }
 

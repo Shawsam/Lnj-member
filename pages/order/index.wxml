@@ -48,8 +48,8 @@
 </view>
 
 <view class="main">
-    <scroll-view  scroll-y  class="tab_list {{detail_panel||choose_panel?'noscroll':''}}">
-        <view wx:key="{{item.categoryId}}" wx:for="{{items}}" class="tab {{item.active?'active':''}}" data-param="{{index}}"  bindtap="tabTap">
+    <scroll-view  scroll-y  class="tab_list {{detail_panel||choose_panel?'noscroll':''}}" scroll-into-view ="{{toTabView}}" scroll-with-animation ="true">
+        <view wx:key="{{item.categoryId}}" wx:for="{{items}}" class="tab {{item.active?'active':''}}" data-param="{{index}}"  bindtap="tabTap" id="tab_{{index}}">
            <image wx:if="{{item.active}}" src="{{item.onPicture}}" />
            <image wx:if="{{!item.active}}" src="{{item.picture}}" />
            <view>{{item.name}}</view>
