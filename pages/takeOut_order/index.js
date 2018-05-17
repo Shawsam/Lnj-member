@@ -46,7 +46,7 @@ Page({
                    switch(status){
                       case 1: statusDesp = '待支付';break;
                       case 2: statusDesp = '已支付';break;
-                      case 3: statusDesp = '已支付';break;
+                      case 3: statusDesp = '已出餐';break;
                       case 4: statusDesp = '已退单';break;
                       case 6: statusDesp = '已支付';break;
                       case 7: statusDesp = '接单失败';break;
