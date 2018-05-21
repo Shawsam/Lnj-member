@@ -30,7 +30,8 @@ App({
               // 已经授权，可以直接调用 getUserInfo 获取头像昵称
               wx.getUserInfo({
                 success: function(res) {
-                  console.log(res.userInfo)
+                  _this.globalData.userInfo = res.userInfo
+                  cb(res.userInfo)
                 }
               })
             }else{
