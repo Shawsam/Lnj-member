@@ -1,0 +1,14 @@
+/**index.wxss**/
+@import "../../components/myModal/index.wxss";
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > .flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+input{ background:#000!important; }
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+.container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; background:#fff;  }
+
+.panel{ padding:60rpx; }
+.panel .panel_title{height:90rpx; text-align:center; font:36rpx/90rpx "微软雅黑"; font-weight:bold; }
+.panel .panel_content{ padding:30rpx 0; font:30rpx/40rpx "微软雅黑"; text-indent:60rpx;}
+.panel .panel_footer button{ border:none; outline:none; font-size:28rpx; height:90rpx; line-height:90rpx; font:34rpx/90rpx "微软雅黑"; margin:20rpx auto; background:#FDD01B; }

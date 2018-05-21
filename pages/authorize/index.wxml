@@ -1,0 +1,9 @@
+<view class="container">
+  <view class="panel">
+    <view class="panel_title">微信授权</view>
+ 	<view class="panel_content">老娘舅需要获得您的用户信息，请点击确定允许微信授权。</view>
+ 	<view class="panel_footer" wx:if="{{canIUse}}"><button open-type="getUserInfo" bindgetuserinfo="authorizeFun">确定</button></view>
+    <view wx:else>请升级微信版本</view>
+  </view>
+</view>
+

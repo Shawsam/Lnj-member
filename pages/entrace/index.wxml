@@ -10,6 +10,15 @@
 </view>
 
 <view class="container">
+
+<!-- <view class="panel_cover"></view>
+<view class="panel">
+    <view class="panel_title">微信授权</view>
+    <view class="panel_content">需要获得您的用户信息，请允许微信授权。</view>
+    <view class="panel_footer"><button open-type="getUserInfo" bindgetuserinfo="authorizeFun">确定</button></view>
+</view>
+ -->
+
 <loading hidden="{{loaderhide}}">正在解析二维码，请稍等</loading> 
 
 <!-- <view class="guide" wx:if="{{!unionId}}">
@@ -17,7 +26,6 @@
     <view>扫一扫，关注公众号</view>
 </view> -->
 <view>
-<!-- <button open-type="getUserInfo" bindgetuserinfo="authorizeFun">授权</button> -->
 <view class="section banner">
     <image src="../../image/index_banner.jpg" />
 </view>   

@@ -24,7 +24,8 @@
     "pages/takeOut_order_confirm/index",
     "pages/takeOut_order_info/index",
     "pages/takeOut_order_fail/index",
-    "pages/login/index"
+    "pages/login/index",
+    "pages/authorize/index"
   ],
   "window":{
     "backgroundTextStyle":"light",
