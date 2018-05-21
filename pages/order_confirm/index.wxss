@@ -112,6 +112,6 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .panel .tip_panel .info view{ font:28rpx/60rpx "微软雅黑"; text-align:center; }
 
 .noscroll{ overflow:hidden; } 
-.phoneInput{ border:1px solid #e8e8e8; }
+.phoneInput{ border:1px solid #e8e8e8; margin-top:15rpx; height:70rpx; line-height:70rpx; }
 
 

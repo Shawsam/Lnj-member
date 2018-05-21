@@ -339,7 +339,7 @@ Page({
   phoneConfirmTap:function(){
       var phone = this.data.phoneInput;
       if(phone==''){
-        this.showDialog('请输入手机号码')
+        this.showDialog3('请输入手机号码')
         // wx.showModal({
         //       content:"请输入手机号码",
         //       showCancel: false
@@ -468,7 +468,7 @@ Page({
 
     var phone = this.data.phone;
       if(phone==''){
-        this.showDialog("请输入手机号");
+        this.showDialog3("请输入手机号");
         // wx.showModal({
         //       content:"请输入手机号",
         //       showCancel: false
@@ -476,7 +476,7 @@ Page({
         return;
       }
       if(!this.is_phone(phone)){
-        this.showDialog("请输入正确的手机号");
+        this.showDialog3("请输入正确的手机号");
         // wx.showModal({
         //       content:"请输入正确的手机号",
         //       showCancel: false
@@ -674,6 +674,44 @@ Page({
         dialogShow2:false
       })
       wx.redirectTo({ url: '../order_fail/index' })
+  },
+
+  showDialog3:function(msg){
+      this.setData({
+        dialogShow3:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm3:function(){
+      var phone = this.data.phoneInput2
+      if(phone==''){
+        this.showDialog('没有输入任何手机号')
+        this.setData({
+          dialogShow3:false
+        })
+        return;
+      }
+      if(!this.is_phone(phone)){
+        this.showDialog('输入的手机号不正确')   
+        this.setData({
+          phoneInput2:'',
+          dialogShow3:false
+        })
+        return;
+      }
+
+      wx.setStorageSync('phone',phone);
+      this.setData({
+         phone:phone,
+         phoneInput2:'',
+         phoneSlide:false,
+         dialogShow3:false
+      })
+  },
+  phoneInput2:function(e){
+      this.setData({
+         phoneInput2: e.detail.value
+      })
   }
 
 

@@ -54,6 +54,11 @@
       </view>
     </view>
 
+    <view class="topCon" wx:if="{{order.status==8}}">
+       <view class="title">
+            <icon type="success" size="27" color="#FDD01B" />已完成！
+      </view>
+    </view>
 
     <view class="infoCon1 {{order.status==2?'':'waitPay'}}">
       <view class="title">订单总价<view class="desp">￥<view class="num">{{order.totalFee}}</view></view></view>

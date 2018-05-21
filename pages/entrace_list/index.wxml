@@ -13,7 +13,7 @@
 <loading hidden="{{loaderhide}}">加载中...</loading> 
 
     <scroll-view scroll-y  bindscrolltolower="ScrollLower"  bindscrolltoupper="ScrollUpper">
-        <view class="section backcolor"></view>
+<!--         <view class="section backcolor"></view> -->
         <view class="main">
             <view class="list" >
                 <view class="empty" wx:if="{{orderList.length==0}}">

@@ -12,7 +12,7 @@
 <view class="container">
 <image wx:if="{{indexPage}}" class="return" bindtap="Return" src="../../image/backTo.png" />
 <loading hidden="{{loaderhide}}">加载中...</loading> 
-<view class="section backcolor"></view>
+<!-- <view class="section backcolor"></view> -->
 <view class="main">
     <view class="list">
         <view class="list_item" bindtap="infoTap" data-param="{{item.orderId}}" wx:key="{{item.orderId}}" wx:for="{{orderList}}">
