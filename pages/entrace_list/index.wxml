@@ -13,7 +13,7 @@
 <loading hidden="{{loaderhide}}">加载中...</loading> 
 
     <scroll-view scroll-y  bindscrolltolower="ScrollLower"  bindscrolltoupper="ScrollUpper">
-<!--         <view class="section backcolor"></view> -->
+<!--    <view class="section backcolor"></view> -->
         <view class="main">
             <view class="list" >
                 <view class="empty" wx:if="{{orderList.length==0}}">
@@ -32,6 +32,8 @@
                         <view class="time">订单时间：{{item.orderTime}}
                             <view class="total_fee">￥{{item.totalFee}}</view>
                        </view>
+                       <view class="time">取餐号：{{item.dinnerNo}}</view>
+                       <view class="time">门店名：{{item.shopName}}</view>
                        <view class="time" wx:if="{{item.isSubscribe}}">预约时间：{{item.subscribeTime}}</view>
                     </view>
                     <view class="order">

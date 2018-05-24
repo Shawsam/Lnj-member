@@ -20,11 +20,14 @@
                 <view class="info">
                     <view class="dinnerNo" wx:if="{{item.status==2}}">送餐号：{{item.dinnerNo}}</view>
                     <view class="order_state">订单状态：{{item.statusDesc}}</view>
-                    <view class="total">订单金额</view>
+                    <view class="total">{{item.isSubscribe?'打包预订'
+                            :(item.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}}</view>
                 </view>
                 <view class="time">订单时间：{{item.orderTime}}
                     <view class="total_fee">￥{{item.totalFee}}</view>
                </view>
+               <view class="time">取餐号：{{item.dinnerNo}}</view>
+               <view class="time">门店名：{{item.shopName}}</view>
                <view class="time" wx:if="{{item.isSubscribe}}">预约时间：{{item.subscribeTime}}</view>
             </view>
             <view class="order">

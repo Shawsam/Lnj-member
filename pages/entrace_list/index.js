@@ -57,6 +57,7 @@ Page({
                       singleData.dinnerType = orderList[i].dinnerType;
 
                       singleData.slide = false;
+                      singleData.shopName = orderList[i].shopName;
                       singleData.dinnerNo = orderList[i].dinnerNo;
                       singleData.statusDesc = orderList[i].statusDesc;
                       singleData.status = orderList[i].status;

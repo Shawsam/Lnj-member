@@ -76,12 +76,15 @@ Page({
                           singleData.orderId = orderList[i].orderId;
                           singleData.slide = false;
                           singleData.dinnerNo = orderList[i].dinnerNo;
+                          singleData.shopName = orderList[i].shopName;
                           singleData.statusDesc = orderList[i].statusDesc;
                           singleData.status = orderList[i].status;
                           singleData.userFee = (orderList[i].userFee/100).toFixed(2); 
                           singleData.totalFee = (orderList[i].totalFee/100).toFixed(2); 
                           singleData.orderTime = formatTime(orderList[i].orderTime);
                           singleData.subscribeTime = orderList[i].subscribeTime;
+                          singleData.isSubscribe = orderList[i].isSubscribe;
+                          singleData.dinnerType = orderList[i].dinnerType;
 
                           var dcOrderGoodsList = []; 
                           for(var j in orderList[i].dcOrderGoodsList){

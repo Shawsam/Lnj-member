@@ -6,7 +6,7 @@
 
 page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .container{ height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch; position:relative; background:#f3f3f3; box-sizing:border-box; padding-bottom:110rpx; }
-.backcolor{ background:#2F2E33; height:220rpx; width:100%; }
+.backcolor{  height:220rpx; width:100%; }
 
 .topCon{ font:28rpx/60rpx "微软雅黑"; padding:40rpx 0; text-align:center; background:#fff; box-shadow:0 0 12rpx rgba(0, 0,0,0.3);  border-radius:10rpx; width:86%; position:absolute; top:50rpx; left:7%; border-top:20rpx solid #FDD01B;}
 .topCon > view{ text-align:center; margin-bottom:10rpx;}

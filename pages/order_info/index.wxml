@@ -34,7 +34,7 @@
       <view class="title">
             <icon type="success" size="27" color="#FDD01B" />下单成功！感谢您的光临！
       </view>
-      <view class="bold">送餐号: {{order.dinnerNo}}</view>
+      <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 送餐号: {{order.dinnerNo}}</view>
       <view class="bold">{{shopName}} | 桌号: {{deskNo}}</view>
       <view>请耐心等待，不要远离您的座位！</view>
     </view>
