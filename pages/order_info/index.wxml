@@ -54,11 +54,12 @@
       </view>
     </view>
 
-    <view class="topCon" wx:if="{{order.status==8}}">
+   <view class="topCon" wx:if="{{order.status==8}}">
        <view class="title">
             <icon type="success" size="27" color="#FDD01B" />已完成！
       </view>
     </view>
+
 
     <view class="infoCon1 {{order.status==2?'':'waitPay'}}">
       <view class="title">订单总价<view class="desp">￥<view class="num">{{order.totalFee}}</view></view></view>
@@ -154,8 +155,9 @@
 </view>
 
 
-<view class="footer">
-    <view wx:if="{{order.status!=1}}" class="backBtn" bindtap="backFun">返回</view>
-    <view wx:if="{{order.status==1}}" class="backBtn" bindtap="payFun">去结算</view>
+<view class="footer flexbox">
+    <view wx:if="{{order.status!=1}}" class="flex-item backBtn" bindtap="backFun">返回</view>
+    <view wx:if="{{order.status==1}}" class="flex-item cancelBtn" bindtap="cancelFun">取消订单</view>
+    <view wx:if="{{order.status==1}}" class="flex-item backBtn" bindtap="payFun">去结算</view>
 </view>
 </view>
