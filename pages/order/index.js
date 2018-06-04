@@ -29,13 +29,13 @@ Page({
      addLock3:false,
      jumpLock:false,
      confirmDisabled:false,
-     itemHeight:parseInt(wx.getSystemInfoSync().screenWidth/750*290),
+     itemHeight:parseInt(wx.getSystemInfoSync().screenWidth/750*100)*2.9,
      fillHeight:wx.getSystemInfoSync().windowHeight - wx.getSystemInfoSync().screenWidth/750*280,
      currentIndex:0
   },
   onLoad: function () {
      var _this = this;
-
+  
      //获取全局数据，初始化当前页面
      app.getUserInfo(function(userInfo){
       //用户信息
@@ -43,7 +43,12 @@ Page({
         userInfo:userInfo,
         shopName:app.globalData.shopName   
       })
-  })
+    })
+    
+    //修正 iphone Plus
+    if(wx.getSystemInfoSync().screenWidth==414){
+      this.setData({itemHeight:158})
+    }
   
     //购物车历史数据 
     // console.log(app.globalData.fromType);
@@ -84,197 +89,213 @@ Page({
                })
                wx.setStorageSync('work_num',work_num); 
                
-       
-               var date = new Date();
-               var year = date.getFullYear();    //年
-               var month = date.getMonth() + 1;  //月
-               var day = date.getDate();         //日
-               var currentTime = date.getTime();  //当前时间戳
-
-               var menuData = res.data.data;           //菜单数据
-               for(var i in menuData){       
-                   var reg = /^http/;
-                   if(reg.test(menuData[i].onPicture)){
-                       menuData[i].onPicture =  menuData[i].onPicture;
-                       menuData[i].picture =  menuData[i].picture;
-                   }else{
-                       menuData[i].onPicture =  menuData[i].onPicture?'http://demo.i-manji.com/lnj-weixin/'+menuData[i].onPicture.split('../../../')[1]:'';
-                       menuData[i].picture =  menuData[i].picture?'http://demo.i-manji.com/lnj-weixin/'+menuData[i].picture.split('../../../')[1]:'';
-                   }
-                   if(i==0){
-                       menuData[0].active = true;
-                   }else{
-                       menuData[i].active = false;
-                   }
-
-                   delete menuData[i].categoryCode;
-                   delete menuData[i].categoryTime;
-                   delete menuData[i].isDel;
-                   delete menuData[i].createTime;
-                   delete menuData[i].updateTime;
-                   delete menuData[i].sequence;
-                   delete menuData[i].shop;
-                   delete menuData[i].shopId;
-                   delete menuData[i].key;
-                   delete menuData[i].goodsCount;
-                   delete menuData[i].merId;
-                   delete menuData[i].status;
-                   delete menuData[i].typeDesc;
-                   delete menuData[i].sideGoodsList;
-
-                   var mainGoodsList = menuData[i].mainGoodsList;
-                   for (var j in mainGoodsList){
-                      
-                      var singeItem = mainGoodsList[j];
-                      
-                      //处理iSoldOut = 1
-                      if(singeItem.isSoldOut == 1){
-                         singeItem.stockNum = 0
-                      }
-
-                      //singeItem.availableTodayTimes  = '00:00-00:00'; 处理销售时段
-                      var timeArray = [];
-
-                      if(singeItem.availableTodayTimes){
-                          var available_times = singeItem.availableTodayTimes.split(',');
-                          
-
-                          for(var a in available_times){
-                             var _available_times = available_times[a].split('-');
-                             for(var b in _available_times){
-                                var timeStamp = new Date(year+'/'+month+'/'+day+' '+_available_times[b]).getTime();
-                                timeArray.push(timeStamp);
-                             }
-                          }
-                          
-                          var groupNum = Math.ceil(timeArray.length/2);
-                          var record = 0;
-                          for(var g=0; g<=groupNum; g++){
-                            if(currentTime >= timeArray[2*g] && currentTime<= timeArray[2*g+1]){
-                                record++;
-                                // console.log(currentTime);
-                                // console.log(timeArray[2*g]);
-                                // console.log(timeArray[2*g+1]);
-                            }
-                          }
-                          if(record == 0) singeItem.NotAvailable = true;
-                      }
-
-
-                      singeItem.categoryId = menuData[i].categoryId;
-                      singeItem.categoryName = menuData[i].name;
-                      singeItem.categoryDescription = menuData[i].description;  
-                      singeItem.count = 0;
-                      singeItem.cart_items = [];      //主菜
-                      singeItem.minArray = [];        //小菜
-                      singeItem.priceVal =  (singeItem.price/100).toFixed(2);
-                      var reg = /^http/;
-                      if(reg.test(singeItem.smallPicture)){
-                         singeItem.centerImg =  singeItem.smallPicture;
-                      }else{
-                         singeItem.centerImg =  singeItem.smallPicture?'http://demo.i-manji.com/lnj-weixin/'+singeItem.smallPicture.split('../../../')[1]:'';
-                      }
-
-                      delete singeItem.availableTimes;
-                      delete singeItem.createTime;
-                      delete singeItem.merId;
-                      delete singeItem.lnjPrice;
-                      delete singeItem.isSoldOutDesc;
-                      delete singeItem.key;
-                      delete singeItem.quotaCount;
-                      delete singeItem.sequence;
-                      delete singeItem.shop;
-                      delete singeItem.shopId;
-                      delete singeItem.isDel;
-                      delete singeItem.typeDesc;
-                      delete singeItem.updateTime;
-                      delete singeItem.sideGoodsList;
-                      delete singeItem.picture;
-                      delete singeItem.smallPicture;
-                      
-                      
-                      for(var m in singeItem.sideDcGoodsCategoryList){
-                          delete singeItem.sideDcGoodsCategoryList[m].onPicture;
-                          delete singeItem.sideDcGoodsCategoryList[m].picture;
-                          delete singeItem.sideDcGoodsCategoryList[m].sequence;
-                          delete singeItem.sideDcGoodsCategoryList[m].shop;
-                          delete singeItem.sideDcGoodsCategoryList[m].shopId;
-                          delete singeItem.sideDcGoodsCategoryList[m].isDel;
-                          delete singeItem.sideDcGoodsCategoryList[m].createTime;
-                          delete singeItem.sideDcGoodsCategoryList[m].key;
-                          delete singeItem.sideDcGoodsCategoryList[m].mainGoodsList;
-                          delete singeItem.sideDcGoodsCategoryList[m].updateTime;
-                          delete singeItem.sideDcGoodsCategoryList[m].status;
-                          delete singeItem.sideDcGoodsCategoryList[m].typeDesc;
-
-                          for(var n in singeItem.sideDcGoodsCategoryList[m].sideGoodsList){
-                              singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryId = singeItem.sideDcGoodsCategoryList[m].categoryId;
-                              singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryName = singeItem.sideDcGoodsCategoryList[m].name;
-                              singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryDescription = singeItem.sideDcGoodsCategoryList[m].description;
-                              
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].sideGoodsList;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].sideDcGoodsCategoryList;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].picture;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].smallPicture;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].availableTimes;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].isSoldOutDesc;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].key;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].lnjPrice;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].merId;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].createTime;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].updateTime;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].quotaCount;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].sequence;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].shop;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].shopId;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].ticketName;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].ticketNoList;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].ticketNum;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].type;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].typeDesc;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].isDel;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryDescription;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryName;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryId;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryIds;
-                              delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].description;
-                          }
-                      }
-
-                   }  
-               }
-
-                _this.setData({ loaderhide:true });
-                
-
-                //menuData 是处理完的菜单数据
-                wx.setStorageSync('menuData',menuData)
-
-                var itemHeight = _this.data.itemHeight,  
-                heightArray = [0]                  //范围数组
-                var _scrollHeight = 0
-                menuData.map(function(item){
-                    if(item.mainGoodsList.length==0){
-                       _scrollHeight = _scrollHeight + itemHeight
+              wx.request({
+                url:"https://demo.i-manji.com/lnj-weixin/console/dc/getUTC",
+                data:{mini:'mini'},
+                header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+                method:'POST',
+                success: function (resData) {
+                    console.log(resData)
+                    if(resData.data.errcode==0){
+                        var date = new Date(resData.data.data);
+                        var year = date.getFullYear();    //年
+                        var month = date.getMonth() + 1;  //月
+                        var day = date.getDate();         //日
+                        var currentTime = date.getTime();  //当前时间戳
+                        console.log(currentTime)
                     }else{
-                       _scrollHeight = _scrollHeight + item.mainGoodsList.length*itemHeight
+                        var date = new Date();
+                        var year = date.getFullYear();    //年
+                        var month = date.getMonth() + 1;  //月
+                        var day = date.getDate();         //日
+                        var currentTime = date.getTime();  //当前时间戳
                     }
-                    heightArray.push(_scrollHeight)
-                })
-                console.log(heightArray)
 
-                _this.setData({
-                   items:menuData,
-                   cart_num:0,
-                   cart_fee:'0.00',
-                   detail_panel:false,
-                   choose_panel:false,
-                   info_panel:false,
-                   heightArray:heightArray
-                })
+                    var menuData = res.data.data;           //菜单数据
+                    for(var i in menuData){       
+                       var reg = /^http/;
+                       if(reg.test(menuData[i].onPicture)){
+                           menuData[i].onPicture =  menuData[i].onPicture;
+                           menuData[i].picture =  menuData[i].picture;
+                       }else{
+                           menuData[i].onPicture =  menuData[i].onPicture?'http://demo.i-manji.com/lnj-weixin/'+menuData[i].onPicture.split('../../../')[1]:'';
+                           menuData[i].picture =  menuData[i].picture?'http://demo.i-manji.com/lnj-weixin/'+menuData[i].picture.split('../../../')[1]:'';
+                       }
+                       if(i==0){
+                           menuData[0].active = true;
+                       }else{
+                           menuData[i].active = false;
+                       }
+
+                       delete menuData[i].categoryCode;
+                       delete menuData[i].categoryTime;
+                       delete menuData[i].isDel;
+                       delete menuData[i].createTime;
+                       delete menuData[i].updateTime;
+                       delete menuData[i].sequence;
+                       delete menuData[i].shop;
+                       delete menuData[i].shopId;
+                       delete menuData[i].key;
+                       delete menuData[i].goodsCount;
+                       delete menuData[i].merId;
+                       delete menuData[i].status;
+                       delete menuData[i].typeDesc;
+                       delete menuData[i].sideGoodsList;
+
+                       var mainGoodsList = menuData[i].mainGoodsList;
+                       for (var j in mainGoodsList){
+                          
+                          var singeItem = mainGoodsList[j];
+                          
+                          //处理iSoldOut = 1
+                          if(singeItem.isSoldOut == 1){
+                             singeItem.stockNum = 0
+                          }
+
+                          //singeItem.availableTodayTimes  = '00:00-00:00'; 处理销售时段
+                          var timeArray = [];
+
+                          if(singeItem.availableTodayTimes){
+                              var available_times = singeItem.availableTodayTimes.split(',');
+                              
+
+                              for(var a in available_times){
+                                 var _available_times = available_times[a].split('-');
+                                 for(var b in _available_times){
+                                    var timeStamp = new Date(year+'/'+month+'/'+day+' '+_available_times[b]).getTime();
+                                    timeArray.push(timeStamp);
+                                 }
+                              }
+                              
+                              var groupNum = Math.ceil(timeArray.length/2);
+                              var record = 0;
+                              for(var g=0; g<=groupNum; g++){
+                                if(currentTime >= timeArray[2*g] && currentTime<= timeArray[2*g+1]){
+                                    record++;
+                                    // console.log(currentTime);
+                                    // console.log(timeArray[2*g]);
+                                    // console.log(timeArray[2*g+1]);
+                                }
+                              }
+                              if(record == 0) singeItem.NotAvailable = true;
+                          }
+
+
+                          singeItem.categoryId = menuData[i].categoryId;
+                          singeItem.categoryName = menuData[i].name;
+                          singeItem.categoryDescription = menuData[i].description;  
+                          singeItem.count = 0;
+                          singeItem.cart_items = [];      //主菜
+                          singeItem.minArray = [];        //小菜
+                          singeItem.priceVal =  (singeItem.price/100).toFixed(2);
+                          var reg = /^http/;
+                          if(reg.test(singeItem.smallPicture)){
+                             singeItem.centerImg =  singeItem.smallPicture;
+                          }else{
+                             singeItem.centerImg =  singeItem.smallPicture?'http://demo.i-manji.com/lnj-weixin/'+singeItem.smallPicture.split('../../../')[1]:'';
+                          }
+
+                          delete singeItem.availableTimes;
+                          delete singeItem.createTime;
+                          delete singeItem.merId;
+                          delete singeItem.lnjPrice;
+                          delete singeItem.isSoldOutDesc;
+                          delete singeItem.key;
+                          delete singeItem.quotaCount;
+                          delete singeItem.sequence;
+                          delete singeItem.shop;
+                          delete singeItem.shopId;
+                          delete singeItem.isDel;
+                          delete singeItem.typeDesc;
+                          delete singeItem.updateTime;
+                          delete singeItem.sideGoodsList;
+                          delete singeItem.picture;
+                          delete singeItem.smallPicture;
+                          
+                          
+                          for(var m in singeItem.sideDcGoodsCategoryList){
+                              delete singeItem.sideDcGoodsCategoryList[m].onPicture;
+                              delete singeItem.sideDcGoodsCategoryList[m].picture;
+                              delete singeItem.sideDcGoodsCategoryList[m].sequence;
+                              delete singeItem.sideDcGoodsCategoryList[m].shop;
+                              delete singeItem.sideDcGoodsCategoryList[m].shopId;
+                              delete singeItem.sideDcGoodsCategoryList[m].isDel;
+                              delete singeItem.sideDcGoodsCategoryList[m].createTime;
+                              delete singeItem.sideDcGoodsCategoryList[m].key;
+                              delete singeItem.sideDcGoodsCategoryList[m].mainGoodsList;
+                              delete singeItem.sideDcGoodsCategoryList[m].updateTime;
+                              delete singeItem.sideDcGoodsCategoryList[m].status;
+                              delete singeItem.sideDcGoodsCategoryList[m].typeDesc;
+
+                              for(var n in singeItem.sideDcGoodsCategoryList[m].sideGoodsList){
+                                  singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryId = singeItem.sideDcGoodsCategoryList[m].categoryId;
+                                  singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryName = singeItem.sideDcGoodsCategoryList[m].name;
+                                  singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryDescription = singeItem.sideDcGoodsCategoryList[m].description;
+                                  
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].sideGoodsList;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].sideDcGoodsCategoryList;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].picture;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].smallPicture;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].availableTimes;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].isSoldOutDesc;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].key;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].lnjPrice;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].merId;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].createTime;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].updateTime;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].quotaCount;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].sequence;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].shop;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].shopId;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].ticketName;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].ticketNoList;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].ticketNum;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].type;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].typeDesc;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].isDel;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryDescription;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryName;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryId;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].categoryIds;
+                                  delete singeItem.sideDcGoodsCategoryList[m].sideGoodsList[n].description;
+                              }
+                          }
+
+                       }  
+                    }
+
+                    _this.setData({ loaderhide:true });
+
+                    //menuData 是处理完的菜单数据
+                    wx.setStorageSync('menuData',menuData)
+
+                    var itemHeight = _this.data.itemHeight,  
+                    heightArray = [0]                  //范围数组
+                    var _scrollHeight = 0
+                    menuData.map(function(item){
+                        if(item.mainGoodsList.length==0){
+                           _scrollHeight = _scrollHeight + itemHeight
+                        }else{
+                           _scrollHeight = _scrollHeight + item.mainGoodsList.length*itemHeight
+                        }
+                        heightArray.push(_scrollHeight)
+                    })
+                    console.log(heightArray)
+
+                    _this.setData({
+                       items:menuData,
+                       cart_num:0,
+                       cart_fee:'0.00',
+                       detail_panel:false,
+                       choose_panel:false,
+                       info_panel:false,
+                       heightArray:heightArray
+                    })
+                }
+              })
+              
             } else {
                 _this.setData({ loaderhide:true });
-
                 _this.showDialog1(res.data.msg);
                 // wx.showModal({
                 //     content:res.data.msg,
@@ -1174,7 +1195,7 @@ Page({
       var scrollTop = e.detail.scrollTop,
           heightArray = this.data.heightArray,
           items = this.data.items
-  
+      
       for(var i=0; i<=heightArray.length;  i++){
           if(scrollTop>=heightArray[i] && scrollTop<heightArray[i+1]){
               var currentIndex = this.data.currentIndex

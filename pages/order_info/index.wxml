@@ -34,8 +34,8 @@
       <view class="title">
             <icon type="success" size="27" color="#FDD01B" />下单成功！感谢您的光临！
       </view>
-      <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 送餐号: {{order.dinnerNo}}</view>
-      <view class="bold">{{shopName}} | 桌号: {{deskNo}}</view>
+      <view class="bold">{{shopName}} | 取餐号: {{order.dinnerNo}}</view>
+      <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 桌号: {{deskNo}}</view>
       <view>请耐心等待，不要远离您的座位！</view>
     </view>
 
@@ -43,8 +43,8 @@
        <view class="title">
             <icon type="success" size="27" color="#FDD01B" />已出餐！
       </view>
-      <view class="bold">送餐号: {{order.dinnerNo}}</view>
-      <view class="bold">{{shopName}} | 桌号: {{deskNo}}</view>
+      <view class="bold">{{shopName}} | 取餐号: {{order.dinnerNo}}</view>
+      <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 桌号: {{deskNo}}</view>
       <view>请耐心等待，不要远离您的座位！</view>
     </view>
 
@@ -55,13 +55,13 @@
     </view>
 
    <view class="topCon" wx:if="{{order.status==8}}">
-       <view class="title">
-            <icon type="success" size="27" color="#FDD01B" />已完成！
-      </view>
-    </view>
+       <view class="title">{{shopName}}</view>
+       <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 取餐号: {{order.dinnerNo}}</view>
+       <view>订单状态：已完成</view>
+  </view>
 
 
-    <view class="infoCon1 {{order.status==2?'':'waitPay'}}">
+    <view class="infoCon1 {{order.status==2||order.status==8?'':'waitPay'}}">
       <view class="title">订单总价<view class="desp">￥<view class="num">{{order.totalFee}}</view></view></view>
       <view class="title">实付金额<view class="desp">￥<view class="num">{{order.userFee}}</view></view></view>
       <view class="list"> 

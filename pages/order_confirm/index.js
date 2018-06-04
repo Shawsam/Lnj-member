@@ -52,16 +52,26 @@ Page({
       var _this = this;
       var param = {
           mini:'mini',
+          userId:app.globalData.userId,
           shopId:app.globalData.shopId,
           openId:app.globalData.openId,
           goodsDetail:JSON.stringify(this.data.detail_items),
           coupons:JSON.stringify(this.data.coupons),
-          dwCoupons:this.data.dwCoupons,
           dinnerType:this.data.dinnerType,
-          subscribe:this.data.subscribe
+          subscribe:this.data.subscribe,
+          dwCoupons:this.data.dwCoupons,
+          type:this.data.type
       }
       if(this.data.subscribe==0){
-         delete param.subscribe;
+         delete param.subscribe
+      }
+      
+      if(!app.globalData.userId){
+         delete param.userId
+      }
+
+      if(this.data.type){
+         delete param.type
       }
 
       _this.setData({ loaderhide:false });
@@ -77,13 +87,17 @@ Page({
               if (res.data.errcode == 0) {
                   var resdata = res.data,
                       activity = resdata.activity,
-                      coupons = resdata.coupons;
+                      coupons = resdata.coupons,
+                      dkCoupons = resdata.dkCoupons
 
                   if(activity){
                       activity = JSON.parse(activity);
                   }
                   if(coupons){
                       coupons = JSON.parse(coupons);
+                  }
+                  if(dkCoupons){
+                      dkCoupons = JSON.parse(dkCoupons)
                   }
                   
                   _this.setData({
@@ -100,9 +114,15 @@ Page({
                         couponFee:resdata.couponFee,
                         // coupons:coupons,
                         activity:activity,
-                        couponsNum:coupons.length
+                        couponsNum:dkCoupons?dkCoupons.length:coupons.length,
+                        dkCoupons:dkCoupons||null
                   })
-     
+
+                  wx.setStorage({
+                     key:"choosed_card",
+                     data:JSON.stringify(dkCoupons)
+                  })
+                       
               } else {
                   _this.showDialog(res.data.msg);
                  //  wx.showModal({
@@ -227,8 +247,8 @@ Page({
       //用户信息
       _this.setData({
         userInfo:userInfo,
-        startTime:startTime,
-        endTime:endTime
+        // startTime:startTime,
+        // endTime:endTime
       })
     })
 
@@ -301,7 +321,8 @@ Page({
       success: function(res) {
          // console.log(res.data);
          _this.setData({
-            coupons:JSON.parse(res.data)
+            coupons:JSON.parse(res.data),
+            type:0
          });
          
          _this.Init();        
@@ -340,18 +361,10 @@ Page({
       var phone = this.data.phoneInput;
       if(phone==''){
         this.showDialog3('请输入手机号码')
-        // wx.showModal({
-        //       content:"请输入手机号码",
-        //       showCancel: false
-        // });
         return;
       }
       if(!this.is_phone(phone)){
-        this.showDialog('请输入正确的手机号码')
-        // wx.showModal({
-        //       content:"请输入正确的手机号码",
-        //       showCancel: false
-        // });
+        this.showDialog3('请输入正确的手机号码')
         return;
       }
 
@@ -501,7 +514,7 @@ Page({
         dinnerType:this.data.dinnerType,                   
         payType:this.data.paytype,                      
         isMember:this.data.isMember,                    
-        coupons:JSON.stringify(this.data.coupons),                     
+        coupons:this.data.dkCoupons?JSON.stringify(this.data.dkCoupons):JSON.stringify(this.data.coupons),                     
         caution:this.data.caution,
         isInvoice:this.data.isInvoice,                       
         goodsDetail:JSON.stringify(this.data.detail_items),                      
@@ -683,30 +696,41 @@ Page({
       })
   },
   dialogConfirm3:function(){
-      var phone = this.data.phoneInput2
-      if(phone==''){
-        this.showDialog('没有输入任何手机号')
-        this.setData({
-          dialogShow3:false
-        })
-        return;
-      }
-      if(!this.is_phone(phone)){
-        this.showDialog('输入的手机号不正确')   
-        this.setData({
-          phoneInput2:'',
-          dialogShow3:false
-        })
-        return;
-      }
 
-      wx.setStorageSync('phone',phone);
-      this.setData({
-         phone:phone,
-         phoneInput2:'',
-         phoneSlide:false,
-         dialogShow3:false
-      })
+      var phoneInit = this.data.phone
+      var phone = this.data.phoneInput2||''
+      if(phoneInit){
+          this.setData({
+            phoneInput:phone,
+            phoneInput2:'',
+            dialogShow3:false
+          })
+      }
+      else{
+          if(phone==''){
+            this.showDialog('没有输入任何手机号')
+            this.setData({
+              dialogShow3:false
+            })
+            return;
+          }
+          if(!this.is_phone(phone)){
+            this.showDialog('输入的手机号不正确')   
+            this.setData({
+              phoneInput2:'',
+              dialogShow3:false
+            })
+            return;
+          }
+
+          wx.setStorageSync('phone',phone);
+          this.setData({
+             phone:phone,
+             phoneInput2:'',
+             phoneSlide:false,
+             dialogShow3:false
+          })
+    }
   },
   phoneInput2:function(e){
       this.setData({

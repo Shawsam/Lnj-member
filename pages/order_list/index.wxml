@@ -18,16 +18,17 @@
         <view class="list_item" bindtap="infoTap" data-param="{{item.orderId}}" wx:key="{{item.orderId}}" wx:for="{{orderList}}">
             <view class="top">
                 <view class="info">
-                    <view class="dinnerNo" wx:if="{{item.status==2}}">送餐号：{{item.dinnerNo}}</view>
-                    <view class="order_state">订单状态：{{item.statusDesc}}</view>
+                     <view class="time">门店名：{{item.shopName}}</view>
                     <view class="total">{{item.isSubscribe?'打包预订'
                             :(item.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}}</view>
-                </view>
-                <view class="time">订单时间：{{item.orderTime}}
+               </view>
+               <view class="time" wx:if="{{item.status==2||item.status==3||item.status==8}}">取餐号：{{item.dinnerNo}}</view>
+               <view class="info">
+                    <view class="order_state">订单状态：{{item.statusDesc}}</view>
+               </view>
+               <view class="time">订单时间：{{item.orderTime}}
                     <view class="total_fee">￥{{item.totalFee}}</view>
                </view>
-               <view class="time">取餐号：{{item.dinnerNo}}</view>
-               <view class="time">门店名：{{item.shopName}}</view>
                <view class="time" wx:if="{{item.isSubscribe}}">预约时间：{{item.subscribeTime}}</view>
             </view>
             <view class="order">

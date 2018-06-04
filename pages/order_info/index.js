@@ -213,34 +213,36 @@ Page({
 
   cancelFun:function(){
     var _this = this;
-    _this.setData({ loaderhide:false });
-    
     var param = {
-           mini:'mini',
-           openId:app.globalData.openId,
-           orderId:this.data.order.orderId
-    };
-
-    wx.request({
-        url: app.globalData.host+"/orderQuery/cancelByUser",
-        data:param,
-        method:'POST',
-        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
-       
-        success: function(res) {
-          //服务器返回数据
-          _this.setData({ loaderhide:true })
-          if(res.data.errcode == 0){
-             wx.showToast({title:'订单已取消'});
-             setTimeout(function(){
-                 wx.navigateBack()
-             },600)
-          }else{
-             _this.showDialog(res.data.msg);
-          }
-        }
-    })
-
+                   mini:'mini',
+                   openId:app.globalData.openId,
+                   orderId:this.data.order.orderId
+            }
+    wx.showModal({content:'确定要取消该订单吗?',
+                  success: function (res) {
+                    if (res.confirm) {
+                        _this.setData({ loaderhide:false });
+                        wx.request({
+                            url: app.globalData.host+"/orderQuery/cancelByUser",
+                            data:param,
+                            method:'POST',
+                            header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+                            success: function(res) {
+                              //服务器返回数据
+                              _this.setData({ loaderhide:true })
+                              if(res.data.errcode == 0){
+                                 wx.showToast({title:'订单已取消'});
+                                 setTimeout(function(){
+                                     wx.navigateBack()
+                                 },600)
+                              }else{
+                                 _this.showDialog(res.data.msg);
+                              }
+                            }
+                        })
+                    }
+                  }
+            })
   },
 
 

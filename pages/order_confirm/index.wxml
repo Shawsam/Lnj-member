@@ -87,7 +87,7 @@
 		      </view>
 		      <view class="hide_cont">
 		         <view class="tel_change">
-		             <input type="number" maxlength="11" id="telphone" placeholder="请输入手机号码" bindinput="phoneInput" />
+		             <input type="number" maxlength="11" id="telphone" placeholder="请输入手机号码" bindinput="phoneInput" value="{{phoneInput}}" />
 		             <view bindtap="phoneConfirmTap" class="ensure">确认</view>
 		         </view>
 		     </view>
@@ -136,8 +136,7 @@
 	    <view class="con2 couponCon" bindtap="openCardList">优惠券
 <!-- 	    <view wx:if="{{couponsNum}}" class="right colored">已选择{{couponsNum}}张<image class="arrodow rote" src="../../image/arrodow.png" /></view> -->
 	        <view wx:if="{{couponsNum && couponFee>0 }}" class="right colored">-￥{{couponFee/100}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
-
-	       <view wx:if="{{!couponsNum || couponFee==0}}"  class="right {{card_num?'colored':''}}">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+	        <view wx:if="{{!couponsNum || couponFee==0}}"  class="right {{card_num?'colored':''}}">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 	    </view>
 	</view>
 
