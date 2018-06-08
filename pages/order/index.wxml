@@ -58,10 +58,12 @@
 
     
     <view class="item_list">
-         <view class="title" wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:if="{{item.active}}">{{item.name}}</view>
+         <view class="h-title" wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:if="{{item.active}}">{{item.name}}</view>
          <scroll-view class="{{detail_panel||choose_panel?'noscroll':''}}" scroll-y bindscroll="productScroll" scroll-into-view ="{{toView}}" scroll-with-animation ="true" >
-
-             <view wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:for-index="i" id="v_{{i}}">
+  
+             <view wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:for-index="i">
+                  <view class="title" wx:if="{{i!=0}}">{{item.name}}</view>
+                  <view id="v_{{i}}">
                   <view class="item"  wx:key="{{item.goodsId}}" wx:for="{{item.mainGoodsList}}" wx:for-index="j">    
                       <view class="shade {{item.stockNum==0?'show':''}} {{item.NotAvailable?'show':''}}"></view>
                       <image bindtap="infoScan" data-paramA="{{i}}" data-paramB="{{j}}" src="{{item.centerImg}}" alt="{{item.name}}"/>
@@ -83,6 +85,7 @@
                   </view>
                   <view class="emptyItem" wx:if="{{item.mainGoodsList.length == 0}}">暂无此品类</view>
                   <view wx:if="{{items.length-1==i}}" class="fillScroll" style="height:{{fillHeight-(item.mainGoodsList.length||1)*itemHeight+10}}px"></view>
+                  </view>
               </view>
               
          </scroll-view>

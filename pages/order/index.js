@@ -29,8 +29,8 @@ Page({
      addLock3:false,
      jumpLock:false,
      confirmDisabled:false,
-     itemHeight:parseInt(wx.getSystemInfoSync().screenWidth/750*100)*2.9,
-     fillHeight:wx.getSystemInfoSync().windowHeight - wx.getSystemInfoSync().screenWidth/750*280,
+     itemHeight:145,
+     fillHeight:wx.getSystemInfoSync().windowHeight - 140,
      currentIndex:0
   },
   onLoad: function () {
@@ -44,11 +44,6 @@ Page({
         shopName:app.globalData.shopName   
       })
     })
-    
-    //修正 iphone Plus
-    if(wx.getSystemInfoSync().screenWidth==414){
-      this.setData({itemHeight:158})
-    }
   
     //购物车历史数据 
     // console.log(app.globalData.fromType);
@@ -272,11 +267,13 @@ Page({
                     var itemHeight = _this.data.itemHeight,  
                     heightArray = [0]                  //范围数组
                     var _scrollHeight = 0
-                    menuData.map(function(item){
+                    var titleHeight = 0
+                    menuData.map(function(item,i){
+                        i==0?titleHeight = 0:titleHeight=40
                         if(item.mainGoodsList.length==0){
-                           _scrollHeight = _scrollHeight + itemHeight
+                           _scrollHeight = _scrollHeight + itemHeight + titleHeight
                         }else{
-                           _scrollHeight = _scrollHeight + item.mainGoodsList.length*itemHeight
+                           _scrollHeight = _scrollHeight + item.mainGoodsList.length*itemHeight + titleHeight
                         }
                         heightArray.push(_scrollHeight)
                     })
