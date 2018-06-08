@@ -77,9 +77,9 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .panel .detail_panel .list .item{ overflow:hidden; zoom:1; border-bottom:1px dashed #999; padding:20rpx 10rpx; font:28rpx/40rpx "微软雅黑"; position:relative;}
 .panel .detail_panel .list .package{  padding:20rpx 10rpx; border-bottom:1px dashed #999;}
 .panel .detail_panel .list .package view{ display:inline-block; }
-.panel .detail_panel .list .package .name{width:80%; font-weight:bold;}
+.panel .detail_panel .list .package .name{width:55%; font-weight:bold;}
 .panel .detail_panel .list .package .price{width:20%; text-align:right; color:#333;}
-
+.panel .detail_panel .list .package .num{ width:25%; text-align:center; color:#333;}
 
 .panel .detail_panel .list .item .info1 view{ display:inline-block; font:26rpx/40rpx "微软雅黑"; vertical-align:top; }
 .panel .detail_panel .list .item .info1 .name{ width:55%; font-weight:bold; }

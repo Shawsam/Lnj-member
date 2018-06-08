@@ -102,6 +102,7 @@ Page({
                   
                   _this.setData({
                         userFee:resdata.userFee,
+                        packList:resdata.packList||[],
                         packTotalFee:resdata.packageFee,
                         totalFee:resdata.totalOrderFee,                 
                         userFee:resdata.userFee,
@@ -117,11 +118,19 @@ Page({
                         couponsNum:dkCoupons?dkCoupons.length:coupons.length,
                         dkCoupons:dkCoupons||null
                   })
+                  
+                  if(coupons.length){
+                    wx.setStorage({
+                       key:"choosed_card",
+                       data:JSON.stringify(coupons)
+                    })
+                  }else{
+                    wx.setStorage({
+                       key:"choosed_card",
+                       data:JSON.stringify(dkCoupons)
+                    })
+                  }
 
-                  wx.setStorage({
-                     key:"choosed_card",
-                     data:JSON.stringify(dkCoupons)
-                  })
                        
               } else {
                   _this.showDialog(res.data.msg);
@@ -319,7 +328,7 @@ Page({
     wx.getStorage({
       key:'choosed_card',
       success: function(res) {
-         // console.log(res.data);
+         console.log(res.data);
          _this.setData({
             coupons:JSON.parse(res.data),
             type:0

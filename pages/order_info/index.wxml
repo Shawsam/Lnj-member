@@ -49,9 +49,9 @@
     </view>
 
     <view class="topCon" wx:if="{{order.status==9}}">
-       <view class="title">
-            <icon type="success" size="27" color="#FDD01B" />已退单！
-      </view>
+       <view class="title">{{shopName}}</view>
+       <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}}</view>
+       <view>订单状态：已退单</view>
     </view>
 
    <view class="topCon" wx:if="{{order.status==8}}">
@@ -61,7 +61,7 @@
   </view>
 
 
-    <view class="infoCon1 {{order.status==2||order.status==8?'':'waitPay'}}">
+    <view class="infoCon1 {{order.status==2||order.status==8||order.status==9?'':'waitPay'}}">
       <view class="title">订单总价<view class="desp">￥<view class="num">{{order.totalFee}}</view></view></view>
       <view class="title">实付金额<view class="desp">￥<view class="num">{{order.userFee}}</view></view></view>
       <view class="list"> 
@@ -75,7 +75,7 @@
                     <view wx:key="{{item.goodsId}}" wx:for="{{item.subData}}" wx:if="{{index>0}}">+{{item.goodsName}}{{item.price?'(￥'+item.price/100+')':''}}</view>
                 </view>
            </view>
-           <view class="package" wx:if="{{order.packTotalFee}}"><view class="name">餐盒</view><view class="price">￥{{order.packTotalFeeVal}}</view></view>
+<!--            <view class="package" wx:if="{{order.packTotalFee}}"><view class="name">餐盒</view><view class="price">￥{{order.packTotalFeeVal}}</view></view> -->
 
 
            <view wx:if="{{order.activity.length}}">

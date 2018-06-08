@@ -73,13 +73,13 @@ Page({
                              dcOrderGoodsList.push(orderList[i].dcOrderGoodsList[j]);
                           }
                       }
-                      if(orderList[i].packTotalFee > 0){
-                          var packItem = {};
-                          packItem.goodsName = '餐盒费';
-                          packItem.count = orderList[i].packNum;
-                          packItem.price = (orderList[i].packTotalFee/100).toFixed(2);
-                          dcOrderGoodsList.push(packItem);
-                      }
+                      // if(orderList[i].packTotalFee > 0){
+                      //     var packItem = {};
+                      //     packItem.goodsName = '餐盒费';
+                      //     packItem.count = orderList[i].packNum;
+                      //     packItem.price = (orderList[i].packTotalFee/100).toFixed(2);
+                      //     dcOrderGoodsList.push(packItem);
+                      // }
                       singleData.dcOrderGoodsList = dcOrderGoodsList;
                       _orderList.push(singleData);
                     }
