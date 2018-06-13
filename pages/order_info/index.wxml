@@ -106,7 +106,7 @@
       <view class="item">订单状态<view class="desp">{{order.statusDesc}}</view></view>
       <view class="item">订单号<view class="desp">{{order.orderNo}}</view></view>
       <view class="item">下单时间<view class="desp">{{order.orderTime}}</view></view>
-      <view class="item">付款时间<view class="desp">{{order.payTime}}</view></view>
+      <view class="item" wx:if="{{order.status!=1 && order.status!=9}}">付款时间<view class="desp">{{order.payTime}}</view></view>
       <view class="item" wx:if="{{order.subscribeTime}}">预约时间<view class="desp">{{order.subscribeTime}}</view></view>
       <view class="item" wx:if="{{order.isInvoice}}">是否需要发票<view class="desp">{{order.isInvoice?'是':'否'}}</view></view>
       <view class="item">备注信息<view class="desp">{{order.caution?order.caution:'无'}}</view></view>

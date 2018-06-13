@@ -85,7 +85,7 @@ Page({
                wx.setStorageSync('work_num',work_num); 
                
               wx.request({
-                url:"https://demo.i-manji.com/lnj-weixin/console/dc/getUTC",
+                url:app.globalData.host+"/getUTC",
                 data:{mini:'mini'},
                 header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
                 method:'POST',
