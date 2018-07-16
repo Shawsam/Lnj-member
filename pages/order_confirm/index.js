@@ -42,7 +42,7 @@ Page({
       subscribe:0,         //是否预约打包
       subscribeTime:'',    //预约打包时间
       currentTime:'',
-      startTime:'10:00',
+      startTime:'6:30',
       endTime:'20:00'
 
   },
@@ -87,15 +87,13 @@ Page({
               if (res.data.errcode == 0) {
                   var resdata = res.data,
                       activity = resdata.activity,
-                      coupons = resdata.coupons,
+                      coupons = _this.data.coupons,
                       dkCoupons = resdata.dkCoupons
 
                   if(activity){
                       activity = JSON.parse(activity);
                   }
-                  if(coupons){
-                      coupons = JSON.parse(coupons);
-                  }
+
                   if(dkCoupons){
                       dkCoupons = JSON.parse(dkCoupons)
                   }
@@ -113,12 +111,13 @@ Page({
                         packTotalFee:resdata.totalPackageFee,
                         packTotalFeeVal:(resdata.totalPackageFee/100).toFixed(2),
                         couponFee:resdata.couponFee,
-                        // coupons:coupons,
+                        //coupons:coupons,
                         activity:activity,
                         couponsNum:dkCoupons?dkCoupons.length:coupons.length,
                         dkCoupons:dkCoupons||null
                   })
                   
+                  console.log(coupons.length)
                   if(coupons.length){
                     wx.setStorage({
                        key:"choosed_card",
@@ -227,11 +226,13 @@ Page({
         var startTime,endTime,
             currentTime = new Date(),
             currentHours = currentTime.getHours(),
-            currentTime = currentTime.getMinutes()<10?'0'+currentTime.getMinutes():currentTime.getMinutes();
-        if(currentHours<10){
-           startTime = '10:00';
+            currentMinutes = currentTime.getMinutes()<10?'0'+currentTime.getMinutes():currentTime.getMinutes();
+        
+        console.log(currentHours+':'+currentMinutes)
+        if(currentHours<7 && currentMinutes<30){
+           startTime = '6:30';
            endTime = '20:00';
-           _this.setData({currentTime:startTime})
+           _this.setData({currentTime:currentHours+':'+currentMinutes})
            _this.setData({subscribeTime:startTime})
         }else if(currentHours>=20){
            _this.showDialog1('当前时间不提供预约打包服务')
@@ -244,8 +245,9 @@ Page({
            //               }
            // });
         }else{
-           startTime = currentHours+':'+currentTime;
+           startTime = currentHours+':'+currentMinutes;
            endTime = '20:00';
+           _this.setData({startTime:startTime})
            _this.setData({currentTime:startTime})
            _this.setData({subscribeTime:startTime})
         }

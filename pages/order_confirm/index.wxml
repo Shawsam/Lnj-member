@@ -162,7 +162,7 @@
 			                <view class="info1">
 			                    <view class="name">{{item.name}}</view>
 			                    <view class="num">x{{item.count}}</view>
-			                    <view class="price">￥{{item.priceVal}}</view>
+			                    <view class="price">￥{{item.count*item.priceVal}}</view>
 			                </view>
 			            </view>
 			        </view>

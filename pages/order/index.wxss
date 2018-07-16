@@ -97,13 +97,13 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .panel .detail_panel .total{ text-align:right; padding:20rpx 40rpx; font:32rpx/40rpx "微软雅黑"; font-weight:bold;}
 .panel .detail_panel .total .flag{ display:inline-block; margin:0 2rpx 0 20rpx; font:26rpx/40rpx "微软雅黑"; }
 
-.panel .choose_panel{ z-index:200; position:fixed; box-sizing:border-box; top:10%; max-height:80%; width:80%; left:10%; background:#fff; overflow-y:scroll; border-radius:10rpx; }
-.panel .choose_panel{ padding:0 30rpx; padding-bottom:120rpx; padding-top:100rpx;}
+.panel .choose_panel{ z-index:200; position:fixed; box-sizing:border-box; top:10%; max-height:80%; width:80%; left:10%; background:#fff; overflow:hidden; border-radius:10rpx; }
+.panel .choose_panel{ padding-bottom:120rpx; padding-top:100rpx;}
 
-.panel .choose_panel .hd-title{ z-index:200; position:fixed; top:10%; margin-left:-30rpx; box-sizing:border-box; width:80%;  height:100rpx; padding:10rpx 30rpx; }
+.panel .choose_panel .hd-title{ z-index:200; position:fixed; top:10%; box-sizing:border-box; width:80%;  height:100rpx; padding:10rpx 30rpx; }
 .panel .choose_panel .hd-title .name{ display:inline-block; font:36rpx/90rpx "微软雅黑"; font-weight:bold;}
 .panel .choose_panel .hd-title .cancelBtn{ float:right; font:26rpx/90rpx "微软雅黑"; padding:0 20rpx; }
-.panel .choose_panel .list{ max-height:700rpx;  border-top:1px solid #e8e8e8;}
+.panel .choose_panel .list{ max-height:700rpx;  border-top:1px solid #e8e8e8;  overflow-y:scroll; padding:0 30rpx; }
 .panel .choose_panel .list .item .item_name{ font:32rpx/50rpx "微软雅黑"; font-weight:bold; margin:16rpx 0 20rpx 0;   }
 .panel .choose_panel .list .item .item_name .desp{ margin-left:6rpx; font:30rpx/50rpx "微软雅黑"; display:inline-block; }
 .panel .choose_panel .list .item .item_info{ font:28rpx/50rpx "微软雅黑"; border-bottom:1px dashed #e8e8e8; padding:0 0 20rpx 0;}

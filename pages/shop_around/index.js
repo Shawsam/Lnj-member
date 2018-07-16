@@ -32,21 +32,42 @@ Page({
     })
 
     //时间限制
-    var currentTime = new Date(),
-    currentHours = currentTime.getHours(),
-    currentTime = currentTime.getMinutes();
-    if(currentHours>=20){
-       _this.showDialog2('当前时间不提供预约打包服务');
-       // wx.showModal({content:'当前时间不提供预约打包服务',
-       //     showCancel: false,
-       //     success: function(res) {
-       //            if (res.confirm) {
-       //              wx.redirectTo({url:'../../pages/entrace/index'});
-       //            }
-       //     }
-       // });
-    }
-    this.fetchData()
+    wx.request({
+                  url:app.globalData.host+"/getUTC",
+                  data:{mini:'mini'},
+                  header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+                  method:'POST',
+                  success: function (resData) {
+                      console.log(resData)
+                      if(resData.data.errcode==0){
+                          var currentTime = new Date(resData.data.data)
+                      }else{
+                          var currentTime = new Date()
+                      }                   
+                      var currentHours = currentTime.getHours()
+                      var currentTime = currentTime.getMinutes()
+                      if(currentHours>=20){
+                         _this.showDialog2('当前时间不提供预约打包服务');
+                      }
+                      _this.fetchData()                    
+                  }
+    })
+
+    // var currentTime = new Date(),
+    // currentHours = currentTime.getHours(),
+    // currentTime = currentTime.getMinutes();
+    // if(currentHours>=20){
+    //    _this.showDialog2('当前时间不提供预约打包服务');
+    //    // wx.showModal({content:'当前时间不提供预约打包服务',
+    //    //     showCancel: false,
+    //    //     success: function(res) {
+    //    //            if (res.confirm) {
+    //    //              wx.redirectTo({url:'../../pages/entrace/index'});
+    //    //            }
+    //    //     }
+    //    // });
+    // }
+    // this.fetchData()
 
   },
   loadMore:function(){
