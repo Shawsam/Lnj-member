@@ -7,6 +7,7 @@ Page({
      unionId:'',
      loaderhide:true,
      jumpLock:false,
+     noticeClosed:false,
      canIUseWebView: wx.canIUse('web-view')
   },
 

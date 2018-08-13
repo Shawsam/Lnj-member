@@ -10,7 +10,6 @@
 </view>
 
 <view class="container">
-
 <!-- <view class="panel_cover"></view>
 <view class="panel">
     <view class="panel_title">微信授权</view>

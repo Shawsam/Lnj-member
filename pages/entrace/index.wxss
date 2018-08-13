@@ -41,3 +41,4 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .panel .panel_title{height:90rpx; text-align:center; border-bottom:1rpx solid #ccc; font:30rpx/90rpx "微软雅黑"; font-weight:bold; border-radius:10rpx 10rpx 0 0; }
 .panel .panel_content{ padding:30rpx; }
 .panel .panel_footer button{font-size:28rpx; height:90rpx; line-height:90rpx;}
+
