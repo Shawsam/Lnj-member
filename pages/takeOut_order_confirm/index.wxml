@@ -42,11 +42,11 @@
 	        <view class="num"></view>
 	        <view class="price">￥{{deliveryFeeVal}}</view>
 	    </view>
-	    <view class="item coupon" wx:if="{{discountFee>0}}">
+<!-- 	    <view class="item coupon" wx:if="{{discountFee>0}}">
 	        <view class="name">满30减15活动</view>
 	        <view class="num"></view>
 	        <view class="price">-￥{{discountFeeVal}}</view>
-	    </view>
+	    </view> -->
     </view>
 
 <!--
@@ -92,6 +92,14 @@
 	       	  <view class="payview" wx:if="{{paytype==2}}"><image class="tag" src="../../image/wechart.png" />微信支付</view>
 	          <image class="arrodow rote" src="../../image/arrodow.png" />
 	       </view>
+	    </view>
+	</view>
+
+	<view class="cont">
+	    <view class="con2 couponCon" bindtap="openCouponList">优惠券
+<!-- 	    <view wx:if="{{couponsNum}}" class="right colored">已选择{{couponsNum}}张<image class="arrodow rote" src="../../image/arrodow.png" /></view> -->
+	        <view wx:if="{{couponsNum && couponFee>0 }}" class="right colored">-￥{{couponFee}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+	        <view wx:if="{{!couponsNum || couponFee==0}}"  class="right {{card_num?'colored':''}}">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 	    </view>
 	</view>
 

@@ -148,7 +148,7 @@ Page({
 
       //优惠券数量   优惠券信息
       var param = {
-        mini:'min',
+        mini:'mini',
         shopId:app.globalData.shopId,
         openId:app.globalData.openId,
         taoCanNum:this.data.taoCanNum,

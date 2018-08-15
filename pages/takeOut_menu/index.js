@@ -634,6 +634,10 @@ Page({
       }
     }
 
+
+    wx.removeStorage({key:'paytype'});
+    wx.removeStorage({key:'choosed_coupon'});
+
     //cart_items = JSON.stringify(cart_items);
     cart_items = JSON.stringify(cart_items);
     cart_items = cart_items.replace(/\?/g,'');

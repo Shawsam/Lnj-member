@@ -1,0 +1,93 @@
+<!--index.wxml-->
+<view class='wx_dialog_container' hidden="{{!dialogShow}}">
+    <view class='wx-mask'></view>
+    <view class='wx-dialog'>
+        <view class='wx-dialog-content'>{{ contentMsg }}</view>
+        <view class='wx-dialog-footer'>
+          <view class='wx-dialog-btn' catchtap='dialogConfirm'>确定</view>
+        </view>
+    </view>
+</view>
+
+
+<view class="container">
+<view class="main">
+     <view class="head"></view>
+     <view class="top"><image src="../../image/i_choose.png" />选择券</view>
+     <view class="center shadows" bindtap="emptyAllTap">
+         不使用优惠券
+         <image class="choose" src="../../image/cho_ticket.png"/>
+         <image wx:if="{{emptyall}}" class="choosed" src="../../image/choose_ticket.png"/>
+     </view> 
+     <view class="list">
+        <view class="ticket_list" wx:if="{{items[0].data.length>0}}">
+            <view class="title" data-param="0" bindtap="slideTap">套餐券
+                <view class="flo_right">{{items[0].data.length}}张
+                    <image class="{{items[0].slide?'rote':''}}" src="../../image/arro_black.png" />
+                </view>
+            </view>
+            <view class="shadows ticket {{items[0].slide?'slide':''}}"  data-paramA="0" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[0].data}}" wx:key="{{item.couponId}}">
+                <view class="ticket_type">
+                    <view class="val">套餐</view>
+                    <view class="name">{{item.type.categoryDesc}}</view></view>
+                <view class="ticket_time">
+                    <view>{{item.type.typeName}}</view>
+                    <view>{{item.validDateRegion}}</view>
+                </view>
+                <i class="dot_top"></i>
+                <i class="dot_bot"></i>
+                <image class="choose" src="../../image/cho_ticket.png"/>
+                <image wx:if="{{item.active}}" class="choosed" src="../../image/choose_ticket.png"/>
+            </view>
+        </view>
+
+        <view class="ticket_list" wx:if="{{items[1].data.length>0}}">
+            <view class="title" data-param="1" bindtap="slideTap">领用券
+                <view class="flo_right">{{items[1].data.length}}张
+                    <image class="{{items[1].slide?'rote':''}}" src="../../image/arro_black.png" />
+                </view>
+            </view>
+            <view class="shadows ticket {{items[1].slide?'slide':''}}"  data-paramA="1" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[1].data}}" wx:key="{{item.couponId}}">
+                <view class="ticket_type">
+                    <view class="val">领用</view>
+                    <view class="name">{{item.type.categoryDesc}}</view></view>
+                <view class="ticket_time">
+                    <view>{{item.type.typeName}}</view>
+                    <view>{{item.validDateRegion}}</view>
+                </view>
+                <i class="dot_top"></i>
+                <i class="dot_bot"></i>
+                <image class="choose" src="../../image/cho_ticket.png"/>
+                <image wx:if="{{item.active}}" class="choosed" src="../../image/choose_ticket.png"/>
+            </view>
+        </view>
+
+        <view class="ticket_list" wx:if="{{items[2].data.length>0}}">
+            <view class="title" data-param="2" bindtap="slideTap">抵扣券
+                <view class="flo_right">{{items[2].data.length}}张
+                    <image class="{{items[2].slide?'rote':''}}" src="../../image/arro_black.png" />
+                </view>
+            </view>
+            <view class="shadows ticket {{items[2].slide?'slide':''}}" data-paramA="2" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[2].data}}" wx:key="{{item.couponId}}">
+                <view class="ticket_type">
+                    <view class="val">{{item.type.category==0?'现金':'尊享'}}</view>
+                    <view class="name">{{item.type.categoryDesc}}</view></view>
+                <view class="ticket_time">
+                    <view>{{item.type.typeName}}</view>
+                    <view>{{item.validDateRegion}}</view>
+                </view>
+                <i class="dot_top"></i>
+                <i class="dot_bot"></i>
+                <image class="choose" src="../../image/cho_ticket.png"/>
+                <image wx:if="{{item.active}}" class="choosed" src="../../image/choose_ticket.png"/>
+            </view>
+        </view>
+    </view>
+</view>
+
+
+<view class="footer">
+    <view class="confirmBtn" bindtap="chooseConfirm">确定</view>
+</view>
+
+</view>

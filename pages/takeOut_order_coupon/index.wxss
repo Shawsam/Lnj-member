@@ -1,0 +1,45 @@
+/**index.wxss**/
+@import "../../components/myModal/index.wxss";
+.flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
+.flexbox > flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
+::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+
+page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
+.container{ box-sizing:border-box; background:#f3f3f3; height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch; position:relative; padding-bottom:110rpx; }
+
+.footer{ z-index:100; position:fixed; bottom:0; height:110rpx; width:100%; background:#fff; box-sizing:border-box; overflow:hidden; zoom:1; }
+.footer .confirmBtn{ position:absolute; top:0; right:0; height:110rpx;  font:36rpx/110rpx "微软雅黑"; font-weight:bold; width:100%;  text-align:center; background:#FDD01B; }
+.footer .confirmBtn:active{ opacity:0.6; }
+
+
+.bar{height:1px;background:#f8f8f8;}
+.rela{position:relative;}
+.abso{position:absolute;}
+.margin{margin:0 6rpx;}
+.head{height:180rpx; background:#302f34; text-align:center; margin-bottom:-130rpx; }
+.top{ position:relative; text-align:center; color:#fff; font-weight:bold; margin-bottom:40rpx; height:40rpx; line-height:40rpx; font:32rpx/40rpx "微软雅黑"; vertical-align:bottom; }
+.top > image{ display:inline-block; width:50rpx; height:40rpx; margin-right:20rpx; vertical-align:bottom;}
+
+.center{ height:100rpx; background:#fff; margin:0 60rpx; border-radius:6rpx; padding:0 30rpx; line-height:100rpx; position:relative; margin-bottom:50rpx; }
+
+.shadows{background:#fff; box-shadow:0 0 15rpx rgba(0, 0,0,0.3); position:relative;}
+
+.ticket_list{margin:0 60rpx; position:relative;}
+.ticket_list image{width:30rpx; height:20rpx;}
+.title{line-height:80rpx; padding:0 10rpx; margin-bottom:20rpx; border-top:1px solid #b6b6b6; border-bottom:1px solid #b6b6b6; }
+.ticket{border-radius:6rpx; height:140rpx; padding:6rpx 0; margin-bottom:30rpx;display:none;}
+.ticket.slide{ display:block; }
+.ticket > view{display:inline-block; height:100%; vertical-align:top;}
+.ticket_type{width:150rpx;text-align:center;border-right:1px solid #ccc;font-weight: bold;}
+.ticket_type > view:nth-child(1){color:#EB671D; line-height:60rpx; padding-top:10rpx; font-size:35rpx;}
+.ticket_time{ padding:20rpx 0 20rpx 40rpx; box-sizing:border-box; }
+.ticket_time > view{line-height:50rpx;}
+.dot_bot{position:absolute; right:0; width:20rpx; height:10rpx; border-radius:10rpx 10rpx 0 0; background:#e3e3e4; bottom:0; right:60rpx;}
+.dot_top{position:absolute; right:0; top:0;width:20rpx;height:10rpx;border-radius:0 0 10rpx 10rpx ;background:#e3e3e4; right:60rpx;}
+
+.rote{transform:rotate(180deg);-ms-transform:rotate(180deg);-moz-transform:rotate(180deg);-webkit-transform:rotate(180deg);-o-transform:rotate(180deg); }
+.flo_right{float:right;color:#707070;}
+.flo_right> image{width:30rpx;vertical-align:middle; margin-left:40rpx;}
+input{display:none;}
+image.choose{  height:40rpx; width:40rpx; position:absolute; right:50rpx; top:50%; margin-top:-20rpx; }
+image.choosed{ height:40rpx; width:40rpx; position:absolute; right:50rpx; top:50%; margin-top:-20rpx;}

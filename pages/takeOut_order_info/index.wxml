@@ -78,7 +78,7 @@
             </view>
             <view class="item discount" wx:if="{{discountFee}}">
                 <view class="info1">
-                    <view class="name">满30减15活动</view>
+                    <view class="name">优惠券</view>
                     <view class="num"></view>
                     <view class="price">-￥{{discountFeeVal}}</view>
                 </view>
@@ -127,7 +127,7 @@
   </view>
 </view>
 
-<view class="footer flexbox" wx:if="{{ !applyBackOrderStatus && status!=4 && status!= 7 && status !=9 && fourtyTimeBelow }}">
+<view class="footer flexbox" wx:if="{{ !applyBackOrderStatus && status!=4 && status!= 7 && status !=9 && status !=99 && fourtyTimeBelow }}">
     <view wx:if="{{!applyBackOrderStatus && status!=4 && status!= 7 && status !=9 && fourtyTimeBelow}}" class="cancelBtn btn" bindtap="cancelFun">申请退单</view>
     <view wx:if="{{status==1}}" class="payBtn btn" bindtap="payFun">继续支付</view>
 </view>

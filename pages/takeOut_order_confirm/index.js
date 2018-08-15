@@ -8,6 +8,8 @@ Page({
       userInfo:null,
       cardNo:'',
       shopName:'',
+      coupons:[],       //选择的优惠券
+      couponsNum:0,     //选择了多少张
       cart_items:[],
       totalFee:0, 
       totalFeeVal:'0.00',                
@@ -34,6 +36,100 @@ Page({
       indexNum:0
   },
   
+  Init:function(){
+    var _this = this
+    //请求订单计算接口
+    var param = {
+        mini:'mini',
+        storeid:app.globalData.shopId,
+        coupons:JSON.stringify(this.data.coupons),
+        goodsDetail:JSON.stringify(this.data.detail_items),
+    }
+    _this.setData({ loaderhide:false });
+    wx.request({
+        url: app.globalData.host+'/waimai/goods/jsOrderPrice', 
+        data:param,
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        method:'POST',
+        success: function (res) {
+            //服务器返回的结果
+            console.log(res);
+            if (res.data.errcode == 0) {
+                var resdata = res.data;
+                _this.setData({
+                  totalFee:resdata.totalFee,                 
+                  userFee:resdata.userFee,
+                  couponFee:resdata.couponFee.toFixed(2),
+                  discountFee:resdata.discountFee,
+                  couponsNum:resdata.discountList.length,
+                  totalBoxNum:resdata.totalBoxNum,
+                  totalBoxFee:resdata.totalBoxFee,
+                  deliveryFee:resdata.deliveryFee,
+                  deliveryFeeVal:(resdata.deliveryFee).toFixed(2),
+                  totalFeeVal:(resdata.totalFee).toFixed(2),
+                  userFeeVal:(resdata.userFee).toFixed(2),
+                  discountFee:resdata.discountFee,
+                  discountFeeVal:(resdata.discountFee).toFixed(2),
+                  totalBoxFeeVal:(resdata.totalBoxFee).toFixed(2)
+                })
+   
+            } else {
+                wx.showModal({
+                    content:res.data.msg,
+                    showCancel: false
+               });
+            }
+        },
+        fail: function () {
+            console.log('系统错误')
+        }
+    })
+
+
+
+    //优惠券数量   优惠券信息
+    var param = {
+        mini:'mini',
+        openId:app.globalData.openId,
+        taoCanNum:0,
+        goodsId:''
+      }
+
+      wx.request({
+          url: app.globalData.host+'/coupon/couponList', 
+          data:param, 
+          success: function (res) {
+              //服务器返回的结果
+              // console.log(res);
+              _this.setData({ loaderhide:true });
+              if (res.data.errcode == 0) {
+                  var feiTaoCanList = res.data.feiTaoCanList,
+                      taoCanList = res.data.taoCanList,
+                      otherList = res.data.otherList,
+                      a = feiTaoCanList?feiTaoCanList.length:0,
+                      b = taoCanList?taoCanList.length:0,
+                      c = otherList?otherList.length:0;
+                      
+                      _this.setData({
+                         couponsData:res.data,
+                         card_num:a+b+c
+                      })
+                  
+              } else {
+                 wx.showModal({
+                      content:res.data.msg,
+                      showCancel: false
+                 });
+              }
+
+          },
+          fail: function () {
+              console.log('系统错误')
+          }
+      })
+
+  },
+
   onLoad: function (option) {
     var _this = this;
 
@@ -69,54 +165,10 @@ Page({
        detail_items:JSON.parse(detail_items),
        chooseAddr:JSON.parse(chooseAddr)
     })
-
     console.log(this.data.detail_items);
-
+    this.Init()
     
-    //请求订单计算接口
-    var param = {
-        mini:'mini',
-        storeid:app.globalData.shopId,
-        goodsDetail:JSON.stringify(this.data.detail_items),
-    }
-    _this.setData({ loaderhide:false });
-    wx.request({
-        url: app.globalData.host+'/waimai/goods/jsOrderPrice', 
-        data:param,
-        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
-        method:'POST',
-        success: function (res) {
-            //服务器返回的结果
-            console.log(res);
-            _this.setData({ loaderhide:true });
-            if (res.data.errcode == 0) {
-                var resdata = res.data;
-                _this.setData({
-                  totalFee:resdata.totalFee,                 
-                  userFee:resdata.userFee,
-                  discountFee:resdata.discountFee,
-                  totalBoxNum:resdata.totalBoxNum,
-                  totalBoxFee:resdata.totalBoxFee,
-                  deliveryFee:resdata.deliveryFee,
-                  deliveryFeeVal:(resdata.deliveryFee).toFixed(2),
-                  totalFeeVal:(resdata.totalFee).toFixed(2),
-                  userFeeVal:(resdata.userFee).toFixed(2),
-                  discountFee:resdata.discountFee,
-                  discountFeeVal:(resdata.discountFee).toFixed(2),
-                  totalBoxFeeVal:(resdata.totalBoxFee).toFixed(2)
-                })
-   
-            } else {
-                wx.showModal({
-                    content:res.data.msg,
-                    showCancel: false
-               });
-            }
-        },
-        fail: function () {
-            console.log('系统错误')
-        }
-    })
+
   },
 
   onShow: function(){
@@ -130,6 +182,20 @@ Page({
           })
       } 
     })
+
+    wx.getStorage({
+      key:'choosed_coupon',
+      success: function(res) {
+         console.log(res.data);
+         _this.setData({
+            coupons:JSON.parse(res.data),
+            type:0
+         });
+         
+         _this.Init();        
+      } 
+    })
+
   },
 
    bindPickerChange: function(e) {
@@ -152,6 +218,24 @@ Page({
      wx.navigateTo({
         url: '../account/index?type='+this.data.paytype
      })
+  },
+  
+  //跳转到 优惠券选择
+  openCouponList:function(){
+    var card_num = this.data.card_num,
+        taoCanNum = this.data.taoCanNum,
+        couponsData = JSON.stringify(this.data.couponsData);
+    
+    if(card_num == 0){
+       wx.showModal({
+            content:'暂无可用优惠券',
+            showCancel: false
+       });
+        return;
+    }
+    wx.navigateTo({
+        url: '../takeOut_order_coupon/index?couponsData='+couponsData+'&taoCanNum='+taoCanNum
+    })
   },
   
   // demandInput:function(e){
@@ -205,7 +289,8 @@ Page({
         openId:app.globalData.openId,                
         userId:app.globalData.userId, 
         addressId:this.data.chooseAddr.id,                                                      
-        payType:this.data.paytype,                                                                                               
+        payType:this.data.paytype,  
+        coupons:JSON.stringify(this.data.coupons),                                                                                            
         caution:this.data.caution,                       
         goodsDetail:JSON.stringify(this.data.detail_items),                      
         totalFee:this.data.totalFee,                 
@@ -334,5 +419,4 @@ Page({
     }
 
   }
-
 })
