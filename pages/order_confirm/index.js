@@ -190,7 +190,7 @@ Page({
       })
 
       var param = {
-        mini:'min',
+        mini:'mini',
         shopId:app.globalData.shopId,
         openId:app.globalData.openId
       }
