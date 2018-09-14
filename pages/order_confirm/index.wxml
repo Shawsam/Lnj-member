@@ -148,7 +148,13 @@
     <view bindtap="orderSubmit" class="checkBtn">提交</view>
 </view>
 
-<view class="panel_cover" hidden="{{!(detail_panel||tip_panel)}}" bindtap="coverTap"></view>
+
+<view class="notice" hidden="{{noticeClosed}}">
+    <image catchtap='noticeClose' class="btn" src="../../image/closeBtn.png" />
+    <image class="img" src="../../image/notice.jpg" />
+</view>
+
+<view class="panel_cover" hidden="{{!(detail_panel||tip_panel||!noticeClosed)}}" bindtap="coverTap"></view>
 
 <view class="panel" hidden="{{!detail_panel}}">
     <view class="detail_panel">

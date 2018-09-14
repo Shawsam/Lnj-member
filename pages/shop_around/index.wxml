@@ -1,4 +1,12 @@
 <!--index.wxml-->
+
+<view class="notice" hidden="{{noticeClosed}}">
+    <image catchtap='noticeClose' class="btn" src="../../image/closeBtn.png" />
+    <image class="img" src="../../image/notice.jpg" />
+</view>
+
+<view class="panel_cover" hidden="{{noticeClosed}}" bindtap="coverTap"></view>
+
 <view class='wx_dialog_container' hidden="{{!dialogShow2}}">
     <view class='wx-mask'></view>
     <view class='wx-dialog'>
@@ -9,7 +17,7 @@
     </view>
 </view>
 
-<view class="container">
+<view class="container {{noticeClosed?'':'noscroll'}}">
 <loading hidden="{{loaderhide}}">加载中...</loading> 
 <view class="section search">
     <input placeholder="请输入关键字" bindinput="keyInput" />

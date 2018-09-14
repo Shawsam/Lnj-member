@@ -115,3 +115,6 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .phoneInput{ border:1px solid #e8e8e8; margin-top:15rpx; height:70rpx; line-height:70rpx; }
 
 
+.notice{ z-index:10000; position:fixed; height:500rpx; width:490rpx; border-radius:10rpx; overflow:hidden; left:50%; top:50%; transform:translate(-50%,-50%); background:#fff; }
+.notice .img{ height:100%; width:100%; }
+.notice .btn{ position:fixed; z-index:10000; right:0; top:0; height:40rpx; width:40rpx; padding:20rpx; }

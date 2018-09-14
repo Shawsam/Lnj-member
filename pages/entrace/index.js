@@ -347,8 +347,13 @@ Page({
   },
 
   // 跳转登录页面
-  jionTap:function(){
+  joinTap:function(){
       wx.navigateTo({url:'/pages/login/index'});
+  },
+
+  // 跳转会员中心
+  JumpUserCenter:function(){
+      wx.navigateTo({url:'/pages/user_center/index'});
   },
 
   JumpToList:function(){

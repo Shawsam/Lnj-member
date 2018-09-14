@@ -1,10 +1,4 @@
 <!--index.wxml-->
-<view class="notice" hidden="{{noticeClosed}}">
-    <view class="tip">({{timer}}s后自动关闭)</view>
-    <image catchtap='noticeClose' class="btn" src="../../image/closeBtn.png" />
-    <image class="img" src="../../image/notice.png" />
-</view>
-
 <view class="container">
 <loading hidden="{{loaderhide}}">加载中...</loading>    
 <view class="section backcolor"></view>

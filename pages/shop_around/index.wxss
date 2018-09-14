@@ -6,7 +6,7 @@
 ::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
 
 page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
-
+.noscroll{ overflow-y:hidden!important; } 
 .container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; padding:30rpx; padding-bottom:80rpx; }
 
 .search{ position:relative; padding:10rpx 0; padding-right:100rpx;}
@@ -26,3 +26,9 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .empty{ text-align:center; padding:100rpx 0; }
 .empty image{ width:100rpx; height:100rpx; display:inline-block;  }
 .empty view{ color:#999; }
+
+
+.panel_cover{position:fixed; width:100%; height:100%; background:rgba(0,0,0,0.7); top:0; left:0; z-index:105; }
+.notice{ z-index:10000; position:fixed; height:500rpx; width:490rpx; border-radius:10rpx; overflow:hidden; left:50%; top:50%; transform:translate(-50%,-50%); background:#fff; }
+.notice .img{ height:100%; width:100%; }
+.notice .btn{ position:fixed; z-index:10000; right:0; top:0; height:40rpx; width:40rpx; padding:20rpx; }

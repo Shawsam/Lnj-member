@@ -31,7 +31,8 @@ Page({
      confirmDisabled:false,
      itemHeight:145,
      fillHeight:wx.getSystemInfoSync().windowHeight - 140,
-     currentIndex:0
+     currentIndex:0,
+     noticeClosed:false
   },
   onLoad: function () {
      var _this = this;

@@ -86,24 +86,24 @@ Page({
                    shopAddr:shopAddr
                 })
 
-                //餐盒收费提示
-                var noticeDate = new Date('2018-10-01').getTime()
-                var currentDate = new Date().getTime()
-                if(currentDate >= noticeDate) return
-                var shopArray = ['210910010317','210910010064','210910010326','210910010332','210910010102','210910010314','210910010315','210910010167','210910010041','210910010154','210910010186','210910010195','210910010200','210910010201','210910010052','210910010334','210910010335']
-                if(shopArray.indexOf(shopCode)>-1){
-                   _this.setData({noticeClosed:true})
-                }else{
-                   _this.setData({noticeClosed:false})
-                   Timer = setInterval(function(){
-                        var timer = _this.data.timer
-                        if(timer > 1) _this.setData({timer:timer-1})
-                    },1000)
-                    setTimeout(function(){
-                         clearInterval(Timer)
-                        _this.setData({noticeClosed:true})
-                    },3000)
-                }
+                // //餐盒收费提示
+                // var noticeDate = new Date('2018-10-01').getTime()
+                // var currentDate = new Date().getTime()
+                // if(currentDate >= noticeDate) return
+                // var shopArray = ['210910010317','210910010064','210910010326','210910010332','210910010102','210910010314','210910010315','210910010167','210910010041','210910010154','210910010186','210910010195','210910010200','210910010201','210910010052','210910010334','210910010335']
+                // if(shopArray.indexOf(shopCode)>-1){
+                //    _this.setData({noticeClosed:true})
+                // }else{
+                //    _this.setData({noticeClosed:false})
+                //    Timer = setInterval(function(){
+                //         var timer = _this.data.timer
+                //         if(timer > 1) _this.setData({timer:timer-1})
+                //     },1000)
+                //     setTimeout(function(){
+                //          clearInterval(Timer)
+                //         _this.setData({noticeClosed:true})
+                //     },3000)
+                // }
 
             } else {
                  wx.redirectTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg='+res.data.msg,

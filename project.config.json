@@ -5,10 +5,11 @@
 		"es6": true,
 		"postcss": true,
 		"minified": true,
-		"newFeature": true
+		"newFeature": true,
+		"nodeModules": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "1.7.2",
+	"libVersion": "2.3.0",
 	"appid": "wx57d9a7220682d271",
 	"projectname": "%E8%80%81%E5%A8%98%E8%88%85",
 	"condition": {

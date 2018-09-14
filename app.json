@@ -26,7 +26,8 @@
     "pages/takeOut_order_fail/index",
     "pages/login/index",
     "pages/authorize/index",
-    "pages/takeOut_order_coupon/index"
+    "pages/takeOut_order_coupon/index",
+    "pages/user_center/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

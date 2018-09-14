@@ -39,6 +39,7 @@ Page({
       needsSlide:false,
       loaderhide:true,
       textComplete:true,
+      noticeClosed:true,
       subscribe:0,         //是否预约打包
       subscribeTime:'',    //预约打包时间
       currentTime:'',
@@ -201,8 +202,10 @@ Page({
               //服务器返回的结果
               if (res.data.errcode == 0) {
                 var InvoiceEnable = res.data.shop.isInvoice;
+                var shopCode = res.data.shopCode
                 _this.setData({
-                  InvoiceEnable:InvoiceEnable
+                  InvoiceEnable:InvoiceEnable,
+                  shopCode:shopCode
                 })
               } else {
                  wx.showModal({
@@ -355,6 +358,21 @@ Page({
            dinnerType:dinnerType
        })
        this.Init();
+
+       if(dinnerType==2){
+            //餐盒收费提示
+            var noticeDate = new Date('2018-10-01').getTime()
+            var currentDate = new Date().getTime()
+            if(currentDate >= noticeDate) return
+            var shopCode = this.data.shopCode
+            var shopArray = ['210910010317','210910010064','210910010326','210910010332','210910010102','210910010314','210910010315','210910010167','210910010041','210910010154','210910010186','210910010195','210910010200','210910010201','210910010052','210910010334','210910010335']
+            if(shopArray.indexOf(shopCode)>-1){
+               this.setData({noticeClosed:true})
+            }else{
+               this.setData({noticeClosed:false})
+            }
+       }
+
   },
   
   //手机号码
@@ -441,8 +459,13 @@ Page({
         detail_panel:false
       })
   },
-  
+
+  noticeClose:function(){
+     this.setData({noticeClosed:true})
+  },
+
   coverTap:function(){
+      this.noticeClose()
       this.setData({
         detail_panel:false
       })

@@ -9,7 +9,8 @@ Page({
      items:[],
      keyInput:'',
      loaderhide:true,
-     jumpLock:false
+     jumpLock:false,
+     noticeClosed:true
   },
   onLoad: function (option) {
     //分页数据重置
@@ -52,6 +53,12 @@ Page({
                       _this.fetchData()                    
                   }
     })
+
+    //餐盒收费提示
+    var noticeDate = new Date('2018-10-01').getTime()
+    var currentDate = new Date().getTime()
+    if(currentDate >= noticeDate) return
+    this.setData({noticeClosed:false})
 
     // var currentTime = new Date(),
     // currentHours = currentTime.getHours(),
@@ -215,6 +222,13 @@ Page({
   },
   onShow:function(){
      wx.removeStorageSync('items');
+  },
+
+  noticeClose:function(){
+     this.setData({noticeClosed:true})
+  },
+  coverTap:function(){
+     this.noticeClose()
   },
 
   //=======提示框=========================================
