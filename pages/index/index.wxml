@@ -1,28 +1,54 @@
 <!--index.wxml-->
 <view class="container">
-<loading hidden="{{loaderhide}}">加载中...</loading>    
-<view class="section backcolor"></view>
+<loading hidden="{{loaderhide}}">加载中...</loading>  
+<view class="top">
+    <view class="txt">
+    <view>亲爱的{{userInfo.nickName}}</view>
+    <view class="welcome">欢迎您再次回来！</view>
+    </view>
+    <image class="person" src="{{userInfo.avatarUrl}}" />
+</view>  
 <view class="section main">
     <view class="infoCon">
+        <view class="dotLeft"></view>
+        <view class="dotRight"></view>
         <view class="title">当前门店</view>
         <view class="info">
             <image class="shop_img" src="../../image/door.png" />
+            <view class="codeNum2" wx:if="{{deskNo!=999}}">
+                  <view class="code">台号<view class="code_num">{{deskNo}}</view></view>
+            </view>
             <view class="shop"><image class="shop_icon" src="../../image/mendian.png" />{{shopName}}</view>
             <view class="addr"><image class="addr_icon" src="../../image/location.png" />{{shopAddr}}</view>
         </view>
         <view class="codeNum" wx:if="{{deskNo==999}}">
           <view class="code">打包预定</view>
         </view>
-        <view class="codeNum" wx:if="{{deskNo!=999}}">
-          <view class="code">台号<view class="code_num">{{deskNo}}</view></view>
-        </view>
         <view class="enterBtn" bindtap="orderTap" >进入菜单</view>
     </view>
 </view>
-
+<view class="flexbox menu">
+    <view class="menuItem" bindtap="openCharge">
+        <view class="txt">储值卡好礼</view>
+        <image src="../../image/imgline.png" />
+    </view>
+    <view class="menuItem" bindtap="openCoupon">
+        <view class="txt">我的优惠券</view>
+        <image src="../../image/imgline.png" />
+    </view>
+</view>
+<swiper  class="swiper" autoplay="true"
+      indicator-dots="{{indicatorDots}}" indicator-color="#666" indicator-active-color="#fff">
+      <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+        <swiper-item>
+          <image src="{{item}}" class="slide-image" />
+        </swiper-item>
+      </block>
+</swiper>
+<!-- 
 <view class="section bottomCon">
-<!--   <view class="title">加入会员 即刻享有<view class="backet"> > </view></view> -->
-<!--   <view class="itemCon">
+  <view class="title">加入会员 即刻享有<view class="backet"> > </view></view>
+    <view class="itemCon">
     <view class="item item1">
         <image class="item_img" src="../../image/rookie.png" />
         <view>新人礼遇</view>
@@ -35,6 +61,7 @@
         <image class="item_img" src="../../image/consume.png" />
         <view>消费奖励</view>
     </view>
-  </view> -->
+  </view> 
 </view>
+-->
 </view>

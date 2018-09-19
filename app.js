@@ -4,7 +4,7 @@ var host_dev = "https://demo.i-manji.com/lnj-weixin/console/dc";
 
 App({
   globalData: {
-     host:host,
+     host:host_dev,
      userId:'',           //用户userId
      openId:'',           //小程序openId
      _openId:'',          //公众号_openId

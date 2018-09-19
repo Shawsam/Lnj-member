@@ -4,26 +4,38 @@ var Timer
 var app = getApp()
 Page({
   data: {
-     deskNo:'',
-     shopName:'',
-     shopAddr:'',
-     userInfo:null,
-     loaderhide:true,
-     jumpLock:false,
-     noticeClosed:true,
-     timer:3
+      deskNo:'',
+      shopName:'',
+      shopAddr:'',
+      userInfo:null,
+      loaderhide:true,
+      jumpLock:false,
+      noticeClosed:true,
+      timer:3,
+      imgUrls: [
+        '../../image/ad.jpg',
+        '../../image/ad.jpg'
+      ],
+      indicatorDots: true,
+      autoplay: true,
+      interval: 1500,
+      duration: 1500
   },
   noticeClose:function(){
-    clearInterval(Timer)
+     clearInterval(Timer)
      this.setData({
         noticeClosed:true
       })
   },
+  openCharge:function(){
+     wx.navigateTo({url:'/pages/webCharge/index'});
+  },
+  openCoupon:function(){
+     wx.navigateTo({url:'/pages/webCoupon/index'});  
+  },
   //事件处理函数
   orderTap: function() {
-
    var _this = this;
-
    //跳转锁定
    var jumpLock = _this.data.jumpLock;
    if(jumpLock) return;

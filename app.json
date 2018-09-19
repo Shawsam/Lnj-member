@@ -27,7 +27,10 @@
     "pages/login/index",
     "pages/authorize/index",
     "pages/takeOut_order_coupon/index",
-    "pages/user_center/index"
+    "pages/webShop/index",
+    "pages/webUsercenter/index",
+    "pages/webCharge/index",
+    "pages/webCoupon/index"
   ],
   "window":{
     "backgroundTextStyle":"light",

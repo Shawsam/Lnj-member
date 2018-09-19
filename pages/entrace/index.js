@@ -353,7 +353,11 @@ Page({
 
   // 跳转会员中心
   JumpUserCenter:function(){
-      wx.navigateTo({url:'/pages/user_center/index'});
+      wx.navigateTo({url:'/pages/webUsercenter/index'});
+  },
+
+  JumpWebShop:function(){
+      wx.navigateTo({url:'/pages/webShop/index'});
   },
 
   JumpToList:function(){
