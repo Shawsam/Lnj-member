@@ -28,7 +28,8 @@
 <view class="section banner">
     <image src="../../image/index_banner.jpg" />
 </view>   
-<view class="section main">   
+<view class="section main">
+<!--     
     <view class="flexbox cate">
         <view class="flex-item" bindtap="selfOrder">
             <image src="../../image/self.png" />
@@ -41,6 +42,29 @@
         <view class="flex-item" bindtap="takeAway">
             <image src="../../image/out.png" />
             <view class="name">外卖送餐</view>
+        </view>
+    </view>
+--> 
+    <view class="cate">
+        <view class="flexbox" style="margin-bottom:25rpx;">
+            <view class="flex-item" bindtap="selfOrder">
+                <image src="../../image/self.png" />
+                <view class="name">自助点餐</view>
+            </view>
+            <view class="flex-item" bindtap="takeAway">
+                <image src="../../image/out.png" />
+                <view class="name">外卖送餐</view>
+            </view>
+        </view>
+        <view class="flexbox">
+            <view class="flex-item" bindtap="JumpUserCenter">
+                <image src="../../image/user.png" />
+                <view class="name">会员中心</view>
+            </view>
+            <view class="flex-item" bindtap="JumpWebShop">
+                <image src="../../image/shop.png" />
+                <view class="name">“源头”商城</view>
+            </view>
         </view>
     </view>
 </view>
@@ -64,10 +88,10 @@
   </view> -->
 </view>
 
-<view class="footer flexbox">
+<!-- <view class="footer flexbox">
     <view class="active"><image src="../../image/index_active.png" />首页</view>
     <view bindtap="JumpToList"><image src="../../image/order.png" />订单</view>
-</view> 
+</view> -->
 
 
 </view>

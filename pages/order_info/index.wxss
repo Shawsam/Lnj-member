@@ -41,6 +41,28 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .infoCon1 .list .list_item.card .info1 .name{ width:80%; font-weight:bold; }
 .infoCon1 .list .list_item.card .info1 .price{ width:20%; text-align:right; color:#ff6263;}
 
+.payBox{ padding:0 15rpx; }
+.cont{ background:#fff; border-radius:10rpx; padding:0 40rpx; margin-bottom:30rpx; box-shadow:0 0rem 12rpx rgba(0, 0,0,0.3);}
+.cont .con1 view{ display:inline-block; }
+.right{position:absolute;top:50%;right:0; -webkit-transform: translate(0,-50%);-moz-transform:translate(0,-50%);transform: translate(0,-50%);}
+.right1{position:absolute;top:0;right:0;width:100%;text-align:right;}
+.con1{line-height:120rpx; position:relative;}
+.con2{position:relative; line-height:120rpx;}
+.cont.payCon{ padding:20rpx 40rpx;  }
+.payCon .con2{ line-height:90rpx; }
+.payCon .title{ color:#000; }
+.payCon .con2 i{ color:#e5004f; }
+.conheight{height:120rpx; font:26rpx/120rpx "微软雅黑";}
+.sty1 image{ height:60rpx; width:60rpx; vertical-align:middle; margin-right:15rpx; color:#999;}
+.sty1{ font:26rpx/120rpx "微软雅黑"; margin-right:60rpx; }
+.sty2 image{ height:60rpx; width:60rpx; vertical-align:middle; margin-right:15rpx; color:#999;} 
+.sty2{ font:26rpx/120rpx "微软雅黑"; }
+.sty1.active{ color:#FC8D17; }
+.sty2.active{ color:#FC8D17; }
+.payview{ display:inline-block; }
+.tag{ height:50rpx; width:50rpx; vertical-align:middle; margin-right:25rpx; }
+
+
 .flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
 .flexbox > flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
 ::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
@@ -49,7 +71,8 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .infoCon2 .title{ border-bottom:1px dashed #e8e8e8; line-height:90rpx; margin-bottom:16rpx;}
 .infoCon2 .item{ line-height:70rpx; }
 .infoCon2 .item view.desp{ float:right; color:#999;}
-
+.infoCon2 .paygroup{ padding:0 20rpx; }
+.infoCon2 .paygroup .item{ line-height:55rpx; }
 
 .footer{ z-index:100; position:fixed; bottom:0; height:110rpx; width:100%; background:#fff; box-sizing:border-box; overflow:hidden; zoom:1; }
 .footer .backBtn{ height:110rpx;  font:36rpx/110rpx "微软雅黑"; text-align:center; background:#FDD01B; font-weight:bold; }
@@ -79,3 +102,7 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .panel .tip_panel .confirmBtn{ font:30rpx/85rpx "微软雅黑"; text-align:center; font-weight:bold; border-top:1px solid #e8e8e8;  }
 .panel .tip_panel .info{ padding:30rpx 0; }
 .panel .tip_panel .info view{ font:28rpx/60rpx "微软雅黑"; text-align:center; }
+
+.wx-switch-input{width:45px!important;height:24px !important;}
+.wx-switch-input::before{width:45px !important; height:24px !important;}
+.wx-switch-input::after{width:22px !important; height:22px !important;}

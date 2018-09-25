@@ -204,104 +204,18 @@ Page({
           }
       })
   },
-
-  //1、打包预订
-  packReserve:function(){
-
-     var _this = this;
-     //跳转锁定
-
-     var userInfo = _this.data.userInfo;
-     if(!userInfo) return;
-     
-     var jumpLock = _this.data.jumpLock;
-     if(jumpLock) return;
-
-     _this.setData({jumpLock:true});
-
-      app.globalData.fromType = 1;
-      wx.getLocation({
-        type: 'wgs84',
-        success: (res) => {
-           setTimeout(function(){
-              _this.setData({jumpLock:false});
-           },500)
-          var latitude = res.latitude,
-              longitude = res.longitude;
-          wx.navigateTo({url:'../shop_around/index?latitude='+latitude+'&longitude='+longitude});
-        },
-        fail: (res)=>{
-           setTimeout(function(){
-              _this.setData({jumpLock:false});
-           },500)
-          console.log('用户未授权,获取位置信息失败');
-
-          wx.showModal({
-              title: '地理位置未授权',
-              content: '如需正常使用，请按确定并在授权管理中选中“地理位置”，然后点按确定。最后再重新进入小程序即可正常使用。',
-              showCancel: false,
-              success: function (res) {
-                  if (res.confirm) {
-                      //进入二次授权页面
-                      wx.openSetting({
-                          success: function(res) {
-                              var location_Athority = res.authSetting['scope.userLocation'];
-                              _this.setData({location_Athority:location_Athority})
-                              _this.onLoad();
-                          }
-                      });
-                  }
-              }
-          })
-
-        }
-      })
-  },
-  //2、自助点餐
+  //自助点餐
   selfOrder:function(){
      var _this = this;
      //跳转锁定
      var userInfo = _this.data.userInfo;
      if(!userInfo) return;
 
-     var jumpLock = _this.data.jumpLock;
-     if(jumpLock) return;
-     _this.setData({jumpLock:true});
-
-     app.globalData.fromType = 2;
-
-     wx.scanCode({
-        onlyFromCamera: true,
-        success: (res) => {        
-           console.log(res);
-           var a = res.result.split('a=')[1];                             //二维码参数
-           if(a){
-              _this.codeToInfo(a)
-           }else{
-              _this.showDialog('无法识别该二维码');
-               setTimeout(function(){
-                _this.setData({jumpLock:false});
-               },500)
-           }
-        },
-        fail: (res) =>{
-           var errMsg;
-           if(res.errMsg == 'scanCode:fail cancel'){
-               errMsg = '扫码已取消';
-           }else{
-               errMsg = '未发现二维码';
-           }
-           _this.showDialog(errMsg);
-           setTimeout(function(){
-              _this.setData({jumpLock:false});
-           },500)
-        }
-    })
+     wx.navigateTo({url: '/pages/entrace/index'})
   },
-  //3、外卖送餐
+  //外卖送餐
   takeAway:function(){
       app.globalData.fromType = 3;
-      
       //微信版本过低，不支持web-view
       var canIUseWebView = this.data.canIUseWebView;
       if(!canIUseWebView){
@@ -340,14 +254,24 @@ Page({
          app.globalData.userInfo = null;  
          wx.navigateTo({url: '/pages/login/index'})
       }else{
-        app.globalData.pageFrom = 'entrace'
-         wx.switchTab({url:'/pages/takeOut_index/index?from=entrace'})
+         app.globalData.pageFrom = 'homepage'
+         wx.switchTab({url:'/pages/takeOut_index/index'})
       }
 
       
   },
 
+  // 跳转会员中心
+  JumpUserCenter:function(){
+      wx.navigateTo({url:'/pages/webUsercenter/index'});
+  },
+
+  JumpWebShop:function(){
+      wx.navigateTo({url:'/pages/webShop/index'});
+  },
+
   JumpToList:function(){
+
       var _this = this
       var jumpLock = _this.data.jumpLock
       if(jumpLock) return

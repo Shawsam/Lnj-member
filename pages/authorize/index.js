@@ -71,7 +71,7 @@ Page({
   	 console.log(res.detail.userInfo)
      app.globalData.userInfo = res.detail.userInfo
      this.setData({userInfo:res.detail.userInfo})
-     wx.redirectTo({url:'../entrace/index'})
+     wx.redirectTo({url:'../homepage/index'})
   }
 
 })

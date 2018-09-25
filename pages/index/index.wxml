@@ -21,9 +21,9 @@
             <view class="shop"><image class="shop_icon" src="../../image/mendian.png" />{{shopName}}</view>
             <view class="addr"><image class="addr_icon" src="../../image/location.png" />{{shopAddr}}</view>
         </view>
-        <view class="codeNum" wx:if="{{deskNo==999}}">
+<!--         <view class="codeNum" wx:if="{{deskNo==999}}">
           <view class="code">打包预定</view>
-        </view>
+        </view> -->
         <view class="enterBtn" bindtap="orderTap" >进入菜单</view>
     </view>
 </view>

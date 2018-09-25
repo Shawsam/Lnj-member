@@ -44,10 +44,19 @@ Page({
       subscribeTime:'',    //预约打包时间
       currentTime:'',
       startTime:'6:30',
-      endTime:'20:00'
+      endTime:'20:00',
+      isCard:1
 
   },
-  
+  switchChange:function(e){
+      var state = e.detail.value
+      if(state){
+         this.setData({isCard:1})
+      }else{
+         this.setData({isCard:0})
+      }
+      this.Init()
+  },
   Init:function(){
       //POST 参数   计算订单信息
       var _this = this;
@@ -61,7 +70,8 @@ Page({
           dinnerType:this.data.dinnerType,
           subscribe:this.data.subscribe,
           dwCoupons:this.data.dwCoupons,
-          type:this.data.type
+          type:this.data.type,
+          isCard:this.data.isCard
       }
       if(this.data.subscribe==0){
          delete param.subscribe
@@ -100,6 +110,12 @@ Page({
                   }
                   
                   _this.setData({
+                        cardFee:resdata.cardFee,
+                        thirdFee:resdata.thirdFee,
+                        bala:resdata.bala,
+                        cardFeeVal:(resdata.cardFee/100).toFixed(2),
+                        thirdFeeVal:(resdata.thirdFee/100).toFixed(2),
+                        balaVal:(resdata.bala/100).toFixed(2),
                         userFee:resdata.userFee,
                         packList:resdata.packList||[],
                         packTotalFee:resdata.packageFee,
@@ -202,7 +218,7 @@ Page({
               //服务器返回的结果
               if (res.data.errcode == 0) {
                 var InvoiceEnable = res.data.shop.isInvoice;
-                var shopCode = res.data.shopCode
+                var shopCode = res.data.shop.shopCode
                 _this.setData({
                   InvoiceEnable:InvoiceEnable,
                   shopCode:shopCode
@@ -300,8 +316,8 @@ Page({
     console.log(subscribe);
     _this.setData({
        shopName:app.globalData.shopName,
-       cardNo:app.globalData.cardNo,
-       userId:app.globalData.userId,
+       cardNo:app.globalData.cardNo||'',
+       userId:app.globalData.userId||'',
        phone:phone,
        phoneInput:'',
        cart_items:JSON.parse(cart_items),
@@ -560,7 +576,11 @@ Page({
         packTotalFee:this.data.packTotalFee,
         dwCoupons:this.data.dwCoupons,
         subscribe:this.data.subscribe,
-        subscribeTime:this.data.subscribeTime
+        subscribeTime:this.data.subscribeTime,
+        isCard:this.data.isCard,
+        bala:this.data.bala,
+        cardFee:this.data.cardFee,
+        thirdFee:this.data.thirdFee
     };
 
     if(this.data.subscribe==0){

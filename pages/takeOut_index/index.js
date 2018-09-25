@@ -7,7 +7,7 @@ Page({
      loaderhide:true,
      jumpLock:false
   },
-  onLoad:function(){
+  onLoad:function(option){
 	  var _this = this;
 	  //获取全局数据，初始化当前页面
 	  app.getUserInfo(function(userInfo){
@@ -54,6 +54,10 @@ Page({
     })
   },
   Return:function(){
-    wx.redirectTo({url:'../../pages/entrace/index'});
+      if(app.globalData.pageFrom=='homepage'){
+          wx.redirectTo({url:'../../pages/homepage/index'});
+      }else{
+          wx.redirectTo({url:'../../pages/entrace/index'});
+      }      
   }
 })

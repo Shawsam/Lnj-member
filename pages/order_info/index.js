@@ -10,6 +10,9 @@ Page({
      sendNo:'',
      order:{}, 
      items:[],
+     isCard:1,
+     cardFeeVal:'',
+     balaVal:'',
      loaderhide:true,
      paytype:1,
      type_panel:false,
@@ -23,10 +26,10 @@ Page({
        _this.setData({
           deskNo:app.globalData.deskNo,
           shopName:app.globalData.shopName,
-          shopInfo:app.globalData.shopInfo,
+          shopInfo:app.globalData.shopInfo||'',
           isMember:app.globalData.userId?1:0
        })
-  
+      
       var orderId = option.orderId;
       _this.setData({ loaderhide:false });
       wx.request({
@@ -41,9 +44,11 @@ Page({
             console.log(res);
             var resdata = res.data;
             if(resdata.errcode == 0){
-              var order = resdata.order;   
-              order.userFee = (order.userFee/100).toFixed(2);
-              order.totalFee = (order.totalFee/100).toFixed(2);
+              var order = resdata.order; 
+              order.userFee = order.userFee;
+              order.totalFee = order.totalFee;
+              order.userFeeVal = (order.userFee/100).toFixed(2);
+              order.totalFeeVal = (order.totalFee/100).toFixed(2);
               order.discountFeeVal = (order.discountFee/100).toFixed(2);
               order.packTotalFeeVal = (order.packTotalFee/100).toFixed(2);
               order.orderTime = formatTime(order.orderTime);
@@ -77,8 +82,11 @@ Page({
                   loaderhide:true,
                   order:order,
                   paytype:order.payType,
+                  dcOrderPays:order.dcOrderPays,   // 1会员卡 2微信 4支付宝
                   items:items
               })
+              _this.orderCaculate()
+
             }else{
                  _this.showDialog(res.data.msg);
                  // wx.showModal({
@@ -90,6 +98,46 @@ Page({
           }
       })
   },
+  switchChange:function(e){
+      var state = e.detail.value
+      if(state){
+         this.setData({isCard:1})
+      }else{
+         this.setData({isCard:0})
+      }
+      this.orderCaculate()
+  },
+  orderCaculate:function(){
+      var _this = this
+      wx.request({
+          url: app.globalData.host+"/orderQuery/jsOrderPriceByInfo",
+          header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+          method:'POST',
+          data:{
+             mini:'mini',
+             userId:app.globalData.userId,
+             isCard:this.data.isCard,
+             userFee:this.data.order.userFee
+          },
+          success: function(res) {
+            //服务器返回数据
+            if(res.data.errcode==0){
+                var resdata = res.data.data;
+                _this.setData({
+                          cardFee:resdata.cardFee,
+                          thirdFee:resdata.thirdFee,
+                          bala:resdata.bala,
+                          cardFeeVal:(resdata.cardFee/100).toFixed(2),
+                          thirdFeeVal:(resdata.thirdFee/100).toFixed(2),
+                          balaVal:(resdata.bala/100).toFixed(2)
+                })
+            }else{
+                _this.showDialog(res.data.msg);
+            }
+          }
+      })
+  },
+
   backFun:function(){
     console.log(getCurrentPages()[getCurrentPages().length-2].route)
     if(getCurrentPages()[getCurrentPages().length-2].route == "pages/order_list/index" ||
@@ -101,7 +149,13 @@ Page({
   },
 
   payFun:function(){
-    this.setData({type_panel:true})    
+      var paytype = this.data.paytype
+      if(paytype!=1){
+         console.log('直接调用微信支付')
+      }else{
+         console.log('组合支付')
+      } 
+      this.confirmChoose()
   },
 
   chooseTap:function(e){
@@ -126,11 +180,21 @@ Page({
            userId:app.globalData.userId,
            openId:app.globalData.openId,
            orderId:this.data.order.orderId,
-           payType:this.data.paytype
+           payType:2,
+           isCard:this.data.isCard,
+           bala:this.data.bala,
+           cardFee:this.data.cardFee,
+           thirdFee:this.data.thirdFee
     };
 
     if(param.userId == undefined ){
          delete param.userId;
+    }
+    if(this.data.paytype!=1){  //paytype = 1 会员卡支付
+         delete param.isCard;
+         delete param.bala;
+         delete param.cardFee;
+         delete param.thirdFee;
     }
 
     wx.request({

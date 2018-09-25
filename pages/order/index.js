@@ -489,7 +489,7 @@ Page({
       
 
       //对应套餐的处理 1单品，2配菜，3套餐
-      var confirmDisabled;
+      var confirmDisabled = false;
       if(panel_data.type == 3){
          console.log( panel_data.sideDcGoodsCategoryList)
          for(var i in panel_data.sideDcGoodsCategoryList){

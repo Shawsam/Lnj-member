@@ -1,5 +1,6 @@
 {
   "pages":[
+    "pages/homepage/index",
     "pages/entrace/index",
     "pages/entrace_list/index",
     "pages/shop_around/index",
