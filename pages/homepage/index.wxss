@@ -8,6 +8,7 @@ input{ background:#000!important; }
 page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 
 .container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; background:#FDD01B; }
+.banner{ width:750rpx; height:380rpx;}
 .banner image{ width:750rpx; height:380rpx;}
 .main{ margin-top:110rpx; padding:0 50rpx; }
 .main .cate{ background:#fff; padding:40rpx; border-radius:20rpx; position:relative;}

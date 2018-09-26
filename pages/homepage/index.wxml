@@ -25,9 +25,14 @@
     <view>扫一扫，关注公众号</view>
 </view> -->
 <view>
-<view class="section banner">
-    <image src="../../image/index_banner.jpg" />
-</view>   
+<swiper  class="swiper banner" autoplay="true"
+      indicator-dots="{{indicatorDots}}" indicator-color="#666" indicator-active-color="#fff">
+      <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+        <swiper-item>
+          <image src="{{item}}" class="slide-image" />
+        </swiper-item>
+      </block>
+</swiper>
 <view class="section main">
 <!--     
     <view class="flexbox cate">

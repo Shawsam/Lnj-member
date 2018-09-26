@@ -128,6 +128,32 @@ Page({
             }
         }
     })
+    //请求Banner
+    var param = { mini:'mini',
+                  page:'自助点餐首页',
+                  position:'底部' };
+    wx.request({
+        url: app.globalData.host+'/banner/getBanner', 
+        data: param,
+        success: function (res) {
+          if (res.data.errcode == 0) {
+             var items = res.data.data
+             var imgUrls = []
+             for(var i in items){
+                imgUrls.push(items[i].imgUrl)
+             }
+             if(imgUrls.length==1){
+                 _this.setData({
+                      indicatorDots: false,
+                      autoplay: false,
+                      imgUrls:imgUrls
+                 }) 
+             }else{
+                 _this.setData({imgUrls:imgUrls})
+             }
+          }
+        }
+    })
 
   }
 })

@@ -3,6 +3,14 @@
 var app = getApp()
 Page({
   data: {
+     imgUrls: [
+      '../../image/ad.jpg',
+      '../../image/ad.jpg'
+     ],
+     indicatorDots: true,
+     autoplay: true,
+     interval: 1500,
+     duration: 1500,
      userInfo:null,
      unionId:'',
      loaderhide:true,
@@ -24,6 +32,33 @@ Page({
     //      });
     //    }
     // })   
+    
+        //请求Banner
+    var param = { mini:'mini',
+                  page:'管理设置导航页',
+                  position:'顶部' };
+    wx.request({
+        url: app.globalData.host+'/banner/getBanner',  
+        data: param,
+        success: function (res) {
+          if (res.data.errcode == 0) {
+             var items = res.data.data
+             var imgUrls = []
+             for(var i in items){
+                imgUrls.push(items[i].imgUrl)
+             }
+             if(imgUrls.length==1){
+                 _this.setData({
+                      indicatorDots: false,
+                      autoplay: false,
+                      imgUrls:imgUrls
+                 }) 
+             }else{
+                 _this.setData({imgUrls:imgUrls})
+             }
+          }
+        }
+    })
 
 	  app.getUserInfo(function(userInfo){
 	     //用户信息

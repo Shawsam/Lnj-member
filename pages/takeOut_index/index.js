@@ -54,10 +54,10 @@ Page({
     })
   },
   Return:function(){
-      if(app.globalData.pageFrom=='homepage'){
+      // if(app.globalData.pageFrom=='homepage'){
           wx.redirectTo({url:'../../pages/homepage/index'});
-      }else{
-          wx.redirectTo({url:'../../pages/entrace/index'});
-      }      
+      // }else{
+      //     wx.redirectTo({url:'../../pages/entrace/index'});
+      // }      
   }
 })
