@@ -1,2 +1,1 @@
-<!-- <web-view src="https://weixin.chinauff.com/lnj-weixin/console/weixin/page/index"></web-view> -->
-<web-view src="https://demo.i-manji.com/lnj-weixin/console/weixin/page/index"></web-view>
+<web-view src="{{webUrl}}/lnj-weixin/console/weixin/page/index"></web-view>

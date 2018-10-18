@@ -13,13 +13,13 @@ Page({
       noticeClosed:true,
       timer:3,
       imgUrls: [
-        '../../image/ad.jpg',
         '../../image/ad.jpg'
       ],
       indicatorDots: true,
       autoplay: true,
       interval: 1500,
-      duration: 1500
+      duration: 1500,
+      fillHeight:wx.getSystemInfoSync().windowHeight-473.5,
   },
   noticeClose:function(){
      clearInterval(Timer)
@@ -28,7 +28,7 @@ Page({
       })
   },
   openCharge:function(){
-     wx.navigateTo({url:'/pages/webCharge/index'});
+     wx.navigateTo({url:'/pages/charge/index'});
   },
   openCoupon:function(){
      wx.navigateTo({url:'/pages/webCoupon/index'});  

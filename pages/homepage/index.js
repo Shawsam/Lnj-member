@@ -4,8 +4,7 @@ var app = getApp()
 Page({
   data: {
      imgUrls: [
-      '../../image/ad.jpg',
-      '../../image/ad.jpg'
+      '../../image/index_banner.jpg'
      ],
      indicatorDots: true,
      autoplay: true,
@@ -287,7 +286,7 @@ Page({
       console.log('USERID='+userId);
       if(!userId){
          app.globalData.userInfo = null;  
-         wx.navigateTo({url: '/pages/login/index'})
+         wx.navigateTo({url: '/pages/webLogin/index'})
       }else{
          app.globalData.pageFrom = 'homepage'
          wx.switchTab({url:'/pages/takeOut_index/index'})
@@ -302,6 +301,11 @@ Page({
   },
 
   JumpWebShop:function(){
+      wx.showModal({
+          content:'敬请期待！',
+          showCancel:false
+      })
+      return;
       wx.navigateTo({url:'/pages/webShop/index'});
   },
 

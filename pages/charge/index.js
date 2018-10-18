@@ -1,0 +1,77 @@
+//index.js
+//获取应用实例
+var app = getApp()
+Page({
+    data: {
+      bala:0,
+    	amount:0
+    },
+    onLoad:function(option){
+       this.setData({bala:option.bala})
+    },
+    chooseVal:function(e){
+    	 var currentVal = e.currentTarget.dataset.param
+	     this.setData({amount:currentVal})
+	},
+	chargeFun:function(){
+      var amount = this.data.amount
+      if(amount==0){
+         wx.showModal({content:'请选择充值金额',showCancel:false })
+         return;
+      }
+      var param = { mini:'mini',
+                    openId:app.globalData.openId,
+                    userId:app.globalData.userId,
+                    mobile:app.globalData.mobile,
+                    amount:this.data.amount
+                  };
+      wx.request({
+          url: app.globalData.host+'/recharge/addBill',  
+          data: param,
+          method:'POST',
+          header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+          success: function (res) {
+              //服务器返回的结果
+              console.log(res);
+              var resdata = res.data
+              if(resdata.errcode == 0){     
+                  //============调微信支付============//
+                  wx.requestPayment({
+                       'timeStamp': resdata.timeStamp,
+                       'nonceStr': resdata.nonceStr,
+                       'package': resdata.packages,
+                       'signType': resdata.signType,
+                       'paySign': resdata.paySign,
+                       'success':function(res){
+                             console.log(res)
+                             wx.navigateTo({
+                               url: '../webChargesuccess/index?amount='+resdata.amount
+                             })
+                        },
+                       'fail':function(res){
+                            if(res.errMsg == 'requestPayment:fail cancel'){
+                               wx.showModal({content:'支付已取消',showCancel:false })
+                            }else{
+                               wx.navigateTo({
+                                 url: '../webChargefail/index?bala='+resdata.amount
+                               })
+                           }
+                            
+                        }
+                 }) 
+               }else{
+                    wx.showModal({
+                       content:'生成订单失败',
+                       showCancel:false
+                    })
+               }
+           }
+      })
+	},
+	recordFun:function(){
+    wx.navigateTo({ url: '../webChargelog/index' })
+	},
+  instructFun:function(){
+    wx.navigateTo({ url: '../webChargetip/index' })
+  }
+})

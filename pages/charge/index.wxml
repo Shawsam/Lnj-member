@@ -1,0 +1,48 @@
+<!--index.wxml-->
+<view class="container">
+	<view class="backcolor"></view>
+	<div class="main">
+	<view wx-if="{{bala}}" class="bala">账户余额:￥{{bala}}</view>
+	<view class="note">选择充值金额</view>
+    <view class="itemList">
+    	<view class="con">
+    		<view class="item {{amount=='100'?'active':''}}" data-param="100" bindtap="chooseVal">
+	    		<view class="val">￥<view class="num">100</view></view>
+	    		<view class="gift">
+	    			<view>5元代金券*2</view>
+	    			<view class="value">赠券价值￥10</view>
+	    		</view>
+    	    </view>
+    	</view>
+    	<view class="con">
+    		<view class="item {{amount=='300'?'active':''}}" data-param="300" bindtap="chooseVal">
+	    		<view class="val">￥<view class="num">300</view></view>
+	    		<view class="gift">
+	    			<view>5元代金券*7</view>
+	    			<view class="value">赠券价值￥35</view>
+	    		</view>
+    	    </view>
+    	</view>
+    	<view class="con">
+    		<view class="item {{amount=='500'?'active':''}}" data-param="500" bindtap="chooseVal">
+	    		<view class="val">￥<view class="num">500</view></view>
+	    		<view class="gift">
+	    			<view>5元代金券*15</view>
+	    			<view class="value">赠券价值￥75</view>
+	    		</view>
+    	    </view>
+    	</view>
+    </view>
+    <view class="bottomCon">
+    	<view class="title">充值金额</view>
+    	<view class="con">
+	    	<view class="val">￥<view class="num">{{amount}}</view></view>
+	    	<view class="btn" bindtap="chargeFun">立即充值</view>
+	    	<view class="btn" bindtap="recordFun">充值记录</view>
+	    	<view class="tip">*赠券将发送至您的券包</view>
+	    	<view class="instruct" bindtap="instructFun">查看充值说明</view>
+        </view>
+    </view>
+    </div>
+</view>
+

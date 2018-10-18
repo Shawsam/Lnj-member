@@ -14,6 +14,6 @@ Page({
        })
    },
    backFun:function(){
-       wx.reLaunch({ url:'../entrace/index'})
+       wx.reLaunch({ url:'../homepage/index'})
    }
 })

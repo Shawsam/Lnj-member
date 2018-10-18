@@ -1,2 +1,1 @@
-<!-- <web-view src="https://weixin.chinauff.com/shop"></web-view> -->
-<web-view src="https://demo.i-manji.com/shop"></web-view>
+<web-view src="{{webUrl}}/shop"></web-view>

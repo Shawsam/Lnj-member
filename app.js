@@ -1,10 +1,14 @@
-//app.js
-var host = "https://weixin.chinauff.com/lnj-weixin/console/dc";
-var host_dev = "https://demo.i-manji.com/lnj-weixin/console/dc";
+//全局配置
+var config = {};
+config.mode = "run";                          // 运行模式
+config.host = "https://weixin.chinauff.com";  // 接口域名
+config.mode = "debug";                        // 调试模式
+config.host = "https://demo.micvs.com";       // 接口域名
 
 App({
   globalData: {
-     host:host_dev,
+     webUrl:config.host,
+     host:config.host+'/lnj-weixin/console/dc',
      userId:'',           //用户userId
      openId:'',           //小程序openId
      _openId:'',          //公众号_openId

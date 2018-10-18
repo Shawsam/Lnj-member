@@ -1,0 +1,1 @@
+<web-view src="{{webUrl}}/lnj-weixin/console/weixin/page/rechargeFailed?bala={{amount}}"></web-view>

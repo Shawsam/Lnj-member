@@ -25,13 +25,17 @@
     "pages/takeOut_order_confirm/index",
     "pages/takeOut_order_info/index",
     "pages/takeOut_order_fail/index",
-    "pages/login/index",
     "pages/authorize/index",
     "pages/takeOut_order_coupon/index",
+    "pages/charge/index",
+    "pages/webLogin/index",
     "pages/webShop/index",
     "pages/webUsercenter/index",
-    "pages/webCharge/index",
-    "pages/webCoupon/index"
+    "pages/webCoupon/index",
+    "pages/webChargelog/index",
+    "pages/webChargetip/index",
+    "pages/webChargesuccess/index",
+    "pages/webChargefail/index"
   ],
   "window":{
     "backgroundTextStyle":"light",
