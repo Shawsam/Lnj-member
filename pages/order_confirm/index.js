@@ -169,7 +169,8 @@ Page({
         shopId:app.globalData.shopId,
         openId:app.globalData.openId,
         taoCanNum:this.data.taoCanNum,
-        goodsId:this.data.goodsId
+        goodsId:this.data.goodsId,
+        totalFee:this.data.totalFee
       }
 
       wx.request({
@@ -283,7 +284,7 @@ Page({
     })
 
     //点餐页面传递的参数
-    // console.log(option.detail_items);
+    console.log(option);
     var cart_items = option.cart_items,
         detail_items = option.detail_items,
         dwCoupons = option.dwCoupons,
@@ -351,7 +352,7 @@ Page({
       success: function(res) {
          console.log(res.data);
          _this.setData({
-            coupons:JSON.parse(res.data),
+            coupons:res.data?JSON.parse(res.data):[],
             type:0
          });
          
@@ -576,11 +577,7 @@ Page({
         packTotalFee:this.data.packTotalFee,
         dwCoupons:this.data.dwCoupons,
         subscribe:this.data.subscribe,
-        subscribeTime:this.data.subscribeTime,
-        isCard:this.data.isCard,
-        bala:this.data.bala,
-        cardFee:this.data.cardFee,
-        thirdFee:this.data.thirdFee
+        subscribeTime:this.data.subscribeTime
     };
 
     if(this.data.subscribe==0){

@@ -6,7 +6,6 @@ var app = getApp()
 Page({
    data:{
      deskNo:'',
-     shopId:'',
      shopName:'',
      sendNo:'',
      order:{}, 
@@ -32,7 +31,7 @@ Page({
        })
       
       var orderId = option.orderId;
-      _this.setData({ loaderhide:false,orderId:orderId });
+      _this.setData({ loaderhide:false });
       wx.request({
           url: app.globalData.host+"/orderQuery/getOrderDetail",
           data:{
@@ -79,78 +78,23 @@ Page({
                  }
                }
 
-              _this.setData({ 
-                  loaderhide:true,
-                  shopId:order.shopId,
-                  order:order,
-                  paytype:order.payType,
-                  dcOrderPays:order.dcOrderPays,   // 1会员卡 2微信 4支付宝
-                  items:items
-              })
-              //_this.orderCaculate()
+                _this.setData({ 
+                    loaderhide:true,
+                    order:order,
+                    paytype:order.payType,
+                    dcOrderPays:order.dcOrderPays,       // 1会员卡 2微信 4支付宝
+                    items:items
+                })
 
             }else{
-                 _this.showDialog(res.data.msg);
-                 // wx.showModal({
-                 //      content:res.data.msg,
-                 //      showCancel: false
-                 //  });
+                 wx.showModal({ content:res.data.msg, showCancel:false});
             }
  
           }
       })
   },
-  switchChange:function(e){
-      var state = e.detail.value
-      if(state){
-         this.setData({isCard:1})
-      }else{
-         this.setData({isCard:0})
-      }
-      //this.orderCaculate()
-  },
-  // orderCaculate:function(){
-  //     var _this = this
-  //     wx.request({
-  //         url: app.globalData.host+"/orderQuery/jsOrderPriceByInfo",
-  //         header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
-  //         method:'POST',
-  //         data:{
-  //            mini:'mini',
-  //            userId:app.globalData.userId,
-  //            isCard:this.data.isCard,
-  //            userFee:this.data.order.userFee
-  //         },
-  //         success: function(res) {
-  //           //服务器返回数据
-  //           if(res.data.errcode==0){
-  //               var resdata = res.data.data;
-  //               _this.setData({
-  //                         cardFee:resdata.cardFee,
-  //                         thirdFee:resdata.thirdFee,
-  //                         bala:resdata.bala,
-  //                         cardFeeVal:(resdata.cardFee/100).toFixed(2),
-  //                         thirdFeeVal:(resdata.thirdFee/100).toFixed(2),
-  //                         balaVal:(resdata.bala/100).toFixed(2)
-  //               })
-  //           }else{
-  //               _this.showDialog(res.data.msg);
-  //           }
-  //         }
-  //     })
-  // },
 
-  backFun:function(){
-    console.log(getCurrentPages()[getCurrentPages().length-2].route)
-    if(getCurrentPages()[getCurrentPages().length-2].route == "pages/order_list/index" ||
-       getCurrentPages()[getCurrentPages().length-2].route == "pages/entrace_list/index"){
-         wx.navigateBack();
-    }else{
-         wx.reLaunch({ url:'../order_list/index'})
-    }
-  },
-
-  payFun:function(){
+    payFun:function(){
     this.setData({type_panel:true})    
   },
 
@@ -264,7 +208,7 @@ Page({
 
   confirmTrade:function(){
       this.setData({ tip_panel:false});
-      wx.navigateBack();
+      wx.navigateBack({delta:2});
   },
 
   cancelFun:function(){
@@ -300,53 +244,7 @@ Page({
                   }
             })
   },
-
-  detailFun:function(){
-     wx.navigateTo({url:'/pages/order_info_detail/index?orderId='+this.data.orderId});
-  },
-  
-  jumpWebRegister:function(){
-     var shopId = this.data.shopId;
-     var deskNo = this.data.deskNo;
-     wx.navigateTo({url:'/pages/webLogin/index?shopId='+shopId+'&deskNo='+deskNo});
-  },
-
-  jumpWebShop:function(){
-      wx.showModal({
-          content:'敬请期待！',
-          showCancel:false
-      })
-      return;
-      wx.navigateTo({url:'/pages/webShop/index'});
-  },
-
-  //=======提示框=========================================
-  showDialog:function(msg){
-      this.setData({
-        dialogShow:true,
-        contentMsg:msg
-      })
-  },
-  dialogConfirm:function(){
-      this.setData({
-        dialogShow:false
-      })
-  },
-
-  showDialog1:function(msg){
-      this.setData({
-        dialogShow1:true,
-        contentMsg:msg
-      })
-  },
-  dialogConfirm1:function(){
-      this.setData({
-        dialogShow1:false
-      })
-      wx.navigateBack();
+  backFun:function(){
+    wx.navigateBack()
   }
-
-
-
-
 })

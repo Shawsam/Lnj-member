@@ -12,6 +12,7 @@
     "pages/order_fail/index",
     "pages/order_list/index",
     "pages/order_info/index",
+    "pages/order_info_detail/index",
     "pages/view_state/index",
     "pages/takeOut_index/index",
     "pages/takeOut_order/index",

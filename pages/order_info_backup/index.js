@@ -6,7 +6,6 @@ var app = getApp()
 Page({
    data:{
      deskNo:'',
-     shopId:'',
      shopName:'',
      sendNo:'',
      order:{}, 
@@ -32,7 +31,7 @@ Page({
        })
       
       var orderId = option.orderId;
-      _this.setData({ loaderhide:false,orderId:orderId });
+      _this.setData({ loaderhide:false });
       wx.request({
           url: app.globalData.host+"/orderQuery/getOrderDetail",
           data:{
@@ -81,13 +80,12 @@ Page({
 
               _this.setData({ 
                   loaderhide:true,
-                  shopId:order.shopId,
                   order:order,
                   paytype:order.payType,
                   dcOrderPays:order.dcOrderPays,   // 1会员卡 2微信 4支付宝
                   items:items
               })
-              //_this.orderCaculate()
+              _this.orderCaculate()
 
             }else{
                  _this.showDialog(res.data.msg);
@@ -107,38 +105,38 @@ Page({
       }else{
          this.setData({isCard:0})
       }
-      //this.orderCaculate()
+      this.orderCaculate()
   },
-  // orderCaculate:function(){
-  //     var _this = this
-  //     wx.request({
-  //         url: app.globalData.host+"/orderQuery/jsOrderPriceByInfo",
-  //         header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
-  //         method:'POST',
-  //         data:{
-  //            mini:'mini',
-  //            userId:app.globalData.userId,
-  //            isCard:this.data.isCard,
-  //            userFee:this.data.order.userFee
-  //         },
-  //         success: function(res) {
-  //           //服务器返回数据
-  //           if(res.data.errcode==0){
-  //               var resdata = res.data.data;
-  //               _this.setData({
-  //                         cardFee:resdata.cardFee,
-  //                         thirdFee:resdata.thirdFee,
-  //                         bala:resdata.bala,
-  //                         cardFeeVal:(resdata.cardFee/100).toFixed(2),
-  //                         thirdFeeVal:(resdata.thirdFee/100).toFixed(2),
-  //                         balaVal:(resdata.bala/100).toFixed(2)
-  //               })
-  //           }else{
-  //               _this.showDialog(res.data.msg);
-  //           }
-  //         }
-  //     })
-  // },
+  orderCaculate:function(){
+      var _this = this
+      wx.request({
+          url: app.globalData.host+"/orderQuery/jsOrderPriceByInfo",
+          header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+          method:'POST',
+          data:{
+             mini:'mini',
+             userId:app.globalData.userId,
+             isCard:this.data.isCard,
+             userFee:this.data.order.userFee
+          },
+          success: function(res) {
+            //服务器返回数据
+            if(res.data.errcode==0){
+                var resdata = res.data.data;
+                _this.setData({
+                          cardFee:resdata.cardFee,
+                          thirdFee:resdata.thirdFee,
+                          bala:resdata.bala,
+                          cardFeeVal:(resdata.cardFee/100).toFixed(2),
+                          thirdFeeVal:(resdata.thirdFee/100).toFixed(2),
+                          balaVal:(resdata.bala/100).toFixed(2)
+                })
+            }else{
+                _this.showDialog(res.data.msg);
+            }
+          }
+      })
+  },
 
   backFun:function(){
     console.log(getCurrentPages()[getCurrentPages().length-2].route)
@@ -151,7 +149,13 @@ Page({
   },
 
   payFun:function(){
-    this.setData({type_panel:true})    
+      var paytype = this.data.paytype
+      if(paytype!=1){
+         console.log('直接调用微信支付')
+      }else{
+         console.log('组合支付')
+      } 
+      this.confirmChoose()
   },
 
   chooseTap:function(e){
@@ -170,13 +174,17 @@ Page({
   confirmChoose:function(){
     var _this = this;
     _this.setData({ loaderhide:false });
-
+    
     var param = {
            mini:'mini',
            userId:app.globalData.userId,
            openId:app.globalData.openId,
            orderId:this.data.order.orderId,
-           payType:this.data.paytype
+           payType:2,
+           isCard:this.data.isCard,
+           bala:this.data.bala,
+           cardFee:this.data.cardFee,
+           thirdFee:this.data.thirdFee
     };
 
     if(param.userId == undefined ){
@@ -301,24 +309,6 @@ Page({
             })
   },
 
-  detailFun:function(){
-     wx.navigateTo({url:'/pages/order_info_detail/index?orderId='+this.data.orderId});
-  },
-  
-  jumpWebRegister:function(){
-     var shopId = this.data.shopId;
-     var deskNo = this.data.deskNo;
-     wx.navigateTo({url:'/pages/webLogin/index?shopId='+shopId+'&deskNo='+deskNo});
-  },
-
-  jumpWebShop:function(){
-      wx.showModal({
-          content:'敬请期待！',
-          showCancel:false
-      })
-      return;
-      wx.navigateTo({url:'/pages/webShop/index'});
-  },
 
   //=======提示框=========================================
   showDialog:function(msg){

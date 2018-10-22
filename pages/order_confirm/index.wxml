@@ -94,7 +94,7 @@
 	    </view>
 	</view>
 
-<!-- 
+
 	<view class="cont">
 	    <view class="con2" bindtap="openAccount">支付方式
 	       <view class="right">
@@ -103,8 +103,8 @@
 	          <image class="arrodow rote" src="../../image/arrodow.png" />
 	       </view>
 	    </view>
-	</view> -->
-
+	</view>
+<!-- 
     <view class="cont" wx:if="{{!isMember}}">
 	    <view class="con2">支付方式
 	       <view class="right">
@@ -123,7 +123,7 @@
 	       	  <view class="payview"><image class="tag" src="../../image/wechart.png" />微信支付</view>
 	       </view>
 	    </view>
-	</view>
+	</view> -->
  
     <view class="cont" wx-if="{{InvoiceEnable}}">
 	    <view class="con2">发票是否需要

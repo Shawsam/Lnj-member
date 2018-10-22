@@ -1,1 +1,1 @@
-<web-view src="{{webUrl}}/lnj-weixin/console/weixin/page/loginPage?mini=mini"></web-view>
+<web-view src="{{webUrl}}/lnj-weixin/console/weixin/page/loginPage?mini=mini&channel2=15&callback2=0&deskNo={{deskNo}}&shopId={{shopId}}"></web-view>

@@ -6,20 +6,18 @@
 
 page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .container{ height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch; position:relative; background:#fff; box-sizing:border-box; padding-bottom:110rpx; }
-.backcolor{  height:220rpx; width:100%; background:#000;}
+.backcolor{  height:220rpx; width:100%; }
 
-.topCon{ font:28rpx/60rpx "微软雅黑"; padding:40rpx 0 0 0; text-align:center; background:#fff; box-shadow:0 0 12rpx rgba(0, 0,0,0.3);  border-radius:10rpx; overflow:hidden; width:86%; position:absolute; top:50rpx; left:7%; border-top:20rpx solid #FDD01B;}
+.topCon{ font:28rpx/60rpx "微软雅黑"; padding:40rpx 0; text-align:center; background:#fff; box-shadow:0 0 12rpx rgba(0, 0,0,0.3);  border-radius:10rpx; width:86%; position:absolute; top:50rpx; left:7%; border-top:20rpx solid #FDD01B;}
 .topCon > view{ text-align:center; margin-bottom:10rpx;}
 .topCon > .title{ font:30rpx/60rpx "微软雅黑"; }
 .topCon > .title icon{  height:60rpx; width:60rpx; vertical-align:middle; margin-right:10rpx; }
 .topCon > .bold{ font:26rpx/36rpx "微软雅黑"; font-weight:bold;  }
-.topCon .infoBtn{  margin-top:30rpx; font:28rpx/90rpx "微软雅黑"; height:90rpx; font-weight:bold; text-align:center;  background:#FFC600; margin-bottom:0; vertical-align:middle; }
-.topCon .infoBtn .arrow-left{ display:inline-block; width: 0; height: 0; border-top: 12rpx solid transparent; border-left:22rpx solid #000; border-bottom: 12rpx solid transparent; margin-left:15rpx; }
-.jumpCon{ background:#fff; border-radius:10rpx; padding:40rpx; margin-bottom:30rpx; box-shadow:0 0rem 12rpx rgba(0, 0,0,0.3); }
-.jumpCon .tip{ text-align:right; margin-top:30rpx; font-weight:bold; }
 
-.infoCon1{ background:#fff; padding:270rpx 60rpx 30rpx 60rpx; font:26rpx/40rpx "微软雅黑";}
-.waitPay{ padding:110rpx 60rpx 30rpx 60rpx; }
+
+
+.infoCon1{ background:#fff; padding:200rpx 60rpx 30rpx 60rpx; font:26rpx/40rpx "微软雅黑";}
+.waitPay{ padding:60rpx 60rpx 30rpx 60rpx; }
 .infoCon1 .title{ border-bottom:1px dashed #e8e8e8; line-height:90rpx; }
 .infoCon1 .title view{ display:inline-block; }
 .infoCon1 .title view.desp{ float:right; font:30rpx/90rpx "微软雅黑"; font-weight:bold; }

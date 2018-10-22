@@ -28,7 +28,6 @@
        <view class="title">
             <icon type="success" size="27" color="#FDD01B" />订单已生成，请尽快支付！
       </view>
-      <view class="btn infoBtn" bindtap="detailFun">订单详情<view class="arrow-left"></view></view>
     </view>
 
     <view class="topCon" wx:if="{{order.status==2}}">
@@ -38,7 +37,6 @@
       <view class="bold">{{shopName}} | 取餐号: {{order.dinnerNo}}</view>
       <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 桌号: {{deskNo}}</view>
       <view>请耐心等待，不要远离您的座位！</view>
-      <view class="btn infoBtn" bindtap="detailFun">订单详情<view class="arrow-left"></view></view>
     </view>
 
     <view class="topCon" wx:if="{{order.status==3}}">
@@ -48,36 +46,21 @@
       <view class="bold">{{shopName}} | 取餐号: {{order.dinnerNo}}</view>
       <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 桌号: {{deskNo}}</view>
       <view>请耐心等待，不要远离您的座位！</view>
-      <view class="btn infoBtn" bindtap="detailFun">订单详情<view class="arrow-left"></view></view>
     </view>
 
     <view class="topCon" wx:if="{{order.status==9}}">
        <view class="title">{{shopName}}</view>
        <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}}</view>
        <view>订单状态：已退单</view>
-       <view class="btn infoBtn" bindtap="detailFun">订单详情<view class="arrow-left"></view></view>
     </view>
-
-   <view class="topCon" wx:if="{{order.status==8}}"> 
+ 
+    <view class="topCon" wx:if="{{order.status==8}}">
        <view class="title">{{shopName}}</view>
        <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 取餐号: {{order.dinnerNo}}</view>
        <view>订单状态：已完成</view>
-       <view class="btn infoBtn" bindtap="detailFun">订单详情<view class="arrow-left">1</view></view>
-  </view>
- 
-  <view class="infoCon1 {{order.status==2||order.status==8||order.status==9?'':'waitPay'}}">
-  <view class="jumpCon" bindtap="jumpWebRegister" wx-if="{{!isMember}}">
-      <view class="txt">会员消费更方便，常来常吃优惠多</view>
-      <view class="tip">点击注册 >></view>
-  </view>
-  <view class="jumpCon" bindtap="jumpWebShop">
-      <view class="txt">有源头的老娘舅，更健康更健康</view>
-      <view class="tip">“源头”商城 >></view>
-  </view>
-  </view>
+    </view>
 
-<!--
-    <view class="infoCon1 {{order.status==2||order.status==8||order.status==9?'':'waitPay'}}">
+    <view class="infoCon1">
       <view class="title">订单总价<view class="desp">￥<view class="num">{{order.totalFeeVal}}</view></view></view>
       <view class="title">实付金额<view class="desp">￥<view class="num">{{order.userFeeVal}}</view></view></view>
       <view class="list"> 
@@ -109,6 +92,7 @@
           </view>
       </view>
     </view>
+
     <view class="infoCon2">
       <view class="title">订单信息</view>
       <view class="item">订单状态<view class="desp">{{order.status==1 && (paytype==12||paytype==14)?'部分支付':order.statusDesc}}</view></view>
@@ -119,40 +103,11 @@
       <view class="item" wx:if="{{order.isInvoice}}">是否需要发票<view class="desp">{{order.isInvoice?'是':'否'}}</view></view>
       <view class="item">备注信息<view class="desp">{{order.caution?order.caution:'无'}}</view></view>
       <view class="item">支付方式<view class="desp" wx-if="{{paytype!=12&&paytype!=14}}">{{order.payTypeDesc}}</view></view>
-      <view class="paygroup" wx-if="{{paytype==12||paytype==14}}">
-          <view wx:for="{{dcOrderPays}}" wx-if="{{item.payType==1}}">
-               <view class="item">会员卡支付<view class="desp">￥{{item.payFee/100}}</view></view>
-          </view>
-          <view wx:for="{{dcOrderPays}}" wx-if="{{item.payType==2}}">
-               <view class="item">微信支付<view class="desp">￥{{item.payFee/100}}</view></view>
-          </view>
-          <view wx:for="{{dcOrderPays}}" wx-if="{{item.payType==4}}">
-               <view class="item">支付宝支付<view class="desp">￥{{item.payFee/100}}</view></view>
-          </view>
-      </view>
-    </view> 
-
-    <view class="infoCon2" style="margin-top:-30rpx;">
-       <view class="item">备注<view class="desp">发票请至收银台领取</view></view>
-    </view> -->
-    
-<!--
-    <view class="payBox" wx:if="{{paytype==1 && order.status==1}}">
-      <view class="cont payCon">
-        <view class="con2 title">支付方式</view>
-          <view class="con2">账户余额 <i>￥{{balaVal?balaVal:'0.00'}}</i>
-          <view class="right"><switch checked bindchange="switchChange"/></view>
-        </view>
-        <view class="con2">更多支付方式 <i>还需￥{{thirdFeeVal?thirdFeeVal:'0.00'}}</i>
-          <view class="right">
-              <view class="payview"><image class="tag" src="../../image/wechart.png" />微信支付</view>
-           </view>
-        </view>
     </view>
-  </view>
- --> 
+    <view class="infoCon2" style="margin-top:-30rpx;">
+        <view class="item">备注<view class="desp">发票请至收银台领取</view></view>
+    </view>
 </view>
-
 
 <view class="panel_cover" hidden="{{!(type_panel||tip_panel)}}" bindtap="coverTap"></view>
 
