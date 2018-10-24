@@ -1,9 +1,11 @@
 //index.js
 //获取应用实例
 var Timer
+var isInitSelfShow = true;
 var app = getApp()
 Page({
   data: {
+      indexPage:false,
       deskNo:'',
       shopName:'',
       shopAddr:'',
@@ -15,8 +17,8 @@ Page({
       imgUrls: [
         '../../image/ad.jpg'
       ],
-      indicatorDots: true,
-      autoplay: true,
+      indicatorDots: false,
+      autoplay: false,
       interval: 1500,
       duration: 1500,
       fillHeight:wx.getSystemInfoSync().windowHeight-473.5,
@@ -28,10 +30,17 @@ Page({
       })
   },
   openCharge:function(){
-     wx.navigateTo({url:'/pages/charge/index'});
+      var userId = app.globalData.userId;
+      console.log('USERID='+userId);
+      if(!userId){
+         app.globalData.userInfo = null;  
+         wx.navigateTo({url: '/pages/webUsercenter/index'})
+      }else{
+         wx.navigateTo({url:'/pages/charge/index?bala=0&userId='+ app.globalData.userId +'&mobile='+  app.globalData.mobile });
+      }      
   },
   openCoupon:function(){
-     wx.navigateTo({url:'/pages/webCoupon/index'});  
+      wx.navigateTo({url:'/pages/webCoupon/index'});  
   },
   //事件处理函数
   orderTap: function() {
@@ -50,9 +59,22 @@ Page({
       }
     })
   },
+
+  onShow:function(){
+    if (isInitSelfShow) return;
+    this.onLoad();
+  },
+
+  onHide() {
+    isInitSelfShow = false;
+  },
+
   onLoad: function () {
 
     var _this = this;
+    if(getCurrentPages().length==1){
+      this.setData({indexPage:true})
+    }
 
     //获取全局数据，初始化当前页面
     app.getUserInfo(function(userInfo){

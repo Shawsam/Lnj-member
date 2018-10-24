@@ -24,9 +24,11 @@ App({
   },
   getUserInfo: function(cb) {                           
       var _this = this
-      if (this.globalData.userInfo) {           
+      if (this.globalData.userInfo) {     
+        console.log('全局用户信息参数传递')      
         typeof cb == "function" && cb(this.globalData.userInfo)
       } else {
+        console.log('全局用户信息重新获取，参数传递') 
         // 查看是否授权
         wx.getSetting({
           success: function(res){

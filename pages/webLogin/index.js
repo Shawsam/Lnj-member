@@ -1,16 +1,19 @@
 var app = getApp()
 Page({
   data:{
-  	webUrl:''
+    webUrl:''
   },
   onLoad:function(option){
-  	  var deskNo =  option.deskNo||'';
-  	  var shopId =  option.shopId||'';
+      app.globalData.userInfo = null;
+      var deskNo =  option.deskNo||'';
+      var shopId =  option.shopId||'';
+      var channel = 15;
+      
+      var webUrl = app.globalData.webUrl+'/lnj-weixin/console/weixin/page/loginPage?mini=mini';
+      if(option.shopId) webUrl = app.globalData.webUrl+'/lnj-weixin/console/weixin/page/loginPage?channel2='+channel+'&callback2=0&deskNo='+deskNo+'&shopId='+shopId
+      console.log(webUrl)
       this.setData({
-      	webUrl:app.globalData.webUrl,
-      	deskNo:deskNo,
-      	shopId:shopId
+        webUrl:webUrl,
       })
-      console.log(app.globalData.webUrl+'/lnj-weixin/console/weixin/page/loginPage?mini=mini&channel2=15&callback2=0&deskNo='+deskNo+'&shopId='+shopId)
   }
 })

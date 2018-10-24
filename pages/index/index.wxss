@@ -7,6 +7,9 @@
 page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 
 .container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; }
+.container .return{ background:#2F2E33; padding:20rpx 0  0 20rpx; font-size:0;}
+.container .return .icon{ height:65rpx; width:65rpx;  }
+
 .backcolor{ background:#2F2E33; height:300rpx; width:100%; position:absolute; left:0; top:0; z-index:0; }
 .top{ background:#FDD01B; height:150rpx; position:relative; }
 .top .txt{ position:absolute; left:40rpx; bottom:25rpx; font-size:30rpx; font-weight:bold; }

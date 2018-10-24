@@ -170,7 +170,7 @@ Page({
                    'signType': tradeInfo.signType,
                    'paySign': tradeInfo.paySign,
                    'success':function(res){
-                       wx.navigateBack();
+                       wx.navigateBack({delta:2});
                     },
                    'fail':function(res){
                        wx.redirectTo({ url: '../order_fail/index' })
@@ -180,7 +180,7 @@ Page({
               //调用账户支付
               else{
                 if(!tradeInfo.bala){
-                    wx.navigateBack();
+                    wx.navigateBack({delta:2});
                     return;
                 }
 
@@ -233,7 +233,7 @@ Page({
                               if(res.data.errcode == 0){
                                  wx.showToast({title:'订单已取消'});
                                  setTimeout(function(){
-                                     wx.navigateBack()
+                                     wx.navigateBack({delta:2});
                                  },600)
                               }else{
                                  _this.showDialog(res.data.msg);
@@ -246,5 +246,31 @@ Page({
   },
   backFun:function(){
     wx.navigateBack()
+  },
+  //=======提示框=========================================
+  showDialog:function(msg){
+      this.setData({
+        dialogShow:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm:function(){
+      this.setData({
+        dialogShow:false
+      })
+  },
+
+  showDialog1:function(msg){
+      this.setData({
+        dialogShow1:true,
+        contentMsg:msg
+      })
+  },
+  dialogConfirm1:function(){
+      this.setData({
+        dialogShow1:false
+      })
+      wx.navigateBack();
   }
+
 })

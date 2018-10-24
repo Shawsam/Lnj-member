@@ -242,6 +242,6 @@ Page({
       this.setData({
         dialogShow:false
       })
-      wx.redirectTo({url:'../../pages/entrace/index'});
+      wx.navigateBack();
   }
 })

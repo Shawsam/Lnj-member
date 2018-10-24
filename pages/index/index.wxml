@@ -1,5 +1,6 @@
 <!--index.wxml-->
 <view class="container">
+<view wx:if="{{indexPage}}"  class="return" bindtap="Return" ><image class="icon" src="../../image/backTo.png" /></view>
 <loading hidden="{{loaderhide}}">加载中...</loading>  
 <view class="top">
     <view class="txt">

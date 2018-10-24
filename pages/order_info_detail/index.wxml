@@ -60,7 +60,7 @@
        <view>订单状态：已完成</view>
     </view>
 
-    <view class="infoCon1">
+    <view class="infoCon1 {{order.status==2||order.status==8||order.status==9?'':'waitPay'}}">
       <view class="title">订单总价<view class="desp">￥<view class="num">{{order.totalFeeVal}}</view></view></view>
       <view class="title">实付金额<view class="desp">￥<view class="num">{{order.userFeeVal}}</view></view></view>
       <view class="list"> 

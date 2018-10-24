@@ -62,7 +62,7 @@
        <view class="title">{{shopName}}</view>
        <view class="bold">{{order.isSubscribe?'打包预订':(order.dinnerType==1?'门店点餐-堂吃':'门店点餐-外带')}} | 取餐号: {{order.dinnerNo}}</view>
        <view>订单状态：已完成</view>
-       <view class="btn infoBtn" bindtap="detailFun">订单详情<view class="arrow-left">1</view></view>
+       <view class="btn infoBtn" bindtap="detailFun">订单详情<view class="arrow-left"></view></view>
   </view>
  
   <view class="infoCon1 {{order.status==2||order.status==8||order.status==9?'':'waitPay'}}">

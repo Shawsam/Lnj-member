@@ -6,8 +6,8 @@ Page({
      imgUrls: [
       '../../image/index_banner.jpg'
      ],
-     indicatorDots: true,
-     autoplay: true,
+     indicatorDots: false,
+     autoplay: false,
      interval: 1500,
      duration: 1500,
      userInfo:null,
@@ -18,21 +18,10 @@ Page({
      canIUseWebView: wx.canIUse('web-view')
   },
 
-  onLoad:function(options){
+  onLoad:function(option){
 	  var _this = this;
-	  //获取全局数据，初始化当前页面
-    // app.getUserInfo(function(userInfo){
-    //    var unionId = app.globalData.unionId;
-    //    if(unionId){
-    //      //用户信息
-    //      _this.setData({
-    //          userInfo:userInfo,
-    //          unionId:unionId
-    //      });
-    //    }
-    // })   
     
-        //请求Banner
+    //请求Banner
     var param = { mini:'mini',
                   page:'管理设置导航页',
                   position:'顶部' };
@@ -58,16 +47,20 @@ Page({
           }
         }
     })
-
+    
+    if(option.isLogout){
+        console.log('退出登录后重新进入首页')
+        app.globalData.userInfo = null
+    }
+    //获取全局数据，初始化当前页面
 	  app.getUserInfo(function(userInfo){
 	     //用户信息
 	     _this.setData({
 	       userInfo:userInfo
 	     })
-       
-       if(options){
-
-         var qrcode = decodeURIComponent(options.q);
+       console.log('全局userId' + app.globalData.userId);
+       if(option.q){
+         var qrcode = decodeURIComponent(option.q);
          if(qrcode!='undefined'){
             _this.setData({ loaderhide:false });
             var a = qrcode.split('a=')[1];
@@ -171,8 +164,7 @@ Page({
                   }
               }
             })
-
-             
+           
          }
        }
 	  })
@@ -297,7 +289,14 @@ Page({
 
   // 跳转会员中心
   JumpUserCenter:function(){
-      wx.navigateTo({url:'/pages/webUsercenter/index'});
+      var userId = app.globalData.userId;
+      console.log('USERID='+userId);
+      if(!userId){
+         app.globalData.userInfo = null;  
+         wx.navigateTo({url: '/pages/webLogin/index'})
+      }else{
+         wx.navigateTo({url:'/pages/webUsercenter/index'});
+      }
   },
 
   JumpWebShop:function(){

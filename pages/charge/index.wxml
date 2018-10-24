@@ -2,7 +2,7 @@
 <view class="container">
 	<view class="backcolor"></view>
 	<div class="main">
-	<view wx-if="{{bala}}" class="bala">账户余额:￥{{bala}}</view>
+	<view wx-if="{{bala!=0}}" class="bala">账户余额:￥{{bala}}</view>
 	<view class="note">选择充值金额</view>
     <view class="itemList">
     	<view class="con">
