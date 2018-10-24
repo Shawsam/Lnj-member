@@ -70,7 +70,7 @@
             </view>
             <view class="shadows ticket {{items[2].slide?'slide':''}}" data-paramA="2" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[2].data}}" wx:key="{{item.couponId}}">
                 <view class="ticket_type">
-                    <view class="val">{{item.type.category==0?'现金':'尊享'}}</view>
+                    <view class="val">{{item.type.category==0||item.type.category==5?'现金':'尊享'}}</view>
                     <view class="name">{{item.type.categoryDesc}}</view></view>
                 <view class="ticket_time">
                     <view>{{item.type.typeName}}</view>

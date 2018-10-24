@@ -147,55 +147,53 @@ Page({
                     })
                   }
 
+                  //优惠券数量   优惠券信息
+                  var param = {
+                    mini:'mini',
+                    shopId:app.globalData.shopId,
+                    openId:app.globalData.openId,
+                    taoCanNum:_this.data.taoCanNum,
+                    goodsId:_this.data.goodsId,
+                    totalFee:_this.data.totalFee
+                  }
+
+                  wx.request({
+                      url: app.globalData.host+'/coupon/couponList', 
+                      data:param, 
+                      success: function (res) {
+                          //服务器返回的结果
+                          // console.log(res);
+                          _this.setData({ loaderhide:true });
+                          if (res.data.errcode == 0) {
+                              var feiTaoCanList = res.data.feiTaoCanList,
+                                  taoCanList = res.data.taoCanList,
+                                  otherList = res.data.otherList,
+                                  a = feiTaoCanList?feiTaoCanList.length:0,
+                                  b = taoCanList?taoCanList.length:0,
+                                  c = otherList?otherList.length:0;
+
+                                  _this.setData({
+                                     couponsData:res.data,
+                                     card_num:a+b+c
+                                  })
+                              
+                          } else {
+                             _this.showDialog(res.data.msg);
+                             // wx.showModal({
+                             //      content:res.data.msg,
+                             //      showCancel: false
+                             // });
+                          }
+
+                      },
+                      fail: function () {
+                          console.log('系统错误')
+                      }
+                  })
                        
               } else {
                   _this.showDialog(res.data.msg);
                  //  wx.showModal({
-                 //      content:res.data.msg,
-                 //      showCancel: false
-                 // });
-              }
-
-          },
-          fail: function () {
-              console.log('系统错误')
-          }
-      })
-
-
-      //优惠券数量   优惠券信息
-      var param = {
-        mini:'mini',
-        shopId:app.globalData.shopId,
-        openId:app.globalData.openId,
-        taoCanNum:this.data.taoCanNum,
-        goodsId:this.data.goodsId,
-        totalFee:this.data.totalFee
-      }
-
-      wx.request({
-          url: app.globalData.host+'/coupon/couponList', 
-          data:param, 
-          success: function (res) {
-              //服务器返回的结果
-              // console.log(res);
-              _this.setData({ loaderhide:true });
-              if (res.data.errcode == 0) {
-                  var feiTaoCanList = res.data.feiTaoCanList,
-                      taoCanList = res.data.taoCanList,
-                      otherList = res.data.otherList,
-                      a = feiTaoCanList?feiTaoCanList.length:0,
-                      b = taoCanList?taoCanList.length:0,
-                      c = otherList?otherList.length:0;
-
-                      _this.setData({
-                         couponsData:res.data,
-                         card_num:a+b+c
-                      })
-                  
-              } else {
-                 _this.showDialog(res.data.msg);
-                 // wx.showModal({
                  //      content:res.data.msg,
                  //      showCancel: false
                  // });
