@@ -23,6 +23,11 @@ Page({
       duration: 1500,
       fillHeight:wx.getSystemInfoSync().windowHeight-473.5,
   },
+
+  Return:function(){
+    wx.redirectTo({url:'../../pages/homepage/index'});
+  },
+  
   noticeClose:function(){
      clearInterval(Timer)
      this.setData({
