@@ -20,46 +20,77 @@ Page({
          shopName:app.globalData.shopName
        })
      })
-     
 
-     //优惠券
-     var items = [],
-         couponsChoosed,                                //已选优惠券
-         couponsData = JSON.parse(option.couponsData),  //所有优惠券 couponsData
-         taoCanNum = option.taoCanNum;                  //所点套餐数量
-     
-     _this.setData({taoCanNum:taoCanNum})
 
-      wx.getStorage({
-        key:'choosed_card',
-        complete: function(res) {
-           couponsChoosed = res.data; 
-           couponsData = [couponsData.taoCanList,couponsData.feiTaoCanList,couponsData.otherList];
+      //优惠券数量   优惠券信息
+      var param = {
+        mini:'mini',
+        shopId:app.globalData.shopId,
+        openId:app.globalData.openId,
+        taoCanNum:option.taoCanNum,
+        goodsId:option.goodsId,
+        totalFee:option.totalFee   //餐盒不参与优惠券满减
+      }
 
-           console.log(couponsData);
-           for(var i in couponsData){
-             var singledata = {};
-             if(couponsChoosed){
-               var couponsChoose = JSON.parse(couponsChoosed);
-               // console.log(couponsChoose);
-               for(var j in couponsData[i]){ 
-                  for(var m in couponsChoose)
-                      if(couponsData[i][j].couponNo == couponsChoose[m].couponNo){
-                         couponsData[i][j].active = true;
-                      }
-               }
-             }
+      wx.request({
+          url: app.globalData.host+'/coupon/couponList', 
+          data:param, 
+          success: function (res) {
+              //服务器返回的结果
+              console.log(res);
+              if (res.data.errcode == 0) {
+                     //优惠券
+                     var items = [],
+                         couponsChoosed,                                //已选优惠券
+                         couponsData = res.data,                        //所有优惠券
+                         taoCanNum = option.taoCanNum;                  //所点套餐数量
 
-             singledata.data = couponsData[i];
-             singledata.slide = true;
-             items[i] = singledata;
-           }
-           
-           _this.setData({ items:items })
+                      _this.setData({
+                         couponsData:couponsData,
+                         taoCanNum:taoCanNum
+                      })
+                      wx.getStorage({
+                        key:'choosed_card',
+                        complete: function(res) {
+                           couponsChoosed = res.data; 
+                           couponsData = [couponsData.taoCanList,couponsData.feiTaoCanList,couponsData.otherList];
 
-        } 
+                           console.log(couponsData);
+                           for(var i in couponsData){
+                             var singledata = {};
+                             if(couponsChoosed){
+                               var couponsChoose = JSON.parse(couponsChoosed);
+                               // console.log(couponsChoose);
+                               for(var j in couponsData[i]){ 
+                                  for(var m in couponsChoose)
+                                      if(couponsData[i][j].couponNo == couponsChoose[m].couponNo){
+                                         couponsData[i][j].active = true;
+                                      }
+                               }
+                             }
 
+                             singledata.data = couponsData[i];
+                             singledata.slide = true;
+                             items[i] = singledata;
+                           }
+                           
+                           _this.setData({ items:items })
+
+                        } 
+                      })
+                  
+              } else {
+                 wx.showModal({content:res.data.msg, showCancel: false});
+              }
+
+          },
+          fail: function () {
+              console.log('系统错误')
+          }
       })
+
+
+
  
 
   },
@@ -81,17 +112,30 @@ Page({
     
     //抵用券始终只能用一张
     if(parama == 2){
+        for(var i in items[0].data){
+            items[0].data[i].active = false;
+        }
+        for(var i in items[1].data){
+            items[1].data[i].active = false;
+        }
         for(var i in items[2].data){
            if(i == paramb){
                items[parama].data[paramb].active = !items[parama].data[paramb].active;
            }else{
-              items[2].data[i].active = false;
+               items[2].data[i].active = false;
            }
         }
     }
 
     //点几份套餐用几张套餐券
     else if(parama == 0){
+        for(var i in items[1].data){
+            items[1].data[i].active = false;
+        }
+        for(var i in items[2].data){
+            items[2].data[i].active = false;
+        }
+
         var taoCan = 0;
         for(var k in items[0].data){
            if(items[0].data[k].active){
@@ -111,6 +155,13 @@ Page({
     }
 
     else{
+        for(var i in items[0].data){
+            items[0].data[i].active = false;
+        }
+        for(var i in items[2].data){
+            items[2].data[i].active = false;
+        }
+
         items[parama].data[paramb].active = !items[parama].data[paramb].active;
     }
 
@@ -152,7 +203,8 @@ Page({
            }else if(i==1){
                singledata.type = 2;
            }else{
-               singledata.type =items[i].data[j].type.category + 1;
+               // singledata.type = items[i].data[j].type.category + 1;
+               singledata.type = 1;
            }
            choosed.push(singledata);
         }

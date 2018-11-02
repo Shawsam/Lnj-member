@@ -108,6 +108,11 @@ Page({
                   if(dkCoupons){
                       dkCoupons = JSON.parse(dkCoupons)
                   }
+
+                  var packList = resdata.packList||[]
+                  for(var i in packList){
+                     packList[i].totalPrice = (packList[i].price*packList[i].count/100).toFixed(2)
+                  }
                   
                   _this.setData({
                         cardFee:resdata.cardFee,
@@ -117,7 +122,7 @@ Page({
                         thirdFeeVal:(resdata.thirdFee/100).toFixed(2),
                         balaVal:(resdata.bala/100).toFixed(2),
                         userFee:resdata.userFee,
-                        packList:resdata.packList||[],
+                        packList:packList,
                         packTotalFee:resdata.packageFee,
                         totalFee:resdata.totalOrderFee,                 
                         userFee:resdata.userFee,
@@ -154,7 +159,7 @@ Page({
                     openId:app.globalData.openId,
                     taoCanNum:_this.data.taoCanNum,
                     goodsId:_this.data.goodsId,
-                    totalFee:_this.data.totalFee
+                    totalFee:_this.data.totalFee - _this.data.packTotalFee   //餐盒不参与优惠券满减
                   }
 
                   wx.request({
@@ -283,11 +288,17 @@ Page({
 
     //点餐页面传递的参数
     console.log(option);
-    var cart_items = option.cart_items,
+    var cart_items = JSON.parse(option.cart_items),
         detail_items = option.detail_items,
         dwCoupons = option.dwCoupons,
         goodsId = option.goodsId,
         taoCanNum = option.taoCanNum;
+    //处理cart_items
+    for(var i in cart_items){
+       if(!cart_items[i].sideDcGoodsCategoryList)  cart_items[i].totalPrice = (cart_items[i].price*cart_items[i].count/100).toFixed(2)
+    }
+    console.log(cart_items)
+
    
     //附加参数
     var isMember= 1,
@@ -319,7 +330,7 @@ Page({
        userId:app.globalData.userId||'',
        phone:phone,
        phoneInput:'',
-       cart_items:JSON.parse(cart_items),
+       cart_items:cart_items,
        detail_items:JSON.parse(detail_items),
        dwCoupons:dwCoupons,
        goodsId:goodsId,
@@ -439,18 +450,16 @@ Page({
   openCardList:function(){
     var card_num = this.data.card_num,
         taoCanNum = this.data.taoCanNum,
-        couponsData = JSON.stringify(this.data.couponsData);
+        couponsData = JSON.stringify(this.data.couponsData),
+        goodsId = this.data.goodsId,
+        totalFee = this.data.totalFee - this.data.packTotalFee   //餐盒不参与优惠券满减
+
     if(card_num == 0){
         this.showDialog('暂无可用优惠券')
-        // wx.showModal({
-        //       content:"暂无可用优惠券",
-        //       showCancel: false
-        // });
         return;
     }
-
     wx.navigateTo({
-        url: '../card_list/index?couponsData='+couponsData+'&taoCanNum='+taoCanNum
+        url: '../card_list/index?couponsData='+couponsData+'&taoCanNum='+taoCanNum+'&goodsId='+goodsId+'&totalFee='+totalFee
     })
   },
   
@@ -656,7 +665,7 @@ Page({
               }
               //============生成订单失败============//
               else{ 
-                    _this.showDialog2(res.data.msg)                                            
+                    _this.showDialog2(resdata.msg)                                            
                     // wx.showModal({                           
                     //         content:res.errMsg, 
                     //         showCancel: false,
@@ -670,7 +679,7 @@ Page({
           }else{
               var orderId = res.data.data;
               if(orderId){
-                     _this.showDialog2(res.data.msg)
+                     _this.showDialog2(resdata.msg)
                     // wx.showModal({                           
                     //         content:res.data.msg, 
                     //         showCancel: false,
@@ -681,8 +690,20 @@ Page({
                     //         }
                     // })
               }else{
-                   _this.showDialog(resdata.msg);
-                   // wx.showModal({content:resdata.msg,showCancel: false})
+                   wx.showModal({                           
+                          content:res.data.msg, 
+                          showCancel: false,
+                          success: function(res) {
+                              if (res.confirm) {
+                                _this.data.coupons = []
+                                wx.setStorage({
+                                      key:"choosed_card",
+                                      data:''
+                                })
+                                _this.Init()
+                              }
+                          }
+                    })
               }
           }
         }

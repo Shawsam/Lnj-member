@@ -188,7 +188,7 @@
 			                <view class="info1">
 			                    <view class="name">{{item.name}}</view>
 			                    <view class="num">x{{item.count}}</view>
-			                    <view class="price">￥{{item.count*item.priceVal}}</view>
+			                    <view class="price">￥{{item.totalPrice}}</view>
 			                </view>
 			            </view>
 			        </view>
@@ -213,7 +213,7 @@
 			<view class="package" wx:key="{{item.boxId}}" wx:for="{{packList}}">
 				<view class="name">{{item.boxName}}</view>
 				<view class="num">x{{item.count}}</view>
-				<view class="price">￥{{item.price/100*item.count}}</view>
+				<view class="price">￥{{item.totalPrice}}</view>
 			</view>
 <!-- 
 			<view class="package" wx:if="{{packTotalFee}}"><view class="name">餐盒</view><view class="price">￥{{packTotalFeeVal}}</view></view>

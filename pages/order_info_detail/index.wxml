@@ -68,7 +68,7 @@
                 <view class="info1">
                     <view class="name">{{item.Data.goodsName}}<view wx:key="{{item.goodsId}}" wx:for="{{item.subData}}" wx:if="{{index==0}}">{{item.goodsName}}</view></view>
                     <view class="num">x{{item.Data.count}}</view>
-                    <view class="price">￥{{item.Data.count*item.Data.price}}</view>
+                    <view class="price">￥{{item.Data.totalPrice}}</view>
                 </view>
                 <view class="info2">
                     <view wx:key="{{item.goodsId}}" wx:for="{{item.subData}}" wx:if="{{index>0}}">+{{item.goodsName}}{{item.price?'(￥'+item.price/100+')':''}}</view>

@@ -58,7 +58,8 @@ Page({
                
               var items=[],
                   orderData =  order.dcOrderGoodsList;
-
+              
+              console.log(orderData)
               for(var i in orderData){
                  var singleItem = {};
                  if(orderData[i].type != 2){
@@ -72,6 +73,7 @@ Page({
                       }
                     }
                     orderData[i].price = (orderData[i].price/100).toFixed(2);
+                    orderData[i].totalPrice = (orderData[i].count * orderData[i].price).toFixed(2)
                     singleItem.Data = orderData[i];
                     singleItem.subData = subData;
                     items.push(singleItem);

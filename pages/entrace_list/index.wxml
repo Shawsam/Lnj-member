@@ -42,7 +42,7 @@
                             <view class="order_item" wx:for="{{item.dcOrderGoodsList}}" wx:key="{{item.dcOrderGoodsList.id}}" wx:if="{{index<2}}">
                                 <view class="name">{{item.goodsName}}</view>
                                 <view class="num">x{{item.count}}</view>
-                                <view class="price">￥{{item.count*item.price}}</view>
+                                <view class="price">￥{{item.totalprice}}</view>
                             </view>
                             <view class="blurCon" wx:if="{{item.dcOrderGoodsList.length>2}}"></view>
                             <view class="slide" data-param="{{index}}" catchtap="slideFun"  wx:if="{{item.dcOrderGoodsList.length>2}}"><image class="slideImg" src="../../image/slideDown.png" />查看全部</view>
@@ -52,7 +52,7 @@
                             <view class="order_item" wx:for="{{item.dcOrderGoodsList}}" wx:key="{{item.dcOrderGoodsList.id}}">
                                 <view class="name">{{item.goodsName}}</view>
                                 <view class="num">x{{item.count}}</view>
-                                <view class="price">￥{{item.price*item.count}}</view>
+                                <view class="price">￥{{item.totalprice}}</view>
                             </view>
                             <view class="slide" data-param="{{index}}" catchtap="slideFun"  wx:if="{{item.dcOrderGoodsList.length>2}}"><image class="slideImg" src="../../image/slideUp.png" />收起</view>
                         </view>

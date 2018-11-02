@@ -68,6 +68,7 @@ Page({
                         var dcOrderGoodsList = []; 
                         for(var j in orderList[i].dcOrderGoodsList){
                             orderList[i].dcOrderGoodsList[j].price = (orderList[i].dcOrderGoodsList[j].price/100).toFixed(2);
+                            orderList[i].dcOrderGoodsList[j].totalprice = (orderList[i].dcOrderGoodsList[j].count * orderList[i].dcOrderGoodsList[j].price).toFixed(2);
                             if(orderList[i].dcOrderGoodsList[j].type != 2){
                                dcOrderGoodsList.push(orderList[i].dcOrderGoodsList[j]);
                             }

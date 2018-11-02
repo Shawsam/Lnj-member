@@ -71,7 +71,7 @@
       <view class="tip">点击注册 >></view>
   </view>
   <view class="jumpCon" bindtap="jumpWebShop">
-      <view class="txt">有源头的老娘舅，更健康更健康</view>
+      <view class="txt">有源头的老娘舅，更健康更安全</view>
       <view class="tip">“源头”商城 >></view>
   </view>
   </view>
