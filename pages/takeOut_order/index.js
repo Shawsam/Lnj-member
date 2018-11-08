@@ -20,8 +20,6 @@ Page({
 	     _this.setData({
 	       userInfo:userInfo
 	     })
-
-        var _this = this;
         _this.setData({ shopName:app.globalData.shopName });
         _this.setData({loaderhide:false})
         _this.setData({Lowerloading:false,noMore:false})
