@@ -177,9 +177,11 @@ Page({
                                   b = taoCanList?taoCanList.length:0,
                                   c = otherList?otherList.length:0;
 
+                                  var card_num = JSON.parse(_this.data.dwCoupons).length?0:a+b+c;
+                                  console.log('coupon数量'+card_num)
                                   _this.setData({
                                      couponsData:res.data,
-                                     card_num:a+b+c
+                                     card_num:card_num
                                   })
                               
                           } else {
