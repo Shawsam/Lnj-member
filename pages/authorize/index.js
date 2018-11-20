@@ -7,7 +7,7 @@ Page({
      canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
   onLoad:function(){
-  	    //调用微信登录接口，获取code
+        //调用微信登录接口，获取code
         wx.login({
             success: function (r) {
                 var code = r.code;        //登录凭证
@@ -68,7 +68,7 @@ Page({
         })
   },
   authorizeFun:function(res){
-  	 console.log(res.detail.userInfo)
+     console.log(res.detail.userInfo)
      app.globalData.userInfo = res.detail.userInfo
      this.setData({userInfo:res.detail.userInfo})
      wx.redirectTo({url:'../homepage/index'})

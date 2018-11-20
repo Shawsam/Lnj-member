@@ -27,6 +27,7 @@
                 </view>
             </view>
             <view class="shadows ticket {{items[0].slide?'slide':''}}"  data-paramA="0" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[0].data}}" wx:key="{{item.couponId}}">
+                <view wx-if="{{item.disabled}}" class="disablePanel"></view>
                 <view class="ticket_type">
                     <view class="val">套餐</view>
                     <view class="name">{{item.type.categoryDesc}}</view></view>
@@ -48,6 +49,7 @@
                 </view>
             </view>
             <view class="shadows ticket {{items[1].slide?'slide':''}}"  data-paramA="1" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[1].data}}" wx:key="{{item.couponId}}">
+                <view wx-if="{{item.disabled}}" class="disablePanel"></view>
                 <view class="ticket_type">
                     <view class="val">领用</view>
                     <view class="name">{{item.type.categoryDesc}}</view></view>
@@ -69,6 +71,7 @@
                 </view>
             </view>
             <view class="shadows ticket {{items[2].slide?'slide':''}}" data-paramA="2" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[2].data}}" wx:key="{{item.couponId}}">
+                <view wx-if="{{item.disabled}}" class="disablePanel"></view>
                 <view class="ticket_type">
                     <view class="val">{{item.type.category==0||item.type.category==5?'现金':'尊享'}}</view>
                     <view class="name">{{item.type.categoryDesc}}</view></view>

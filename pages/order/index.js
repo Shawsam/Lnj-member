@@ -474,11 +474,48 @@ Page({
          wx.setStorageSync('work_num_choosed',work_num_choosed) 
       }
       //会员商品券
-      var ticketNum = panel_data.ticketNum;
-      if(ticketNum){
+      console.log(panel_data)
+      var ticketNum = panel_data.ticketNum;   
+      if(ticketNum){                                       //所点商品是会员尊享商品券对应商品
+         var isShare = panel_data.isShareCoupon,           //当前券是否可以共享
+             ticketName = panel_data.ticketName,           //唯一id
+             couponUseNumber = panel_data.couponUseNumber  //最大使用张数
+
+         //过滤出已点的会员尊享商品
+         console.log(_items)
+         for(var i in _items){
+            if(_items[i].categoryId==0){
+                for(var j in _items[i].mainGoodsList){
+                    var  couponGoods = _items[i].mainGoodsList[j]
+                    if(couponGoods.count > 0  ){
+                        if(isShare){           //当前可以共享
+                            if(couponGoods.isShareCoupon==0 && couponGoods.ticketName != ticketName){
+                                this.showDialog("您已经选择了不可共享的券！");
+                                this.setData({addLock1:false});
+                                return;
+                            }
+                        }else{                //当前不可以共享
+                           if(couponGoods.ticketName != ticketName){
+                               this.showDialog("该券不可与其他券共享！");
+                               this.setData({addLock1:false});
+                               return;
+                           }
+                        }
+                    }
+                }
+            }
+
+         }
+         //拥有数量超出最大使用张数
+         if(_count>=couponUseNumber){
+                this.showDialog("您最多可以使用"+couponUseNumber+"张 "+ panel_data.name +"！");
+                this.setData({addLock1:false});
+                return;
+         }      
+         //拥有数量不足
          if(_count>=ticketNum){
-              this.showDialog("您只有"+ticketNum+"张会员商品尊享券！");
-              // wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
+           // wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
+              this.showDialog("您只有"+ticketNum+"张 "+ panel_data.name +"！");
               this.setData({addLock1:false});
               return;
          }
@@ -1116,12 +1153,17 @@ Page({
              m++;
          }
         
-         if(cart_items[i].isWork==0 && cart_items[i].type == 1){          //单品
+         if(cart_items[i].isWork==0 && cart_items[i].type == 1){                 //单品
            feiTaoCan[j]=cart_items[i].crmGoodsNo+"#"+cart_items[i].count;
            j++;
-         }         
+         } 
 
-         if(cart_items[i].ticketNum){                                    //会员券 商品
+         if(cart_items[i].categoryNo){                                           //品类券商品
+              feiTaoCan[j] = cart_items[i].categoryNo+"#"+cart_items[i].count;  
+              j++;
+         }
+
+         if(cart_items[i].ticketNum){                                           //会员券 商品
            for(var m = 0; m<cart_items[i].count; m++){
                dwCoupons.push(JSON.parse(cart_items[i].ticketNoList[m]));
            }

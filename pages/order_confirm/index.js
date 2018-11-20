@@ -450,7 +450,8 @@ Page({
   
   //跳转到 优惠券选择
   openCardList:function(){
-    var card_num = this.data.card_num,
+    var cart_items = JSON.stringify(this.data.cart_items),
+        card_num = this.data.card_num,
         taoCanNum = this.data.taoCanNum,
         couponsData = JSON.stringify(this.data.couponsData),
         goodsId = this.data.goodsId,
@@ -461,7 +462,7 @@ Page({
         return;
     }
     wx.navigateTo({
-        url: '../card_list/index?couponsData='+couponsData+'&taoCanNum='+taoCanNum+'&goodsId='+goodsId+'&totalFee='+totalFee
+        url: '../card_list/index?cart_items='+cart_items+'&couponsData='+couponsData+'&taoCanNum='+taoCanNum+'&goodsId='+goodsId+'&totalFee='+totalFee
     })
   },
   
