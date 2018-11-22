@@ -57,7 +57,7 @@ App({
                               data: param,
                               success: function (res) {
                                   //服务器返回的结果
-                                  console.log('信息');
+                                  console.log('==getMiniOpen接口返回信息==');
                                   console.log(res);
                                   if (res.data.errcode == 0) {
                                      var openId = res.data.miniOpenId,
@@ -104,11 +104,31 @@ App({
       }
   },
   onShow:function(scene){
-    if(scene.path == "pages/takeOut_addr_add/index"){
-        this.getUserInfo();
+    console.log('小程序进程被唤起')
+    var _this = this
+    if(this.globalData.unionId){
+        var param =  { mini:'mini',
+                       openId:this.globalData.openId,
+                       unionId:this.globalData.unionId
+                     };
+        wx.request({
+            url: this.globalData.host+'/wxMini/getUseByUnionId', 
+            data: param,
+            success: function (res) {
+              console.log(res)
+              var userId = res.data.data.userId;
+              var cardNo = res.data.data.cardNo;
+              var mobile = res.data.data.mobile;
+              if(_this.globalData.userId!=userId){           //userId 发生变化
+                   console.log('变化前userId'+_this.globalData.userId)
+                   console.log('变化后userId'+userId)
+                  _this.globalData.userId = userId
+                  _this.globalData.cardNo = cardNo
+                  _this.globalData.mobile = mobile
+                  wx.reLaunch({ url:'../homepage/index'})
+              }
+            }
+        })
     }
-  },
-  onHide:function(){
-    this.globalData.userInfo = null;            //会员状态的改变，用户进公众号再进入小程序
   }
 })

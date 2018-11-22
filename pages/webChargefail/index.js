@@ -1,9 +1,12 @@
 var app = getApp()
 Page({
-  data:{
-  	webUrl:''
+  data:{ amount:0,
+  	     webUrl:''
   },
-  onLoad:function(){
-      this.setData({webUrl:app.globalData.webUrl})
+  onLoad:function(option){
+	  this.setData({
+	  	webUrl:app.globalData.webUrl,
+	  	amount:option.amount||this.data.amount
+	  })
   }
 })

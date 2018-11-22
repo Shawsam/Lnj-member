@@ -6,7 +6,7 @@ Page({
   onLoad:function(option){
 	  this.setData({
 	  	webUrl:app.globalData.webUrl,
-	  	amount:option.amount
+	  	amount:option.amount||this.data.amount
 	  })
   }
 })

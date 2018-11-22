@@ -58,7 +58,6 @@ Page({
 	     _this.setData({
 	       userInfo:userInfo
 	     })
-       console.log('全局userId' + app.globalData.userId);
        if(option.q){
          var qrcode = decodeURIComponent(option.q);
          if(qrcode!='undefined'){
@@ -289,14 +288,14 @@ Page({
 
   // 跳转会员中心
   JumpUserCenter:function(){
-      var userId = app.globalData.userId;
-      console.log('USERID='+userId);
-      if(!userId){
-         app.globalData.userInfo = null;  
-         wx.navigateTo({url: '/pages/webLogin/index'})
-      }else{
+      // var userId = app.globalData.userId;
+      // console.log('USERID='+userId);
+      // if(!userId){
+      //    app.globalData.userInfo = null;  
+      //    wx.navigateTo({url: '/pages/webLogin/index'})
+      // }else{
          wx.navigateTo({url:'/pages/webUsercenter/index'});
-      }
+      // }
   },
 
   JumpWebShop:function(){
@@ -323,6 +322,33 @@ Page({
                   },500)
            }
        })
+  },
+
+  onShow:function(scene){
+    console.log('进入homepage页面')
+    if(app.globalData.unionId){
+        var param =  { mini:'mini',
+                       openId:app.globalData.openId,
+                       unionId:app.globalData.unionId
+                     };
+        wx.request({
+            url: app.globalData.host+'/wxMini/getUseByUnionId', 
+            data: param,
+            success: function (res) {
+              console.log(res)
+              var userId = res.data.data.userId;
+              var cardNo = res.data.data.cardNo;
+              var mobile = res.data.data.mobile;
+              if(app.globalData.userId!=userId){           //userId 发生变化
+                    console.log('变化前userId'+app.globalData.userId)
+                    console.log('变化后userId'+userId)
+                    app.globalData.userId = userId
+                    app.globalData.cardNo = cardNo
+                    app.globalData.mobile = mobile
+              }
+            }
+        })
+    }
   },
 
   //=======提示框=========================================

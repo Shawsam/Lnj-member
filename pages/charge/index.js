@@ -57,7 +57,7 @@ Page({
                        'success':function(res){
                              _this.setData({clickLock:false})
                              wx.navigateTo({
-                               url: '../webChargesuccess/index?amount='+resdata.amount
+                               url: '../webChargesuccess/index?amount='+resdata.data.amount
                              })
                         },
                        'fail':function(res){
@@ -66,7 +66,7 @@ Page({
                                wx.showModal({content:'支付已取消',showCancel:false })
                             }else{
                                wx.navigateTo({
-                                 url: '../webChargefail/index?bala='+resdata.amount
+                                 url: '../webChargefail/index?bala='+resdata.data.amount
                                })
                            }
                             

@@ -7,7 +7,7 @@ Page({
      canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
   onLoad:function(){
-        //调用微信登录接口，获取code
+  	    //调用微信登录接口，获取code
         wx.login({
             success: function (r) {
                 var code = r.code;        //登录凭证
@@ -68,10 +68,22 @@ Page({
         })
   },
   authorizeFun:function(res){
-     console.log(res.detail.userInfo)
-     app.globalData.userInfo = res.detail.userInfo
-     this.setData({userInfo:res.detail.userInfo})
-     wx.redirectTo({url:'../homepage/index'})
+      app.globalData.userInfo = res.detail.userInfo
+      this.setData({userInfo:res.detail.userInfo})
+      var param =  { mini:'mini',
+                     openId:app.globalData.openId,
+                     iv:res.detail.iv,
+                     encryptedData:res.detail.encryptedData
+                   };
+      wx.request({
+        url: app.globalData.host+'/wxMini/encryptedData', 
+        method:'POST',
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        data: param,
+        success: function (res) {
+              app.globalData.unionId = res.data.unionId
+              wx.redirectTo({url:'../homepage/index'})
+        }
+      })
   }
-
 })
