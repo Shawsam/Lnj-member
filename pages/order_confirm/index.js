@@ -99,7 +99,8 @@ Page({
                   var resdata = res.data,
                       activity = resdata.activity,
                       coupons = _this.data.coupons,
-                      dkCoupons = resdata.dkCoupons
+                      dkCoupons = resdata.dkCoupons,
+                      dkisUnshare = resdata.type==5?true:false
 
                   if(activity){
                       activity = JSON.parse(activity);
@@ -115,6 +116,7 @@ Page({
                   }
                   
                   _this.setData({
+                        dkisUnshare:dkisUnshare,
                         cardFee:resdata.cardFee,
                         thirdFee:resdata.thirdFee,
                         bala:resdata.bala,
@@ -139,7 +141,8 @@ Page({
                         dkCoupons:dkCoupons||null
                   })
                   
-                  console.log(coupons.length)
+                  console.log(dkCoupons)
+                  console.log(coupons)
                   if(coupons.length){
                     wx.setStorage({
                        key:"choosed_card",
@@ -176,8 +179,8 @@ Page({
                                   a = feiTaoCanList?feiTaoCanList.length:0,
                                   b = taoCanList?taoCanList.length:0,
                                   c = otherList?otherList.length:0;
-
-                                  var card_num = JSON.parse(_this.data.dwCoupons).length?0:a+b+c;
+                                  
+                                  var card_num = a+b+c;
                                   console.log('coupon数量'+card_num)
                                   _this.setData({
                                      couponsData:res.data,
@@ -456,9 +459,13 @@ Page({
         couponsData = JSON.stringify(this.data.couponsData),
         goodsId = this.data.goodsId,
         totalFee = this.data.totalFee - this.data.packTotalFee   //餐盒不参与优惠券满减
-
+    
+    if(this.data.dkisUnshare){
+        // wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享!", showCancel: false});
+        return;
+    }
     if(card_num == 0){
-        this.showDialog('暂无可用优惠券')
+        wx.showModal({content:"暂无可用优惠券!", showCancel: false});
         return;
     }
     wx.navigateTo({

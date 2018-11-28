@@ -155,8 +155,11 @@
 	<view class="cont">
 	    <view class="con2 couponCon" bindtap="openCardList">优惠券
 <!-- 	    <view wx:if="{{couponsNum}}" class="right colored">已选择{{couponsNum}}张<image class="arrodow rote" src="../../image/arrodow.png" /></view> -->
-	        <view wx:if="{{couponsNum && couponFee>0 }}" class="right colored">-￥{{couponFee/100}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
-	        <view wx:if="{{!couponsNum || couponFee==0}}"  class="right {{card_num?'colored':''}}">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+            <view  wx:if="{{!dkisUnshare}}">
+	            <view wx:if="{{couponsNum && couponFee>0 }}" class="right colored">-￥{{couponFee/100}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+	            <view wx:if="{{!couponsNum || couponFee==0}}"  class="right {{card_num?'colored':''}}">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+	        </view>
+	        <view wx:if="{{dkisUnshare}}"  class="right">尊享优惠不可与其他优惠同享<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 	    </view>
 	</view>
 

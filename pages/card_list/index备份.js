@@ -1,7 +1,7 @@
 //index.js
 //获取应用实例
 var zunxiangShare
-var cart_items,pinleiCoupon,pinleiMap=new Map(),linyongMap=new Map(),shareCouponNum=0,unshareCouponNum=0
+var cart_items,cart_coupon_items,pinleiCoupon,pinleiMap=new Map(),shareCouponNum=0,unshareCouponNum=0
 var app = getApp()
 Page({
   data:{
@@ -18,33 +18,25 @@ Page({
      var _this = this;
      //初始化全局变量
       cart_items = JSON.parse(option.cart_items);
+      cart_coupon_items = [];
       pinleiCoupon = [];
       shareCouponNum = 0;
       unshareCouponNum = 0;
-      pinleiMap.clear();
-      linyongMap.clear();
+      pinleiMap.clear()
 
      //取出所选商品中能使用品类券的商品及数量
-     console.log(cart_items)
      for(var i in cart_items){
           var categoryNo = cart_items[i].categoryNo
-          var crmGoodsNo =  cart_items[i].crmGoodsNo
-          if(pinleiMap.has(categoryNo+'maxNum')){
-             var maxNum = pinleiMap.get(categoryNo+'maxNum')
-             pinleiMap.set(categoryNo+'maxNum',maxNum+cart_items[i].count);
-          }else{
-             pinleiMap.set(categoryNo+'maxNum',cart_items[i].count);
-             pinleiMap.set(categoryNo+'choosedNum',0);  
+          if(cart_items[i].categoryNo){
+                cart_coupon_items.push(cart_items[i])
+                if(pinleiMap.has(categoryNo+'maxNum')){
+                   var maxNum = pinleiMap.get(categoryNo+'maxNum')
+                   pinleiMap.set(categoryNo+'maxNum',maxNum+cart_items[i].count);
+                }else{
+                   pinleiMap.set(categoryNo+'maxNum',cart_items[i].count);
+                   pinleiMap.set(categoryNo+'choosedNum',0);  
+                }
           }
-
-          if(linyongMap.has(crmGoodsNo+'maxNum')){
-             var maxNum = linyongMap.get(crmGoodsNo+'maxNum')
-             linyongMap.set(crmGoodsNo+'maxNum',maxNum+cart_items[i].count);
-          }else{
-             linyongMap.set(crmGoodsNo+'maxNum',cart_items[i].count);
-             linyongMap.set(crmGoodsNo+'choosedNum',0);  
-          }
-          //=================================================================
           if(cart_items[i].categoryId==0){               //是否存在可共享尊享券
               zunxiangShare = true
           }else{
@@ -126,8 +118,6 @@ Page({
                       console.log(pinleiCoupon)
                       console.log('品类券选择数据：')
                       console.log(pinleiMap)
-                      console.log('领用券券选择数据：')
-                      console.log(linyongMap)
 
                       _this.setData({
                          couponsData:couponsData,
@@ -150,7 +140,6 @@ Page({
                                 for(var j in couponsData[i]){ 
                                   if(!couponsData[i][j].type.isShare){
                                     couponsData[i][j].disabledTag = true;
-                                    couponsData[i][j].unsharedwith = true;
                                   }
                                 }
                               }
@@ -319,52 +308,126 @@ Page({
         var goodsId =  items[parama].data[paramb].goodsId;                          //点击的券goodId
         console.log(items[parama].data[paramb])                                     //点击的券信息                                        
         //=====================================================================
-        //如果所点商品有品类券商品          
-        if(items[parama].data[paramb].type.category == 6){                      //选择的券是品类券
-            console.log('品类券')
-            console.log('对应品类'+goodsId)
-            var choosedNum =  pinleiMap.get(goodsId+'choosedNum');
-            var maxNum = pinleiMap.get(goodsId+'maxNum');
-            if(items[parama].data[paramb].active){
-                choosedNum--;
-            }else{
-                choosedNum++;
-            }
-            items[parama].data[paramb].active = !items[parama].data[paramb].active;
-            pinleiMap.set(goodsId+'choosedNum',choosedNum);
-            console.log(goodsId+'总共已选'+choosedNum)
-            console.log(goodsId+'总共可选'+maxNum)
-            if(choosedNum>=maxNum){
-                // wx.showModal({content:'不能再选了', showCancel: false});
-                for(var i in items[1].data){
-                    if(!items[1].data[i].active){
-                        for(var j in cart_items){ 
-                             if(cart_items[j].crmGoodsNo == items[1].data[i].goodsId){
-                                   console.log(cart_items[j].categoryNo)
-                                   if(cart_items[j].categoryNo == goodsId){
-                                      items[1].data[i].disabled = true
-                                      items[1].data[i].overMax = true
-                                   }  
-                             }
-                        }
-                        if(items[1].data[i].goodsId == goodsId){
-                          items[1].data[i].disabled = true
-                          items[1].data[i].overMax = true
+        //如果所点商品有品类券商品
+        if(cart_coupon_items.length){             
+            if(items[parama].data[paramb].type.category == 6){                      //选择的券是品类券
+                console.log('品类券')
+                console.log('对应品类'+goodsId)
+                var choosedNum =  pinleiMap.get(goodsId+'choosedNum');
+                var maxNum = pinleiMap.get(goodsId+'maxNum');
+                if(items[parama].data[paramb].active){
+                    choosedNum--;
+                }else{
+                    choosedNum++;
+                }
+                items[parama].data[paramb].active = !items[parama].data[paramb].active;
+                pinleiMap.set(goodsId+'choosedNum',choosedNum);
+                console.log(goodsId+'总共已选'+choosedNum)
+                console.log(goodsId+'总共可选'+maxNum)
+                if(choosedNum>=maxNum){
+                    // wx.showModal({content:'不能再选了', showCancel: false});
+                    for(var i in items[1].data){
+                        if(!items[1].data[i].active){
+                            for(var j in cart_coupon_items){ 
+                                 if(cart_coupon_items[j].crmGoodsNo == items[1].data[i].goodsId){
+                                       console.log(cart_coupon_items[j].categoryNo)
+                                       if(cart_coupon_items[j].categoryNo == goodsId){
+                                          items[1].data[i].disabled = true
+                                          items[1].data[i].overMax = true
+                                       }  
+                                 }
+                            }
+                            if(items[1].data[i].goodsId == goodsId){
+                              items[1].data[i].disabled = true
+                              items[1].data[i].overMax = true
+                            }
                         }
                     }
-                }
-             }
-             else{
-                if(unshareCouponNum==0 && shareCouponNum>0){
-                  console.log('没有不共享券且共享商品券大于0')
-                  for(var i in items[1].data){
-                      if(items[1].data[i].disabled && items[1].data[i].type.isShare){
-                          // 取消其他券不可选状态
-                          console.log(items[1].data[i])
-                          for(var j in cart_items){ 
-                               if(cart_items[j].crmGoodsNo == items[1].data[i].goodsId){
-                                     console.log(cart_items[j].categoryNo)
-                                     if(cart_items[j].categoryNo == goodsId){
+                 }
+                 else{
+                    if(unshareCouponNum==0 && shareCouponNum>0){
+                      console.log('没有不共享券且共享商品券大于0')
+                      for(var i in items[1].data){
+                          if(items[1].data[i].disabled && items[1].data[i].type.isShare){
+                              // 取消其他券不可选状态
+                              console.log(items[1].data[i])
+                              for(var j in cart_coupon_items){ 
+                                   if(cart_coupon_items[j].crmGoodsNo == items[1].data[i].goodsId){
+                                         console.log(cart_coupon_items[j].categoryNo)
+                                         if(cart_coupon_items[j].categoryNo == goodsId){
+                                              var _useNumber = items[1].data[i].type.useNumber
+                                              var _couponTypeId = items[1].data[i].couponTypeId
+                                              var num = 0
+                                              for(var ii in items[1].data){
+                                                  if(items[1].data[ii].couponTypeId == _couponTypeId && items[1].data[ii].active){
+                                                     num++;
+                                                  }
+                                              }
+                                              console.log(_couponTypeId+'已用'+num,'可用'+_useNumber)
+                                              console.log(items[1].data[i])
+                                              if(_useNumber > num){
+                                                 items[1].data[i].disabled = false
+                                                 items[1].data[i].overMax = false
+                                                 items[1].data[i].overMax = true
+                                              }
+                                         }  
+                                   }
+                              }
+                              if(items[1].data[i].goodsId == goodsId){
+                                    var _useNumber = items[1].data[i].type.useNumber
+                                    var _couponTypeId = items[1].data[i].couponTypeId
+                                    var num = 0
+                                    for(var ii in items[1].data){
+                                        if(items[1].data[ii].couponTypeId == _couponTypeId && items[1].data[ii].active){
+                                           num++;
+                                        }
+                                    }
+                                    console.log(_couponTypeId+'已用'+num,'可用'+_useNumber)
+                                    console.log(items[1].data[i])
+                                    if(_useNumber > num){
+                                          items[1].data[i].disabled = false
+                                          items[1].data[i].overMax = false
+                                    }
+                              }
+                          }
+                      }
+                    }
+                 }
+            }else{                                                                   //选中的券是针对某商品的券
+                console.log('商品券')
+                for(var i in cart_coupon_items){ 
+                    if(cart_coupon_items[i].crmGoodsNo==goodsId){                    //领用券对应商品
+                        console.log('对应品类：'+cart_coupon_items[i].categoryNo)     //领用券对应商品的品类
+                        var categoryNo = cart_coupon_items[i].categoryNo;
+                        var choosedNum =  pinleiMap.get(categoryNo+'choosedNum');
+                        var maxNum = pinleiMap.get(categoryNo+'maxNum');
+                        if(items[parama].data[paramb].active){
+                            choosedNum--;
+                        }else{
+                            choosedNum++;
+                        }
+                        items[parama].data[paramb].active = !items[parama].data[paramb].active;
+                        pinleiMap.set(categoryNo+'choosedNum',choosedNum);
+                        console.log(categoryNo+'总共已选'+choosedNum)
+                        console.log(categoryNo+'总共可选'+maxNum)
+
+                        if(choosedNum>=maxNum){
+                          for(var i in items[1].data){
+                              if(!items[1].data[i].active){
+                                  if(items[1].data[i].goodsId == goodsId || items[1].data[i].goodsId == categoryNo){
+                                       items[1].data[i].disabled = true
+                                       items[1].data[i].overMax = true
+                                  }
+                              }
+                          }
+                        }
+                        else{
+                            if(unshareCouponNum==0 && shareCouponNum>0){
+                              console.log('没有不共享券且共享商品券大于0')
+                              for(var i in items[1].data){
+                                  if(items[1].data[i].disabled && items[1].data[i].type.isShare){
+                                      // 取消其他券不可选状态
+                                      if(items[1].data[i].goodsId == goodsId || items[1].data[i].goodsId == categoryNo){
                                           var _useNumber = items[1].data[i].type.useNumber
                                           var _couponTypeId = items[1].data[i].couponTypeId
                                           var num = 0
@@ -375,124 +438,23 @@ Page({
                                           }
                                           console.log(_couponTypeId+'已用'+num,'可用'+_useNumber)
                                           console.log(items[1].data[i])
-                                          if(_useNumber > num){
-                                             items[1].data[i].disabled = false
-                                             items[1].data[i].overMax = false
-                                             items[1].data[i].overMax = true
+                                          if(_useNumber > num) {
+                                              items[1].data[i].disabled = false
+                                              items[1].data[i].overMax = false
                                           }
-                                     }  
-                               }
-                          }
-                          if(items[1].data[i].goodsId == goodsId){
-                                var _useNumber = items[1].data[i].type.useNumber
-                                var _couponTypeId = items[1].data[i].couponTypeId
-                                var num = 0
-                                for(var ii in items[1].data){
-                                    if(items[1].data[ii].couponTypeId == _couponTypeId && items[1].data[ii].active){
-                                       num++;
-                                    }
-                                }
-                                console.log(_couponTypeId+'已用'+num,'可用'+_useNumber)
-                                console.log(items[1].data[i])
-                                if(_useNumber > num){
-                                      items[1].data[i].disabled = false
-                                      items[1].data[i].overMax = false
-                                }
-                          }
-                      }
-                  }
-                }
-             }
-        }else{                                                                   //选中的券是针对某商品的券
-            console.log('商品券')
-            console.log('对应商品'+goodsId)
-            var _choosedNum =  linyongMap.get(goodsId+'choosedNum');
-            var _maxNum = linyongMap.get(goodsId+'maxNum');
-            if(items[parama].data[paramb].active){
-                _choosedNum--;
-            }else{
-                _choosedNum++;
-            }
-            linyongMap.set(goodsId+'choosedNum',_choosedNum);
-            console.log(goodsId+'总共已选'+_choosedNum)
-            console.log(goodsId+'总共可选'+_maxNum)
-
-            for(var i in cart_items){ 
-                if(cart_items[i].crmGoodsNo==goodsId){                    //领用券对应商品
-                    console.log('对应品类：'+cart_items[i].categoryNo)     //领用券对应商品的品类
-                    var categoryNo = cart_items[i].categoryNo;
-                    var choosedNum =  pinleiMap.get(categoryNo+'choosedNum');
-                    var maxNum = pinleiMap.get(categoryNo+'maxNum');
-                    if(items[parama].data[paramb].active){
-                        choosedNum--;
-                    }else{
-                        choosedNum++;
-                    }
-                    pinleiMap.set(categoryNo+'choosedNum',choosedNum);
-                    console.log(categoryNo+'总共已选'+choosedNum)
-                    console.log(categoryNo+'总共可选'+maxNum)
-                }              
-            }
-
-            items[parama].data[paramb].active = !items[parama].data[paramb].active;
-            
-            //商品数量对领用券券数量限制
-            if(_choosedNum>=_maxNum){
-              for(var i in items[1].data){
-                  if(!items[1].data[i].active){
-                      if(items[1].data[i].goodsId == goodsId){
-                           items[1].data[i].disabled = true
-                           items[1].data[i].overMax = true
-                      }
-                  }
-              }
-            }else{
-              for(var i in items[1].data){
-                  if(items[1].data[i].disabled && items[1].data[i].goodsId == goodsId){
-                           items[1].data[i].disabled = false
-                           items[1].data[i].overMax = false
-                  }
-              }
-            }
-            //商品数量对品类券数量的限制
-            if(choosedNum>=maxNum){
-              for(var i in items[1].data){
-                  if(!items[1].data[i].active){
-                      if(items[1].data[i].goodsId == goodsId || items[1].data[i].goodsId == categoryNo){
-                           items[1].data[i].disabled = true
-                           items[1].data[i].overMax = true
-                      }
-                  }
-              }
-            }
-            else{
-                if(unshareCouponNum==0 && shareCouponNum>0){
-                  console.log('没有不共享券且共享商品券大于0')
-                  for(var i in items[1].data){
-                      if(items[1].data[i].disabled && items[1].data[i].type.isShare){
-                          // 取消其他券不可选状态
-                          if(items[1].data[i].goodsId == categoryNo){
-                              var _useNumber = items[1].data[i].type.useNumber
-                              var _couponTypeId = items[1].data[i].couponTypeId
-                              var num = 0
-                              for(var ii in items[1].data){
-                                  if(items[1].data[ii].couponTypeId == _couponTypeId && items[1].data[ii].active){
-                                     num++;
+                                      }
                                   }
                               }
-                              console.log(_couponTypeId+'已用'+num,'可用'+_useNumber)
-                              console.log(items[1].data[i])
-                              if(_useNumber > num) {
-                                  items[1].data[i].disabled = false
-                                  items[1].data[i].overMax = false
-                              }
-                          }
-                      }
-                  }
+                            }
+                        }
+                    }              
                 }
             }
 
+        }else{
+            items[parama].data[paramb].active = !items[parama].data[paramb].active;
         }
+        
     }
 
     // 券本身数量限制
@@ -537,29 +499,18 @@ Page({
            items[i].data[j].fulled = false;
         }
     }
-    pinleiCoupon = [];
     shareCouponNum = 0;
     unshareCouponNum = 0;
     pinleiMap.clear();
-    linyongMap.clear();
-    for(var i in cart_items){
-          var categoryNo = cart_items[i].categoryNo
-          var crmGoodsNo =  cart_items[i].crmGoodsNo
+    for(var i in cart_coupon_items){
+          var categoryNo = cart_coupon_items[i].categoryNo
           if(pinleiMap.has(categoryNo+'maxNum')){
              var maxNum = pinleiMap.get(categoryNo+'maxNum')
              pinleiMap.set(categoryNo+'maxNum',maxNum+cart_items[i].count);
           }else{
              pinleiMap.set(categoryNo+'maxNum',cart_items[i].count);
              pinleiMap.set(categoryNo+'choosedNum',0);  
-          }
-
-          if(linyongMap.has(crmGoodsNo+'maxNum')){
-             var maxNum = linyongMap.get(crmGoodsNo+'maxNum')
-             linyongMap.set(crmGoodsNo+'maxNum',maxNum+cart_items[i].count);
-          }else{
-             linyongMap.set(crmGoodsNo+'maxNum',cart_items[i].count);
-             linyongMap.set(crmGoodsNo+'choosedNum',0);  
-          }
+          }        
     }
     this.setData({
       items:items,

@@ -490,13 +490,13 @@ Page({
                     if(couponGoods.count > 0  ){
                         if(isShare){           //当前可以共享
                             if(couponGoods.isShareCoupon==0 && couponGoods.ticketName != ticketName){
-                                this.showDialog("您已经选择了不可共享的券！");
+                                wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享！", showCancel: false});
                                 this.setData({addLock1:false});
                                 return;
                             }
                         }else{                //当前不可以共享
                            if(couponGoods.ticketName != ticketName){
-                               this.showDialog("该券不可与其他券共享！");
+                               wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享！", showCancel: false});
                                this.setData({addLock1:false});
                                return;
                            }
@@ -508,14 +508,16 @@ Page({
          }
          //拥有数量超出最大使用张数
          if(_count>=couponUseNumber){
-                this.showDialog("您最多可以使用"+couponUseNumber+"张 "+ panel_data.name +"！");
+                // this.showDialog("您最多可使用"+couponUseNumber+"张 "+ panel_data.name +"！");
+                wx.showModal({content:"亲，您最多可使用"+ticketNum+"张该商品尊享券！", showCancel: false});
                 this.setData({addLock1:false});
                 return;
          }      
          //拥有数量不足
          if(_count>=ticketNum){
-           // wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
-              this.showDialog("您只有"+ticketNum+"张 "+ panel_data.name +"！");
+              //wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
+              //this.showDialog("您只有"+ticketNum+"张 "+ panel_data.name +"！");
+              wx.showModal({content:"亲，您只有"+ticketNum+"张该商品尊享券！", showCancel: false});
               this.setData({addLock1:false});
               return;
          }
@@ -617,8 +619,7 @@ Page({
         confirmDisabled:confirmDisabled
       });
   },
-  confirmTap:function(){                           //确定，触发底层数据items的改变
-     
+  confirmTap:function(){                           //确定，触发底层数据items的改变  
      if(this.data.confirmDisabled) return;
      var panel_data = this.data.panel_data,        //当所点前菜品数据
          panel_i = this.data.panel_i,
@@ -788,12 +789,51 @@ Page({
          wx.setStorageSync('work_num_choosed',work_num_choosed)  
       }
       //会员商品券
-      var ticketNum = panel_data.ticketNum;
-      if(ticketNum){
+      console.log(panel_data)
+      var ticketNum = panel_data.ticketNum;   
+      if(ticketNum){                                       //所点商品是会员尊享商品券对应商品
+         var isShare = panel_data.isShareCoupon,           //当前券是否可以共享
+             ticketName = panel_data.ticketName,           //唯一id
+             couponUseNumber = panel_data.couponUseNumber  //最大使用张数
+
+         //过滤出已点的会员尊享商品
+         console.log(_items)
+         for(var i in _items){
+            if(_items[i].categoryId==0){
+                for(var j in _items[i].mainGoodsList){
+                    var  couponGoods = _items[i].mainGoodsList[j]
+                    if(couponGoods.count > 0  ){
+                        if(isShare){           //当前可以共享
+                            if(couponGoods.isShareCoupon==0 && couponGoods.ticketName != ticketName){
+                                wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享！", showCancel: false});
+                                this.setData({addLock1:false});
+                                return;
+                            }
+                        }else{                //当前不可以共享
+                           if(couponGoods.ticketName != ticketName){
+                               wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享！", showCancel: false});
+                               this.setData({addLock1:false});
+                               return;
+                           }
+                        }
+                    }
+                }
+            }
+
+         }
+         //拥有数量超出最大使用张数
+         if(_count>=couponUseNumber){
+                // this.showDialog("您最多可使用"+couponUseNumber+"张 "+ panel_data.name +"！");
+                wx.showModal({content:"亲，您最多可使用"+ticketNum+"张该商品尊享券！", showCancel: false});
+                this.setData({addLock1:false});
+                return;
+         }      
+         //拥有数量不足
          if(_count>=ticketNum){
-              this.showDialog("您只有"+ticketNum+"张会员商品尊享券！");
               //wx.showModal({content:"您只有"+ticketNum+"张会员商品尊享券！", showCancel: false});
-              this.setData({addLock2:false});
+              //this.showDialog("您只有"+ticketNum+"张 "+ panel_data.name +"！");
+              wx.showModal({content:"亲，您只有"+ticketNum+"张该商品尊享券！", showCancel: false});
+              this.setData({addLock1:false});
               return;
          }
       }
