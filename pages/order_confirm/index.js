@@ -15,7 +15,6 @@ Page({
       card_num:0,       //一共多少张
       goodsId:'',       //单品数据
       taoCanNum:'',     //套餐数据
-      couponsData:[],
       totalFee:0,                 
       userFee:0,
       userFeeVal:'0.00',
@@ -155,6 +154,11 @@ Page({
                     })
                   }
 
+                  if(dkCoupons){        //已经选券不重新获取数量
+                      _this.setData({ loaderhide:true,card_num:1 });
+                      return;
+                  }
+
                   //优惠券数量   优惠券信息
                   var param = {
                     mini:'mini',
@@ -183,7 +187,6 @@ Page({
                                   var card_num = a+b+c;
                                   console.log('coupon数量'+card_num)
                                   _this.setData({
-                                     couponsData:res.data,
                                      card_num:card_num
                                   })
                               
@@ -456,7 +459,6 @@ Page({
     var cart_items = JSON.stringify(this.data.cart_items),
         card_num = this.data.card_num,
         taoCanNum = this.data.taoCanNum,
-        couponsData = JSON.stringify(this.data.couponsData),
         goodsId = this.data.goodsId,
         totalFee = this.data.totalFee - this.data.packTotalFee   //餐盒不参与优惠券满减
     
@@ -469,7 +471,7 @@ Page({
         return;
     }
     wx.navigateTo({
-        url: '../card_list/index?cart_items='+cart_items+'&couponsData='+couponsData+'&taoCanNum='+taoCanNum+'&goodsId='+goodsId+'&totalFee='+totalFee
+        url: '../card_list/index?cart_items='+cart_items+'&taoCanNum='+taoCanNum+'&goodsId='+goodsId+'&totalFee='+totalFee
     })
   },
   
@@ -548,29 +550,40 @@ Page({
 
 
     var phone = this.data.phone;
-      if(phone==''){
-        this.showDialog3("请输入手机号");
-        // wx.showModal({
-        //       content:"请输入手机号",
-        //       showCancel: false
-        // });
-        return;
-      }
-      if(!this.is_phone(phone)){
-        this.showDialog3("请输入正确的手机号");
-        // wx.showModal({
-        //       content:"请输入正确的手机号",
-        //       showCancel: false
-        // });
-        return;
-      }
-      this.setData({
-         phone:phone,
-         phoneSlide:false
-      })
+    if(phone==''){
+      this.showDialog3("请输入手机号");
+      // wx.showModal({
+      //       content:"请输入手机号",
+      //       showCancel: false
+      // });
+      return;
+    }
+    if(!this.is_phone(phone)){
+      this.showDialog3("请输入正确的手机号");
+      // wx.showModal({
+      //       content:"请输入正确的手机号",
+      //       showCancel: false
+      // });
+      return;
+    }
+    this.setData({
+       phone:phone,
+       phoneSlide:false
+    })
+
+    if(app.globalData.deskNo==999){
+       this.setData({
+          dinnerType:2,
+          subscribe:1   
+       })
+       if(subscribeTime == ''){
+          this.showDialog("请选择预订时间");
+          return;
+       }
+    }
+
 
     var _this = this,
-
     param= {
         mini:'mini',
         shopId:app.globalData.shopId,
@@ -608,8 +621,7 @@ Page({
     console.log(this.data.userId);
     if(this.data.userId == undefined ){
          delete param.userId;
-    }
-    
+    }   
     
     
     wx.setStorageSync('clearCart',true);

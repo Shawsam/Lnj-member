@@ -1122,7 +1122,7 @@ Page({
 
 
      for(var i in cart_items){
-        if(cart_items[i].sideDcGoodsCategoryList){                      //套餐       
+        if(cart_items[i].sideDcGoodsCategoryList){                         //套餐       
            cart_items[i].count = 1;                               
            if(cart_items[i].isWork==0 && cart_items[i].type==3){        //套餐且非情亲套餐    
                 taoCanNum++;
@@ -1193,7 +1193,8 @@ Page({
              m++;
          }
         
-         if(cart_items[i].isWork==0 && cart_items[i].type == 1){                 //单品
+         // if(cart_items[i].isWork==0 && cart_items[i].type == 1){               //单品
+        if(cart_items[i].isWork==0){                                              //单品 套餐
            feiTaoCan[j]=cart_items[i].crmGoodsNo+"#"+cart_items[i].count;
            j++;
          } 

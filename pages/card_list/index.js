@@ -212,7 +212,7 @@ Page({
   },
   //选择
   chooseTap:function(e,a,b){          
-    //item[0]  套餐  item[1]  非套餐（领用+品类） item[2] otherList                       
+    //item[0]  套餐  item[1]  非套餐（领用+品类） item[2] otherList  抵用券                     
     var items = this.data.items,
         taoCanNum = this.data.taoCanNum,
         parama = e?e.currentTarget.dataset.parama:a,
