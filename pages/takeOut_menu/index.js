@@ -51,15 +51,7 @@ Page({
         shopName:app.globalData.shopName   
       })
     })
-  
-    // 购物车历史数据 
-    // console.log(app.globalData.fromType);
-    // var history = wx.getStorageSync('items');
-    // if(history){
-    //    _this.computed(history);
-    //    return;
-    // }
-    
+
     if(moreshopId){
       console.log(moreshopName);
       app.globalData.shopId = moreshopId;
@@ -563,7 +555,8 @@ Page({
           this.computed(_items);
       }
   },
-
+  
+  //去结算
   orderConfirmTap:function(e){
     var param = e.currentTarget.dataset.param;
     if(param == 'false') return;
@@ -575,8 +568,8 @@ Page({
     _this.setData({jumpLock:true});
 
     var cart_items = [],
+        goodsId = '',
         items = this.data.items;
-     
 
      for(var i in items){
         for(var j in items[i].goodsList){
@@ -592,12 +585,15 @@ Page({
         }
     }
     
-    var detail_items = [];
+    var feiTaoCan = [],
+       detail_items = [],
+       j = 0;
     for(var i in cart_items){
       //套餐
       if(cart_items[i].issetfood == 1){
           var singe_items = {};
           singe_items.itemid = cart_items[i].did;
+          singe_items.dishsno = cart_items[i].dishsno;          
           singe_items.itemname = cart_items[i].name;
           singe_items.bsetmeal = cart_items[i].issetfood;
           singe_items.itemcount = 1;
@@ -624,6 +620,7 @@ Page({
       }else{
           var singe_items = {};
           singe_items.itemid = cart_items[i].did;
+          singe_items.dishsno = cart_items[i].dishsno;    
           singe_items.itemname = cart_items[i].name;
           singe_items.bsetmeal = cart_items[i].issetfood;
           singe_items.itemcount = cart_items[i].count;
@@ -632,18 +629,23 @@ Page({
           singe_items.box_price = cart_items[i].box_price;
           detail_items.push(singe_items);
       }
+
+      feiTaoCan[j]=cart_items[i].dishsno+"#"+cart_items[i].count;
+      j++;
+
     }
 
+    
 
-    wx.removeStorage({key:'paytype'});
-    wx.removeStorage({key:'choosed_coupon'});
-
-    //cart_items = JSON.stringify(cart_items);
+    goodsId = feiTaoCan.join('-');
     cart_items = JSON.stringify(cart_items);
     cart_items = cart_items.replace(/\?/g,'');
     detail_items = JSON.stringify(detail_items);
+
+    wx.removeStorage({key:'paytype'});
+    wx.removeStorage({key:'choosed_coupon'});
     wx.navigateTo({
-      url:'../takeOut_order_confirm/index?cart_items='+cart_items+'&detail_items='+detail_items,
+      url:'../takeOut_order_confirm/index?cart_items='+cart_items+'&detail_items='+detail_items+'&goodsId='+goodsId,
       success:function(){
             setTimeout(function(){
                _this.setData({jumpLock:false});

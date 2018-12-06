@@ -41,10 +41,22 @@ Page({
     //请求订单计算接口
     var param = {
         mini:'mini',
+        userId:app.globalData.userId,
+        openId:app.globalData.openId,
         storeid:app.globalData.shopId,
+        type:this.data.type,
         coupons:JSON.stringify(this.data.coupons),
         goodsDetail:JSON.stringify(this.data.detail_items),
     }
+      if(!app.globalData.userId){
+         delete param.userId
+      }
+
+      if(this.data.type){
+         delete param.type
+      }
+
+
     _this.setData({ loaderhide:false });
     wx.request({
         url: app.globalData.host+'/waimai/goods/jsOrderPrice', 
@@ -56,8 +68,14 @@ Page({
             console.log(res);
             if (res.data.errcode == 0) {
                 var resdata = res.data;
+                var dkCoupons = resdata.dkCoupons;
+                if(dkCoupons){
+                      dkCoupons = JSON.parse(dkCoupons)
+                }
+
                 _this.setData({
-                  totalFee:resdata.totalFee,                 
+                  totalFee:resdata.totalFee, 
+                  packTotalFee:resdata.totalBoxFee,
                   userFee:resdata.userFee,
                   couponFee:resdata.couponFee.toFixed(2),
                   discountFee:resdata.discountFee,
@@ -72,7 +90,65 @@ Page({
                   discountFeeVal:(resdata.discountFee).toFixed(2),
                   totalBoxFeeVal:(resdata.totalBoxFee).toFixed(2)
                 })
-   
+                
+
+                var coupons = _this.data.coupons;
+                if(coupons.length){
+                  wx.setStorage({
+                     key:"choosed_coupon",
+                     data:JSON.stringify(coupons)
+                  })
+                }else{
+                  wx.setStorage({
+                     key:"choosed_coupon",
+                     data:JSON.stringify(dkCoupons)
+                  })
+                }
+                if(resdata.couponFee){
+                    _this.setData({ loaderhide:true,card_num:1 });
+                    return;
+                }
+                //优惠券数量   优惠券信息
+                var param = {
+                    mini:'mini',
+                    openId:app.globalData.openId,
+                    taoCanNum:0,
+                    goodsId:_this.data.goodsId,
+                    totalFee:(_this.data.totalFee - _this.data.packTotalFee)*100   //餐盒不参与优惠券满减
+                  }
+
+                  wx.request({
+                      url: app.globalData.host+'/coupon/couponList', 
+                      data:param, 
+                      success: function (res) {
+                          //服务器返回的结果
+                          // console.log(res);
+                          _this.setData({ loaderhide:true });
+                          if (res.data.errcode == 0) {
+                              var feiTaoCanList = res.data.feiTaoCanList,
+                                  taoCanList = res.data.taoCanList,
+                                  otherList = res.data.otherList,
+                                  a = feiTaoCanList?feiTaoCanList.length:0,
+                                  b = taoCanList?taoCanList.length:0,
+                                  c = otherList?otherList.length:0;
+                                  
+                                  _this.setData({
+                                     card_num:a+b+c
+                                  })
+                              
+                          } else {
+                             wx.showModal({
+                                  content:res.data.msg,
+                                  showCancel: false
+                             });
+                          }
+
+                      },
+                      fail: function () {
+                          console.log('系统错误')
+                      }
+                  })
+
             } else {
                 wx.showModal({
                     content:res.data.msg,
@@ -84,49 +160,6 @@ Page({
             console.log('系统错误')
         }
     })
-
-
-
-    //优惠券数量   优惠券信息
-    var param = {
-        mini:'mini',
-        openId:app.globalData.openId,
-        taoCanNum:0,
-        goodsId:''
-      }
-
-      wx.request({
-          url: app.globalData.host+'/coupon/couponList', 
-          data:param, 
-          success: function (res) {
-              //服务器返回的结果
-              // console.log(res);
-              _this.setData({ loaderhide:true });
-              if (res.data.errcode == 0) {
-                  var feiTaoCanList = res.data.feiTaoCanList,
-                      taoCanList = res.data.taoCanList,
-                      otherList = res.data.otherList,
-                      a = feiTaoCanList?feiTaoCanList.length:0,
-                      b = taoCanList?taoCanList.length:0,
-                      c = otherList?otherList.length:0;
-                      
-                      _this.setData({
-                         couponsData:res.data,
-                         card_num:a+b+c
-                      })
-                  
-              } else {
-                 wx.showModal({
-                      content:res.data.msg,
-                      showCancel: false
-                 });
-              }
-
-          },
-          fail: function () {
-              console.log('系统错误')
-          }
-      })
 
   },
 
@@ -142,8 +175,9 @@ Page({
     })
 
     //点餐页面传递的参数
-    // console.log(option);
-    var cart_items = option.cart_items,
+    console.log(option);
+    var goodsId = option.goodsId,
+        cart_items = option.cart_items,
         detail_items = option.detail_items;
     //读取缓存地址
     var chooseAddr = wx.getStorageSync('chooseAddr');
@@ -163,12 +197,10 @@ Page({
        phoneInput:app.globalData.mobile,
        cart_items:JSON.parse(cart_items),
        detail_items:JSON.parse(detail_items),
-       chooseAddr:JSON.parse(chooseAddr)
+       chooseAddr:JSON.parse(chooseAddr),
+       goodsId:goodsId
     })
-    console.log(this.data.detail_items);
     this.Init()
-    
-
   },
 
   onShow: function(){
@@ -188,7 +220,7 @@ Page({
       success: function(res) {
          console.log(res.data);
          _this.setData({
-            coupons:JSON.parse(res.data),
+            coupons:res.data?JSON.parse(res.data):[],
             type:0
          });
          
@@ -198,7 +230,7 @@ Page({
 
   },
 
-   bindPickerChange: function(e) {
+  bindPickerChange: function(e) {
     this.setData({
       indexNum: e.detail.value
     })
@@ -219,25 +251,25 @@ Page({
         url: '../account/index?type='+this.data.paytype
      })
   },
-  
   //跳转到 优惠券选择
   openCouponList:function(){
-    var card_num = this.data.card_num,
-        taoCanNum = this.data.taoCanNum,
-        couponsData = JSON.stringify(this.data.couponsData);
+    var cart_items = JSON.stringify(this.data.cart_items),
+        card_num = this.data.card_num,
+        goodsId = this.data.goodsId,
+        totalFee = this.data.totalFee - this.data.packTotalFee   //餐盒不参与优惠券满减
     
+    if(this.data.dkisUnshare){
+        // wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享!", showCancel: false});
+        return;
+    }
     if(card_num == 0){
-       wx.showModal({
-            content:'暂无可用优惠券',
-            showCancel: false
-       });
+        wx.showModal({content:"暂无可用优惠券!", showCancel: false});
         return;
     }
     wx.navigateTo({
-        url: '../takeOut_order_coupon/index?couponsData='+couponsData+'&taoCanNum='+taoCanNum
+        url: '../takeOut_order_coupon/index?cart_items='+cart_items+'&goodsId='+goodsId+'&totalFee='+totalFee
     })
   },
-  
   // demandInput:function(e){
   //     this.setData({
   //        caution: e.detail.value

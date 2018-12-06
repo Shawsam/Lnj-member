@@ -42,11 +42,11 @@
 	        <view class="num"></view>
 	        <view class="price">￥{{deliveryFeeVal}}</view>
 	    </view>
-<!-- 	    <view class="item coupon" wx:if="{{discountFee>0}}">
-	        <view class="name">满30减15活动</view>
+	    <view class="item coupon" wx:if="{{discountFee>0}}">
+	        <view class="name">券优惠</view>
 	        <view class="num"></view>
 	        <view class="price">-￥{{discountFeeVal}}</view>
-	    </view> -->
+	    </view>
     </view>
 
 <!--

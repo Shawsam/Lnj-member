@@ -11,75 +11,133 @@
 
 
 <view class="container">
+<loading hidden="{{loaderhide}}">加载中...</loading> 
 <view class="main">
      <view class="head"></view>
      <view class="top"><image src="../../image/i_choose.png" />选择券</view>
      <view class="center shadows" bindtap="emptyAllTap">
          不使用优惠券
-         <image class="choose" src="../../image/cho_ticket.png"/>
+         <image wx:if="{{!(item.disabled || item.disabledTag)}}" class="choose" src="../../image/cho_ticket.png"/>
          <image wx:if="{{emptyall}}" class="choosed" src="../../image/choose_ticket.png"/>
      </view> 
      <view class="list">
-        <view class="ticket_list" wx:if="{{items[0].data.length>0}}">
-            <view class="title" data-param="0" bindtap="slideTap">套餐券
-                <view class="flo_right">{{items[0].data.length}}张
-                    <image class="{{items[0].slide?'rote':''}}" src="../../image/arro_black.png" />
+        <view bindtap="slideCoupon" class="cate">以下优惠券可用<image class="flo_right {{ableCouponSlide?'rote':''}}" src="../../image/arro_black.png" /></view>
+        <view class="ableCoupon {{ableCouponSlide?'slide':''}}">
+            <view class="ticket_list" wx:if="{{items[1].data.length>0}}">
+                <view class="title" data-param="1" bindtap="slideTap">领用券
+                    <view class="flo_right">{{items[1].data.length}}张
+                        <image class="{{items[1].slide?'rote':''}}" src="../../image/arro_black.png" />
+                    </view>
+                </view>
+                <view class="ticket {{items[1].slide?'slide':''}}"  data-paramA="1" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[1].data}}" wx:key="{{item.couponId}}">
+                    <view class="content shadows">
+                        <view class="ticket_type">
+                            <view class="val">领用</view>
+                            <view class="name">{{item.type.categoryDesc}}</view></view>
+                        <view class="ticket_time">
+                            <view class="typeName">{{item.type.typeName}}</view>
+                            <view>{{item.validDateRegion}}</view>
+                        </view>
+                        <image wx:if="{{!(item.disabled || item.disabledTag)}}" class="choose" src="../../image/cho_ticket.png"/>
+                        <image wx:if="{{item.active}}" class="choosed" src="../../image/choose_ticket.png"/>
+                    </view>
+                    <view class="reason shadows" wx:if="{{item.disabled || item.disabledTag}}">
+                        <view class="tit"><icon type="warn" color="#f00" size="13" />不可选原因</view>
+                        <view wx:if="{{item.unshared || item.unsharedwith}}">您已经选中的优惠券不与其他优惠券同享</view>
+                        <view wx:if="{{item.fulled}}">您已经选中的优惠券限制可用张数</view>
+                        <view wx:if="{{item.overMax}}">您已经选中的优惠券超出订单内商品可用券数量</view>
+                    </view>
+                    <i class="dot_top"></i>
+                    <i class="dot_bot"></i>
                 </view>
             </view>
-            <view class="shadows ticket {{items[0].slide?'slide':''}}"  data-paramA="0" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[0].data}}" wx:key="{{item.couponId}}">
-                <view class="ticket_type">
-                    <view class="val">套餐</view>
-                    <view class="name">{{item.type.categoryDesc}}</view></view>
-                <view class="ticket_time">
-                    <view>{{item.type.typeName}}</view>
-                    <view>{{item.validDateRegion}}</view>
+            <view class="ticket_list" wx:if="{{items[2].data.length>0}}">
+                <view class="title" data-param="2" bindtap="slideTap">抵扣券
+                    <view class="flo_right">{{items[2].data.length}}张
+                        <image class="{{items[2].slide?'rote':''}}" src="../../image/arro_black.png" />
+                    </view>
                 </view>
-                <i class="dot_top"></i>
-                <i class="dot_bot"></i>
-                <image class="choose" src="../../image/cho_ticket.png"/>
-                <image wx:if="{{item.active}}" class="choosed" src="../../image/choose_ticket.png"/>
+                <view class="ticket {{items[2].slide?'slide':''}}" data-paramA="2" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[2].data}}" wx:key="{{item.couponId}}">
+                    <view class="content shadows">
+                        <view class="ticket_type">
+                            <view class="val">{{item.type.category==0||item.type.category==5?'现金':'尊享'}}</view>
+                            <view class="name">{{item.type.categoryDesc}}</view></view>
+                        <view class="ticket_time {{item.type.category==5?'manjian':''}}">
+                            <view class="typeName">{{item.type.typeName}}</view>
+                            <view class="validtime">{{item.validDateRegion}}</view>
+                            <view class="txt" wx-if="{{item.type.category==5}}">满{{item.type.fullSubtractAmount}}元可用</view>
+                        </view>
+                        <image wx:if="{{!(item.disabled || item.disabledTag)}}" class="choose" src="../../image/cho_ticket.png"/>
+                        <image wx:if="{{item.active}}" class="choosed" src="../../image/choose_ticket.png"/>
+                    </view>
+                    <view class="reason shadows" wx:if="{{item.disabled || item.disabledTag}}">
+                        <view class="tit"><icon type="warn" color="#f00" size="13" />不可选原因</view>
+                        <view wx:if="{{item.unshared || item.unsharedwith}}">您已经选中的优惠券不与其他优惠券同享</view>
+                        <view wx:if="{{item.fulled}}">您已经选中的优惠券限制可用张数</view>
+                        <view wx:if="{{item.overMax}}">您已经选中的优惠券超出订单内商品可用券数量</view>
+                    </view>
+                    <i class="dot_top"></i>
+                    <i class="dot_bot"></i>
+                </view>
             </view>
         </view>
+    </view>
 
-        <view class="ticket_list" wx:if="{{items[1].data.length>0}}">
-            <view class="title" data-param="1" bindtap="slideTap">领用券
-                <view class="flo_right">{{items[1].data.length}}张
-                    <image class="{{items[1].slide?'rote':''}}" src="../../image/arro_black.png" />
+    <view class="list">
+        <view bindtap="slideDisabledCoupon" class="cate cateDisabled">以下优惠券不可用<image class="flo_right {{disableCouponSlide?'rote':''}}" src="../../image/arro_black.png" /></view>
+        <view class="disableCoupon {{disableCouponSlide?'slide':''}}">
+            <view class="ticket_list" wx:if="{{unitems[0].data.length>0}}">
+                <view class="title" data-param="0" bindtap="unslideTap">领用券
+                    <view class="flo_right">{{unitems[0].data.length}}张
+                        <image class="{{unitems[0].slide?'rote':''}}" src="../../image/arro_black.png" />
+                    </view>
+                </view>
+                <view class="ticket {{unitems[0].slide?'slide':''}}"  data-paramA="1" data-paramB="{{index}}"  wx:for="{{unitems[0].data}}" wx:key="{{item.couponId}}">
+                    <view class="content shadows">
+                        <view class="disablePanel"></view>
+                        <view class="ticket_type">
+                            <view class="val">领用</view>
+                            <view class="name">{{item.type.categoryDesc}}</view></view>
+                        <view class="ticket_time">
+                            <view class="typeName">{{item.type.typeName}}</view>
+                            <view>{{item.validDateRegion}}</view>
+                        </view>
+                    </view>
+                    <view class="reason shadows">
+                        <view class="disablePanel"></view>
+                        <view class="tit"><icon type="warn" color="#f00" size="13" />不可用原因</view>
+                        <view>{{item.unableDesc}}</view>
+                    </view>
+                    <i class="dot_top"></i>
+                    <i class="dot_bot"></i>
                 </view>
             </view>
-            <view class="shadows ticket {{items[1].slide?'slide':''}}"  data-paramA="1" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[1].data}}" wx:key="{{item.couponId}}">
-                <view class="ticket_type">
-                    <view class="val">领用</view>
-                    <view class="name">{{item.type.categoryDesc}}</view></view>
-                <view class="ticket_time">
-                    <view>{{item.type.typeName}}</view>
-                    <view>{{item.validDateRegion}}</view>
+            <view class="ticket_list" wx:if="{{unitems[1].data.length>0}}">
+                <view class="title" data-param="1" bindtap="unslideTap">抵扣券
+                    <view class="flo_right">{{unitems[1].data.length}}张
+                        <image class="{{unitems[1].slide?'rote':''}}" src="../../image/arro_black.png" />
+                    </view>
                 </view>
-                <i class="dot_top"></i>
-                <i class="dot_bot"></i>
-                <image class="choose" src="../../image/cho_ticket.png"/>
-                <image wx:if="{{item.active}}" class="choosed" src="../../image/choose_ticket.png"/>
-            </view>
-        </view>
-
-        <view class="ticket_list" wx:if="{{items[2].data.length>0}}">
-            <view class="title" data-param="2" bindtap="slideTap">抵扣券
-                <view class="flo_right">{{items[2].data.length}}张
-                    <image class="{{items[2].slide?'rote':''}}" src="../../image/arro_black.png" />
+                <view class="ticket {{unitems[1].slide?'slide':''}}" data-paramA="2" data-paramB="{{index}}" wx:for="{{unitems[1].data}}" wx:key="{{item.couponId}}">
+                    <view class="content shadows">
+                        <view class="disablePanel"></view>
+                        <view class="ticket_type">
+                            <view class="val">{{item.type.category==0||item.type.category==5?'现金':'尊享'}}</view>
+                            <view class="name">{{item.type.categoryDesc}}</view></view>
+                        <view class="ticket_time {{item.type.category==5?'manjian':''}}">
+                            <view class="typeName">{{item.type.typeName}}</view>
+                            <view class="validtime">{{item.validDateRegion}}</view>
+                            <view class="txt" wx-if="{{item.type.category==5}}">满{{item.type.fullSubtractAmount}}元可用</view>
+                        </view>
+                    </view>
+                    <view class="reason shadows">
+                        <view class="disablePanel"></view>
+                        <view class="tit"><icon type="warn" color="#f00" size="13" />不可用原因</view>
+                        <view>{{item.unableDesc}}</view>
+                    </view>
+                    <i class="dot_top"></i>
+                    <i class="dot_bot"></i>
                 </view>
-            </view>
-            <view class="shadows ticket {{items[2].slide?'slide':''}}" data-paramA="2" data-paramB="{{index}}" bindtap="chooseTap" wx:for="{{items[2].data}}" wx:key="{{item.couponId}}">
-                <view class="ticket_type">
-                    <view class="val">{{item.type.category==0?'现金':'尊享'}}</view>
-                    <view class="name">{{item.type.categoryDesc}}</view></view>
-                <view class="ticket_time">
-                    <view>{{item.type.typeName}}</view>
-                    <view>{{item.validDateRegion}}</view>
-                </view>
-                <i class="dot_top"></i>
-                <i class="dot_bot"></i>
-                <image class="choose" src="../../image/cho_ticket.png"/>
-                <image wx:if="{{item.active}}" class="choosed" src="../../image/choose_ticket.png"/>
             </view>
         </view>
     </view>
