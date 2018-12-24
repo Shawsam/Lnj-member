@@ -48,7 +48,7 @@
 </view>
 
 <view class="main">
-    <scroll-view  scroll-y  class="tab_list {{detail_panel||choose_panel?'noscroll':''}}" scroll-into-view ="{{toTabView}}" scroll-with-animation ="true">
+    <scroll-view  scroll-y="{{!detail_panel && !choose_panel}}"  class="tab_list {{detail_panel||choose_panel?'noscroll':''}}" scroll-into-view ="{{toTabView}}" scroll-with-animation ="true">
         <view wx:key="{{item.categoryId}}" wx:for="{{items}}" class="tab {{item.active?'active':''}}" data-param="{{index}}"  bindtap="tabTap" id="tab_{{index}}">
            <image wx:if="{{item.active}}" src="{{item.onPicture}}" />
            <image wx:if="{{!item.active}}" src="{{item.picture}}" />
@@ -59,7 +59,7 @@
     
     <view class="item_list">
          <view class="h-title" wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:if="{{item.active}}">{{item.name}}</view>
-         <scroll-view class="{{detail_panel||choose_panel?'noscroll':''}}" scroll-y bindscroll="productScroll" scroll-into-view ="{{toView}}" scroll-with-animation ="true" >
+         <scroll-view class="{{detail_panel||choose_panel?'noscroll':''}}" scroll-y="{{!detail_panel && !choose_panel}}" bindscroll="productScroll" scroll-into-view ="{{toView}}" scroll-with-animation ="true" >
   
              <view wx:key="{{item.categoryId}}" wx:for="{{items}}" wx:for-index="i">
                   <view class="title" wx:if="{{i!=0}}">{{item.name}}</view>
