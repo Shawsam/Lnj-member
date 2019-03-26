@@ -65,7 +65,7 @@
        <view class="btn infoBtn" bindtap="detailFun">订单详情<view class="arrow-left"></view></view>
   </view>
  
-  <view class="infoCon1 {{order.status==2||order.status==8||order.status==9?'':'waitPay'}}">
+  <view class="infoCon1 {{order.status==2||order.status==3||order.status==8||order.status==9?'':'waitPay'}}">
   <view class="jumpCon" bindtap="jumpWebRegister" wx-if="{{!isMember}}">
       <view class="txt">会员消费更方便，常来常吃优惠多</view>
       <view class="tip">点击注册 >></view>
