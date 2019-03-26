@@ -12,8 +12,8 @@ Page({
   },
 
   onLoad:function(options){
-	  var _this = this;
-	  //获取全局数据，初始化当前页面
+    var _this = this;
+    //获取全局数据，初始化当前页面
     // app.getUserInfo(function(userInfo){
     //    var unionId = app.globalData.unionId;
     //    if(unionId){
@@ -25,18 +25,18 @@ Page({
     //    }
     // })   
 
-	  app.getUserInfo(function(userInfo){
-	     //用户信息
-	     _this.setData({
-	       userInfo:userInfo
-	     })
+    app.getUserInfo(function(userInfo){
+       //用户信息
+       _this.setData({
+         userInfo:userInfo
+       })
        
        if(options){
-
-         var qrcode = decodeURIComponent(options.q);
-         if(qrcode!='undefined'){
+         var url = decodeURIComponent(options.q);
+         if(url=='https://weixin.chinauff.com/lnj-weixin/console/dc/home') return;
+         if(url!='undefined'){
             _this.setData({ loaderhide:false });
-            var a = qrcode.split('a=')[1];
+            var a = url.split('a=')[1];
             
             app.globalData.fromType = 2;
 
@@ -137,11 +137,10 @@ Page({
                   }
               }
             })
-
-             
+  
          }
        }
-	  })
+    })
   },
 
   //解析二维码数据
