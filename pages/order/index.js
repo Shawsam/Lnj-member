@@ -6,6 +6,7 @@ var isInitSelfShow = true;
 var app = getApp()
 Page({
   data: {
+     overHeight:false,
      userInfo:null,
      shopName:'老娘舅',
      items:[],
@@ -30,7 +31,7 @@ Page({
      jumpLock:false,
      confirmDisabled:false,
      itemHeight:145,
-     fillHeight:wx.getSystemInfoSync().windowHeight - 140,
+     fillHeight:wx.getSystemInfoSync().windowHeight - 100,
      currentIndex:0,
      noticeClosed:false
   },
@@ -176,6 +177,7 @@ Page({
                               if(record == 0) singeItem.NotAvailable = true;
                           }
 
+                          singeItem.isNewGoods = singeItem.tagEndTime>=currentTime?true:false
 
                           singeItem.categoryId = menuData[i].categoryId;
                           singeItem.categoryName = menuData[i].name;
@@ -265,29 +267,38 @@ Page({
                     //menuData 是处理完的菜单数据
                     wx.setStorageSync('menuData',menuData)
 
-                    var itemHeight = _this.data.itemHeight,  
-                    heightArray = [0]                  //范围数组
-                    var _scrollHeight = 0
+                    var itemHeight = _this.data.itemHeight 
+                    var heightArray = [185]                  //范围数组
+                    var heightArray2 = [0]
+                    var _scrollHeight = 185
+                    var _scrollHeight2 = 0
                     var titleHeight = 0
                     menuData.map(function(item,i){
-                        i==0?titleHeight = 0:titleHeight=40
+                        i==0?titleHeight=150:titleHeight = 40
                         if(item.mainGoodsList.length==0){
                            _scrollHeight = _scrollHeight + itemHeight + titleHeight
+                           _scrollHeight2 = _scrollHeight2 + itemHeight + titleHeight
                         }else{
                            _scrollHeight = _scrollHeight + item.mainGoodsList.length*itemHeight + titleHeight
+                           _scrollHeight2 = _scrollHeight2 + item.mainGoodsList.length*itemHeight + titleHeight
                         }
                         heightArray.push(_scrollHeight)
+                        heightArray2.push(_scrollHeight2)
                     })
                     console.log(heightArray)
+                    console.log(heightArray2)
 
                     _this.setData({
                        items:menuData,
+                       meal:res.data.meal,
+                       mealIsShow:res.data.mealIsShow,
                        cart_num:0,
                        cart_fee:'0.00',
                        detail_panel:false,
                        choose_panel:false,
                        info_panel:false,
-                       heightArray:heightArray
+                       heightArray:heightArray,
+                       heightArray2:heightArray2
                     })
                 }
               })
@@ -328,7 +339,6 @@ Page({
         index = e.currentTarget.dataset.param;
     console.log(index)
     this.setData({ toView:'v_'+index})
-
   },
 
   //处理数据变化 数据全依赖于items
@@ -509,7 +519,7 @@ Page({
          //拥有数量超出最大使用张数
          if(_count>=couponUseNumber){
                 // this.showDialog("您最多可使用"+couponUseNumber+"张 "+ panel_data.name +"！");
-                wx.showModal({content:"亲，您最多可使用"+ticketNum+"张该商品尊享券！", showCancel: false});
+                wx.showModal({content:"亲，您最多可使用"+couponUseNumber+"张该商品尊享券！", showCancel: false});
                 this.setData({addLock1:false});
                 return;
          }      
@@ -824,7 +834,7 @@ Page({
          //拥有数量超出最大使用张数
          if(_count>=couponUseNumber){
                 // this.showDialog("您最多可使用"+couponUseNumber+"张 "+ panel_data.name +"！");
-                wx.showModal({content:"亲，您最多可使用"+ticketNum+"张该商品尊享券！", showCancel: false});
+                wx.showModal({content:"亲，您最多可使用"+couponUseNumber+"张该商品尊享券！", showCancel: false});
                 this.setData({addLock1:false});
                 return;
          }      
@@ -1270,15 +1280,43 @@ Page({
         showTime:false
       })
   },
-
   productScroll:function(e){
       var _this = this
       var scrollTop = e.detail.scrollTop,
           heightArray = this.data.heightArray,
+          heightArray2 = this.data.heightArray2,
           items = this.data.items
-      
-      for(var i=0; i<=heightArray.length;  i++){
-          if(scrollTop>=heightArray[i] && scrollTop<heightArray[i+1]){
+
+      console.log(scrollTop)
+      console.log(heightArray2)
+
+      if(scrollTop>=140){
+         if(!this.data.overHeight){
+              this.setData({overHeight:true})
+         }
+      }else{
+          if(this.data.overHeight){
+               this.setData({overHeight:false})
+          }
+          // for(var i=0; i<=heightArray.length;  i++){
+          //     if(scrollTop>=heightArray[i] && scrollTop<heightArray[i+1]){
+          //         var currentIndex = this.data.currentIndex
+          //         if(i==currentIndex) return
+          
+          //         items.map(function(item,n){
+          //            if(n==i){
+          //               items[n].active = true
+          //               _this.setData({toTabView:'tab_'+n})
+          //            }else{
+          //               items[n].active = false
+          //            }
+          //         })
+          //         this.setData({items:items,currentIndex:i})
+          //     }
+          // }
+      }
+      for(var i=0; i<=heightArray2.length;  i++){
+          if(scrollTop>=heightArray2[i] && scrollTop<heightArray2[i+1]){
               var currentIndex = this.data.currentIndex
               if(i==currentIndex) return
       
@@ -1295,7 +1333,4 @@ Page({
       }
 
   }
-
-
-
 })
