@@ -299,14 +299,11 @@ Page({
   },
 
   JumpWebShop:function(){
-      wx.showModal({
-          content:'敬请期待！',
-          showCancel:false
+      wx.navigateToMiniProgram({
+          appId: 'wx348628e7b74d7528',
+          path: 'pages/Login/Login',
       })
-      return;
-      wx.navigateTo({url:'/pages/webShop/index'});
   },
-
   JumpToList:function(){
 
       var _this = this
