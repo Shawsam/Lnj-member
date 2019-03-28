@@ -62,7 +62,14 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .cont.slide .hide_cont .arrodow{transform:rotate(-180deg);-ms-transform:rotate(-180deg);-moz-transform:rotate(-180deg);-webkit-transform:rotate(-180deg);-o-transform:rotate(-180deg);position:relative;top:0;}
 .cont .con1.slide .hide_cont{ display:block!important;}
 .cont .con1.slide .hide_cont .arrodow{transform:rotate(-180deg);-ms-transform:rotate(-180deg);-moz-transform:rotate(-180deg);-webkit-transform:rotate(-180deg);-o-transform:rotate(-180deg);position:relative;top:0;}
-
+.tipInfo{ color:#999; }
+.hide_cont .coupon_change{ display:block!important; height:40px;}
+.hide_cont .ensure{display: inline-block; width:110rpx; line-height:60rpx; background:#FDD01B; font-weight:bold; float:right; text-align:center; border-radius:6rpx;  }
+.hide_cont #couponInput{ display: inline-block; width:380rpx; border:1px solid #b5b5b5; line-height:60rpx; height:60rpx; border-radius:6rpx; padding-left:24rpx; vertical-align:top;}
+.couponVal{ color:#e80314; margin-left:15rpx; }
+.couponTitle{ display:inline-block; position:relative; z-index:100; }
+.couponTip{ font-size:20rpx;  display:block!important; color:#F0AF23; line-height:80rpx; border-top: 1px solid hsl(0, 0%, 93%);}
+.wen{ display:inline-block; height:30rpx; width:30rpx; margin-left:10rpx; vertical-align:middle; }
 
 .hide_cont .tips{ border-bottom:1px solid #eeeeee; margin-top:-13px; line-height:45px; margin-bottom:10px;}
 .hide_cont .tel_change{ display:block!important; height:40px;}
@@ -120,3 +127,10 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .wx-switch-input{width:45px!important;height:24px !important;}
 .wx-switch-input::before{width:45px !important; height:24px !important;}
 .wx-switch-input::after{width:22px !important; height:22px !important;}
+
+.panel .coupon_panel{ z-index:200; position:fixed; box-sizing:border-box; top:10%; width:80%; left:10%; background:#fff; border-radius:10rpx; padding-top:90rpx;}
+.panel .coupon_panel .hd-title{  z-index:200; position:absolute; top:0; width:100%; height:90rpx; text-align:center; background:#FDD01B; font:30rpx/100rpx "微软雅黑"; color:#fff; font-weight:bold; border-radius:10rpx 10rpx 0 0; }
+.panel .coupon_panel .confirmBtn{ font:30rpx/85rpx "微软雅黑"; text-align:center; font-weight:bold; background:#FDD01B; border-radius:45rpx; width:90%; margin:15rpx auto 45rpx auto; }
+.panel .coupon_panel .info{ padding:30rpx; max-height:700rpx; overflow-y:scroll; }
+.panel .coupon_panel .info view{ font:28rpx/50rpx "微软雅黑"; text-align:left; color:#666; }
+.panel .coupon_panel .info view.tit{ font:28rpx/55rpx "微软雅黑"; font-weight:bold; color:#000; }

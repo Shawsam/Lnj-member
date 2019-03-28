@@ -44,7 +44,10 @@ Page({
       currentTime:'',
       startTime:'6:30',
       endTime:'20:00',
-      isCard:1
+      isCard:1,
+      type:1,             //type = 1 默认选券，type!=1 不默认选券
+      couponInput:'',
+      couponTip:false
 
   },
   switchChange:function(e){
@@ -80,12 +83,9 @@ Page({
          delete param.userId
       }
 
-      if(this.data.type){
-         delete param.type
-      }
-
       _this.setData({ loaderhide:false });
-
+      
+      console.log(param)
       wx.request({
           url: app.globalData.host+'/orderQuery/jsOrderPrice', 
           data:param,
@@ -205,6 +205,7 @@ Page({
                   })
                        
               } else {
+                  _this.setData({ loaderhide:true });
                   _this.showDialog(res.data.msg);
                  //  wx.showModal({
                  //      content:res.data.msg,
@@ -372,7 +373,7 @@ Page({
             coupons:res.data?JSON.parse(res.data):[],
             type:0
          });
-         
+        
          _this.Init();        
       } 
     })
@@ -447,6 +448,78 @@ Page({
       return false;
   },
   
+  //农行优惠券
+  couponSlideTap:function(){
+       console.log(this.data.dwCoupons.length)
+       if(this.data.dwCoupons.length > 2){
+          //wx.showModal({content:"受尊享优惠，不可与其他优惠同享!", showCancel: false});
+          return;
+       }
+       this.setData({
+           couponSlide:!this.data.couponSlide
+       })
+  },
+  couponInput:function(e){
+      this.setData({
+         couponInput: e.detail.value
+      })
+  },
+  couponConfirmTap:function(){
+      var nhCoupon = this.data.couponInput;
+      console.log(nhCoupon.length)
+      if(nhCoupon==''){
+          this.setData({ coupons:[],couponFee:0,couponSlide:false,nhCouponChoosed:false})
+          this.Init()
+      }else{
+          if(0<nhCoupon.length && nhCoupon.length<16){
+              wx.showToast({title:"无效的券号", icon:'none'});
+          }else{
+              var param = {
+                mini:'mini',
+                couponNo:nhCoupon,
+                username:this.data.userInfo.nickName,
+                openId:app.globalData.openId,
+                ip:'',
+                totalAmt:this.data.totalFee
+              }
+              var _this = this
+              wx.request({
+                  url: app.globalData.host+'/coupon/checkCoupon', 
+                  data:param, 
+                  success: function (res) {
+                      //服务器返回的结果
+                      console.log(res);
+                      if (res.data.errcode == 0) {
+                             var resData = res.data.data
+                             var couponData = {};
+                             couponData.single = resData.couponValue;
+                             couponData.goodsId = resData.goodsId;
+                             couponData.typeName = resData.typeName;
+                             couponData.couponNo = resData.couponNo;
+                             couponData.couponTypeId = resData.couponTypeId;
+                             couponData.type = 1;
+                             console.log(couponData)
+                             _this.setData({ coupons:[couponData],couponSlide:false,nhCouponChoosed:true,nhCoupon:nhCoupon})
+                             _this.Init()
+                      } else {
+                         _this.showDialog(res.data.msg||'服务器异常');
+                      }
+
+                  },
+                  fail: function () {
+                      console.log('系统错误')
+                  }
+              })
+          }    
+      }
+
+  },
+  openCouponTip:function(){
+      this.setData({couponTip:true})
+  },
+  closeCouponTip:function(){
+      this.setData({couponTip:false})
+  },
   //更多需求
   needsSlideTap:function(){
        this.setData({
@@ -462,8 +535,9 @@ Page({
         goodsId = this.data.goodsId,
         totalFee = this.data.totalFee - this.data.packTotalFee   //餐盒不参与优惠券满减
     
-    if(this.data.dkisUnshare){
+    if(this.data.dkisUnshare || this.data.nhCouponChoosed){
         // wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享!", showCancel: false});
+        // wx.showModal({content:"您已享受农行券优惠，不可与其他优惠同享!", showCancel: false});
         return;
     }
     if(card_num == 0){
