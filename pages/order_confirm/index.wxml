@@ -156,8 +156,8 @@
 	    <view class="con2 couponCon" bindtap="openCardList">会员优惠券
 <!-- 	    <view wx:if="{{couponsNum}}" class="right colored">已选择{{couponsNum}}张<image class="arrodow rote" src="../../image/arrodow.png" /></view> -->
             <view  wx:if="{{!dkisUnshare}}">
-	            <view wx:if="{{!nhCouponChoosed && couponsNum && couponFee>0 }}" class="right colored">-￥{{couponFee/100}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
-	            <view wx:if="{{nhCouponChoosed || !couponsNum || couponFee==0}}"  class="right {{card_num?'colored':''}}">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+	            <view wx:if="{{ couponsNum && couponFee>0 }}" class="right colored">-￥{{couponFee/100}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
+	            <view wx:if="{{ !couponsNum || couponFee==0}}"  class="right {{card_num?'colored':''}}">{{card_num?card_num+'张可用':'暂无可用'}}<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 	        </view>
 	        <view wx:if="{{dkisUnshare}}"  class="right">尊享优惠不可与其他优惠同享<image class="arrodow rote" src="../../image/arrodow.png" /></view>
 	    </view>
@@ -166,7 +166,7 @@
 	<view class="cont">
 		<view class="con1 {{couponSlide?'slide':''}}"><view class="couponTitle" catchtap="openCouponTip">农行优惠券<image class="wen" src="../../image/wen.png" /></view>
 		      <view class="right1" catchtap="couponSlideTap">
-		      	<view wx:if="{{nhCouponChoosed}}">{{nhCoupon}}<text class="couponVal">-￥{{couponFee/100}}</text></view>
+		      	<view wx:if="{{nhCouponChoosed}}">{{nhCoupon}}<text class="couponVal">-￥{{nhCouponFee/100}}</text></view>
 		        <view wx:else class="tipInfo">
 		             <text wx:if="{{dwCoupons.length>2}}">农行优惠券不可与优惠菜品共享</text>
 		             <text wx:else>请输入或粘贴农行优惠券券号</text>
@@ -176,8 +176,11 @@
 		      <view wx:if="{{!couponSlide && nhCouponChoosed}}" class="couponTip">*会员与农行优惠券不可叠加使用，同选时仅限农行优惠券</view>
 		      <view class="hide_cont">
 		         <view class="coupon_change">
-		             <input type="number" maxlength="16" id="couponInput" placeholder="请输入或粘贴农行优惠券券号" bindinput="couponInput" value="{{couponInput}}" />
-		             <view bindtap="couponConfirmTap" class="ensure">确认</view>
+		         	 <view id="couponInput">
+		                 <input type="number" maxlength="16" placeholder="请输入或粘贴农行优惠券券号" bindinput="couponInput" value="{{couponInput}}" />
+		                 <image wx:if="{{couponInput}}" catchtap="clearInput" class="clear" src="../../image/clear.png" />
+		             </view>
+		              <view bindtap="couponConfirmTap" class="ensure">确认</view>
 		         </view>
 		     </view>
 	    </view>
@@ -260,11 +263,20 @@
                </view>
             </view> -->
 
-            <view wx:if="{{couponFee}}">
+            <view wx:if="{{couponFee && !nhCouponChoosed}}">
 		       <view class="item card coupon"> 
 	               <view class="info1">
 	                 <view class="name">券优惠</view>
 	                 <view class="price">-￥{{couponFee/100}}</view>
+	               </view>
+               </view>
+            </view>
+
+            <view wx:if="{{nhCouponChoosed}}">
+		       <view class="item card coupon"> 
+	               <view class="info1">
+	                 <view class="name">券优惠</view>
+	                 <view class="price">-￥{{nhCouponFee/100}}</view>
 	               </view>
                </view>
             </view>
@@ -294,11 +306,11 @@
 		<view class="hd-title">- 农行优惠券使用说明 -</view>
 		<view class="info">
 			<view class="tit">一.农行优惠券是什么？</view>
-			<view>其他优惠券是指通过农行掌上银行APP购买的老娘舅优惠券。在老娘舅餐厅点餐时，可用于抵扣优惠券相对应的金额。</view>
+			<view>农行优惠券是指通过农行掌上银行APP购买的老娘舅优惠券。在老娘舅餐厅线上或线下点餐时，可用于抵扣优惠券相对应的金额。</view>
 			<view class="tit">二.怎样购买农行优惠券？</view>
-			<view>活动期间，持卡人可登陆农行掌银银行APP-信用卡拼刀，在指定专区XX元购买XX元代金券（具体活动页面，点击购买按钮，选择支付卡号，输入密码完成支付），代金券可在活动期间于商户活动门店使用。（每月限量XX万张，每位客户限购X次）</view>
+			<view>活动期间，持卡人可登录农行掌银银行APP-信用卡频道，在指定专区XX元购买XX元代金券（具体活动页面，点击“购买按钮”，选择支付卡号，输入密码完成支付），代金券可在活动期间于商户活动门店使用。每月限量XX万张，每位客户限购买X次。</view>
 			<view class="tit">三.怎么使用其他优惠券？</view>
-			<view>复制优惠券上的券号粘贴在其他优惠券输入框内，系统会自动识别。</view>
+			<view>复制优惠券上的券号黏贴在其他优惠券输入框内，系统会自动识别，提交后会扣减相对应的优惠金额。农行优惠券与会员优惠券不可同时使用，在既选用了会员优惠券和农行优惠券的情况下，系统默认仅使用农行优惠券，提交后会扣减农行优惠券相对应的优惠金额</view>
 		</view>
 		<view class="confirmBtn" bindtap="closeCouponTip">我知道了</view>
 	</view>
@@ -306,3 +318,4 @@
 
 
 </view>
+

@@ -24,6 +24,7 @@ Page({
       packPrice:0,
       packTotalFee:0,
       couponFee:0,
+      nhCouponFee:0,
       dinnerType:1,     //用餐方式
       paytype:2,        //支付方式
       phone:'',         //联系方式
@@ -83,6 +84,10 @@ Page({
          delete param.userId
       }
 
+      //选择农行券
+      console.log(this.data.nhCoupon)
+      if(this.data.nhCoupon) param.coupons = JSON.stringify(this.data.nhCouponData)
+
       _this.setData({ loaderhide:false });
       
       console.log(param)
@@ -100,7 +105,8 @@ Page({
                       coupons = _this.data.coupons,
                       dkCoupons = resdata.dkCoupons,
                       dkisUnshare = resdata.type==5?true:false
-
+                  
+                  if(_this.data.nhCoupon) coupons = _this.data.nhCouponData
                   if(activity){
                       activity = JSON.parse(activity);
                   }
@@ -133,25 +139,30 @@ Page({
                         packPrice:resdata.packageFee,
                         packTotalFee:resdata.totalPackageFee,
                         packTotalFeeVal:(resdata.totalPackageFee/100).toFixed(2),
-                        couponFee:resdata.couponFee,
                         //coupons:coupons,
                         activity:activity,
                         couponsNum:dkCoupons?dkCoupons.length:coupons.length,
-                        dkCoupons:dkCoupons||null
+                        dkCoupons:dkCoupons||null,
                   })
-                  
-                  console.log(dkCoupons)
-                  console.log(coupons)
-                  if(coupons.length){
-                    wx.setStorage({
-                       key:"choosed_card",
-                       data:JSON.stringify(coupons)
-                    })
+
+                  if(_this.data.nhCoupon){
+                      _this.setData({ nhCouponFee:resdata.couponFee })
                   }else{
-                    wx.setStorage({
-                       key:"choosed_card",
-                       data:JSON.stringify(dkCoupons)
-                    })
+                      _this.setData({ couponFee:resdata.couponFee })
+                      console.log(dkCoupons)
+                      console.log(coupons)
+                      if(coupons.length){
+                        wx.setStorage({
+                           key:"choosed_card",
+                           data:JSON.stringify(coupons)
+                        })
+                      }else{
+                        wx.setStorage({
+                           key:"choosed_card",
+                           data:JSON.stringify(dkCoupons)
+                        })
+                      }
+
                   }
 
                   if(dkCoupons){        //已经选券不重新获取数量
@@ -464,11 +475,16 @@ Page({
          couponInput: e.detail.value
       })
   },
+  clearInput:function(e){
+      this.setData({
+         couponInput: ''
+      })
+  },
   couponConfirmTap:function(){
       var nhCoupon = this.data.couponInput;
       console.log(nhCoupon.length)
       if(nhCoupon==''){
-          this.setData({ coupons:[],couponFee:0,couponSlide:false,nhCouponChoosed:false})
+          this.setData({ nhCoupon:'',couponSlide:false,nhCouponChoosed:false})
           this.Init()
       }else{
           if(0<nhCoupon.length && nhCoupon.length<16){
@@ -480,7 +496,8 @@ Page({
                 username:this.data.userInfo.nickName,
                 openId:app.globalData.openId,
                 ip:'',
-                totalAmt:this.data.totalFee
+                totalAmt:this.data.totalFee - this.data.packTotalFee,
+                shopId:app.globalData.shopId
               }
               var _this = this
               wx.request({
@@ -498,8 +515,7 @@ Page({
                              couponData.couponNo = resData.couponNo;
                              couponData.couponTypeId = resData.couponTypeId;
                              couponData.type = 1;
-                             console.log(couponData)
-                             _this.setData({ coupons:[couponData],couponSlide:false,nhCouponChoosed:true,nhCoupon:nhCoupon})
+                             _this.setData({ nhCouponData:[couponData],couponSlide:false,nhCouponChoosed:true,nhCoupon:nhCoupon})
                              _this.Init()
                       } else {
                          _this.showDialog(res.data.msg||'服务器异常');
@@ -536,7 +552,7 @@ Page({
         totalFee = this.data.totalFee - this.data.packTotalFee   //餐盒不参与优惠券满减
     
     if(this.data.dkisUnshare || this.data.nhCouponChoosed){
-        // wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享!", showCancel: false});
+        wx.showToast({title:"如您想使用会员优惠券，请先清空农行优惠券号", icon:'none'});
         // wx.showModal({content:"您已享受农行券优惠，不可与其他优惠同享!", showCancel: false});
         return;
     }
@@ -697,6 +713,8 @@ Page({
          delete param.userId;
     }   
     
+    //农行券
+    if(this.data.nhCoupon) param.coupons = JSON.stringify(this.data.nhCouponData)
     
     wx.setStorageSync('clearCart',true);
     wx.setStorageSync('items','');
