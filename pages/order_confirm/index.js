@@ -369,9 +369,11 @@ Page({
       key:'paytype',
       success: function(res) {
           var data = res.data;
-          _this.setData({
+          if(data){
+            _this.setData({
               paytype:data
-          })
+            })
+          } 
       } 
     })
 
@@ -551,13 +553,17 @@ Page({
         goodsId = this.data.goodsId,
         totalFee = this.data.totalFee - this.data.packTotalFee   //餐盒不参与优惠券满减
     
-    if(this.data.dkisUnshare || this.data.nhCouponChoosed){
-        wx.showToast({title:"如您想使用会员优惠券，请先清空农行优惠券号", icon:'none'});
-        // wx.showModal({content:"您已享受农行券优惠，不可与其他优惠同享!", showCancel: false});
+     if(this.data.dkisUnshare){
+        // wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享!", showCancel: false});
         return;
     }
     if(card_num == 0){
         wx.showModal({content:"暂无可用优惠券!", showCancel: false});
+        return;
+    }
+    if(this.data.nhCouponChoosed){
+        wx.showToast({title:"如您想使用会员优惠券，请先清空农行优惠券号", icon:'none'});
+        // wx.showModal({content:"您已享受农行券优惠，不可与其他优惠同享!", showCancel: false});
         return;
     }
     wx.navigateTo({
