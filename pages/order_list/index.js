@@ -17,6 +17,7 @@ Page({
 
     if(getCurrentPages().length==1){
       this.setData({indexPage:true})
+      isInitSelfShow = true
     }
 
      var _this = this;
