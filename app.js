@@ -1,9 +1,4 @@
-//全局配置
-var config = {};
-config.mode = "run";                          // 运行模式
-config.host = "https://weixin.chinauff.com";  // 接口域名
-config.mode = "dev";                          // 开发模式
-config.host = "https://demo.micvs.com";       // 接口域名
+import config from './utils/config.js';
 
 App({
   globalData: {
@@ -33,14 +28,6 @@ App({
         wx.getSetting({
           success: function(res){
             if (res.authSetting['scope.userInfo']) {
-              // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-              wx.getUserInfo({
-                success: function(res) {
-                  _this.globalData.userInfo = res.userInfo
-                  cb(res.userInfo)
-                }
-              })
-
               //调用微信登录接口，获取code
               wx.login({
                   success: function (r) {
@@ -60,18 +47,62 @@ App({
                                   console.log('==getMiniOpen接口返回信息==');
                                   console.log(res);
                                   if (res.data.errcode == 0) {
-                                     var openId = res.data.miniOpenId,
-                                         _openId = res.data.openId,
-                                         userId = res.data.userId,
-                                         unionId = res.data.unionId,
-                                         mobile = res.data.mobile,
-                                         cardNo =  res.data.cardNo;
-                                     _this.globalData.openId = openId;
-                                     _this.globalData._openId = _openId;
-                                     _this.globalData.userId = userId;
-                                     _this.globalData.unionId = unionId;
-                                     _this.globalData.mobile = mobile;
-                                     _this.globalData.cardNo = cardNo;
+                                    _this.globalData.openId = res.data.miniOpenId;
+                                     if(res.data.unionId){
+                                         console.log('直接拿到unionId')
+                                         var _openId = res.data.openId,
+                                             userId = res.data.userId,
+                                             unionId = res.data.unionId,
+                                             mobile = res.data.mobile,
+                                             cardNo =  res.data.cardNo;
+                                         _this.globalData._openId = _openId;
+                                         _this.globalData.userId = userId;
+                                         _this.globalData.unionId = unionId;
+                                         _this.globalData.mobile = mobile;
+                                         _this.globalData.cardNo = cardNo;
+                                         wx.getUserInfo({
+                                            success: function(res) {
+                                              _this.globalData.userInfo = res.userInfo
+                                              cb(res.userInfo)
+                                            }
+                                          })
+                                     }else{
+                                          console.log('需要解密出unionId')
+                                          wx.getUserInfo({
+                                              success: function(res) {
+                                                  _this.globalData.userInfo = res.userInfo
+                                                  var param =  { mini:'mini',
+                                                                 openId:_this.globalData.openId,
+                                                                 iv:res.iv,
+                                                                 encryptedData:res.encryptedData
+                                                               };
+                                                  wx.request({
+                                                      url: _this.globalData.host+'/wxMini/encryptedData', 
+                                                      method:'POST',
+                                                      header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+                                                      data: param,
+                                                      success: function (res) {
+                                                          if(res.data.errcode==0){
+                                                             var resData = res.data.data
+                                                             console.log(resData)
+                                                             _this.globalData.unionId = resData.unionId
+                                                             var _openId = resData.openId,
+                                                                 userId = resData.userId,
+                                                                 unionId = resData.unionId,
+                                                                 mobile = resData.mobile,
+                                                                 cardNo =  resData.cardNo;
+                                                             _this.globalData._openId = _openId;
+                                                             _this.globalData.userId = userId;
+                                                             _this.globalData.unionId = unionId;
+                                                             _this.globalData.mobile = mobile;
+                                                             _this.globalData.cardNo = cardNo;
+                                                             cb(_this.globalData.userInfo)
+                                                          }
+                                                      }
+                                                  })
+                                              }
+                                          })
+                                     }
                                   } else {
                                      console.log('服务器异常');
                                      wx.redirectTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg=服务器异常'})
