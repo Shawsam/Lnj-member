@@ -88,7 +88,8 @@ Page({
                   userFeeVal:(resdata.userFee).toFixed(2),
                   discountFee:resdata.discountFee,
                   discountFeeVal:(resdata.discountFee).toFixed(2),
-                  totalBoxFeeVal:(resdata.totalBoxFee).toFixed(2)
+                  totalBoxFeeVal:(resdata.totalBoxFee).toFixed(2),
+                  dkCoupons:dkCoupons||null
                 })
                 
 
@@ -111,13 +112,14 @@ Page({
                 //优惠券数量   优惠券信息
                 var param = {
                     mini:'mini',
-                    shopId:app.globalData.shopId,
+                    shopId:'wm',
                     openId:app.globalData.openId,
                     taoCanNum:0,
                     goodsId:_this.data.goodsId,
-                    totalFee:(_this.data.totalFee - _this.data.packTotalFee)*100   //餐盒不参与优惠券满减
+                    totalFee:(_this.data.totalFee - _this.data.packTotalFee - _this.data.deliveryFee)*100   //餐盒不参与优惠券满减
                   }
-
+                  
+                  console.log(param)
                   wx.request({
                       url: app.globalData.host+'/coupon/couponList', 
                       data:param, 
@@ -257,7 +259,7 @@ Page({
     var cart_items = JSON.stringify(this.data.cart_items),
         card_num = this.data.card_num,
         goodsId = this.data.goodsId,
-        totalFee = this.data.totalFee - this.data.packTotalFee   //餐盒不参与优惠券满减
+        totalFee = this.data.totalFee - this.data.packTotalFee - this.data.deliveryFee   //餐盒不参与优惠券满减
     
     if(this.data.dkisUnshare){
         // wx.showModal({content:"您已享受尊享优惠，不可与其他优惠同享!", showCancel: false});
@@ -323,7 +325,7 @@ Page({
         userId:app.globalData.userId, 
         addressId:this.data.chooseAddr.id,                                                      
         payType:this.data.paytype,  
-        coupons:JSON.stringify(this.data.coupons),                                                                                            
+        coupons:this.data.dkCoupons?JSON.stringify(this.data.dkCoupons):JSON.stringify(this.data.coupons),                                                                                             
         caution:this.data.caution,                       
         goodsDetail:JSON.stringify(this.data.detail_items),                      
         totalFee:this.data.totalFee,                 

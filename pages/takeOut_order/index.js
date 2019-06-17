@@ -12,14 +12,14 @@ Page({
      Upperloading:false
   },
   onLoad:function(){
-	  var _this = this;
+    var _this = this;
     pageNo = 1;
-	  //获取全局数据，初始化当前页面
-	  app.getUserInfo(function(userInfo){
-	     //用户信息
-	     _this.setData({
-	       userInfo:userInfo
-	     })
+    //获取全局数据，初始化当前页面
+    app.getUserInfo(function(userInfo){
+       //用户信息
+       _this.setData({
+         userInfo:userInfo
+       })
         _this.setData({ shopName:app.globalData.shopName });
         _this.setData({loaderhide:false})
         _this.setData({Lowerloading:false,noMore:false})
@@ -65,7 +65,7 @@ Page({
               }
         })
     
-	  })
+    })
   },
   openDetails:function(e){
     var _this = this;
