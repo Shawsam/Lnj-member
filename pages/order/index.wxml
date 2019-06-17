@@ -134,7 +134,7 @@
           <view class="cartEmpty" catchtap="cartEmpty">清空</view>
           <view class="closeDetail"  bindtap="closeDetailTap">关闭</view>
         </view>
-        <view class="list">
+        <scroll-view class="list" scroll-y="true">
             <view wx:for="{{items}}" wx:key="{{item.categoryId}}"  wx:for-index="i">
                 <view wx:key="{{item.goodsId}}" wx:for="{{item.mainGoodsList}}" wx:for-index="j">
                     <view wx:if="{{!item.sideDcGoodsCategoryList}}">
@@ -179,7 +179,7 @@
                     </view>
                 </view>
             </view>
-        </view>
+        </scroll-view>
         <view class="total">总计:<view class="flag">￥</view>{{cart_fee}}</view>
     </view>
 
