@@ -17,24 +17,56 @@ Page({
      noticeClosed:false,
      canIUseWebView: wx.canIUse('web-view')
   },
-
+  jumpFun(e){
+    var item =  e.currentTarget.dataset.item;
+    console.log(item)
+    if(item.type==1){         //type=1,表示跳转链接
+       if(item.hrefUrl){
+           wx.navigateTo({url: '/pages/webPage/index?url='+item.hrefUrl})
+       }
+    }else{
+      if(item.hrefUrl){
+           this.setData({panelImg:item.hrefUrl,panelShow:true})    
+       }
+    }
+  },
+  closePanel(){
+      this.setData({
+         panelShow:false
+      })
+  },
+  onReady(){
+      var _this = this;
+      app.showTipImg = function(){
+        var param = { mini:'mini',
+                      openId:app.globalData.openId,
+                      userId:app.globalData.userId||'',
+                      merId:3,
+                      posId:1 };
+        wx.request({
+            url: app.globalData.host+'/banner/popup',  
+            data: param,
+            success: function (res) {
+              if (res.data.errcode == 0) {
+                   _this.setData({panelShow:true,panelImg:res.data.data})   
+              }
+            }
+        })
+      }
+  },
   onLoad:function(option){
-	  var _this = this;
+    var _this = this;
     
     //请求Banner
     var param = { mini:'mini',
                   page:'管理设置导航页',
-                  position:'顶部' };
+                  posId:2 };
     wx.request({
         url: app.globalData.host+'/banner/getBanner',  
         data: param,
         success: function (res) {
           if (res.data.errcode == 0) {
-             var items = res.data.data
-             var imgUrls = []
-             for(var i in items){
-                imgUrls.push(items[i].imgUrl)
-             }
+             var imgUrls = res.data.data
              if(imgUrls.length==1){
                  _this.setData({
                       indicatorDots: false,
@@ -53,11 +85,11 @@ Page({
         app.globalData.userInfo = null
     }
     //获取全局数据，初始化当前页面
-	  app.getUserInfo(function(userInfo){
-	     //用户信息
-	     _this.setData({
-	       userInfo:userInfo
-	     })
+    app.getUserInfo(function(userInfo){
+       //用户信息
+       _this.setData({
+         userInfo:userInfo
+       })
        if(option.q){
          var qrcode = decodeURIComponent(option.q);
          if(qrcode!='undefined'){
@@ -166,7 +198,7 @@ Page({
            
          }
        }
-	  })
+    })
   },
 
   //解析二维码数据

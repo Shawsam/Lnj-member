@@ -28,8 +28,8 @@
 <swiper  class="swiper banner" autoplay="true"
       indicator-dots="{{indicatorDots}}" indicator-color="#666" indicator-active-color="#fff">
       <block wx:for="{{imgUrls}}" wx:key="{{index}}">
-        <swiper-item>
-          <image src="{{item}}" class="slide-image" />
+        <swiper-item bindtap="jumpFun" data-item="{{item}}">
+          <image src="{{item.imgUrl}}" class="slide-image" />
         </swiper-item>
       </block>
 </swiper>
@@ -98,6 +98,12 @@
     <view bindtap="JumpToList"><image src="../../image/order.png" />订单</view>
 </view> -->
 
+<view class="panel_cover" hidden="{{!panelShow}}" bindtap="closePanel" catchtouchmove="ture"></view>
+
+<view class="panel" hidden="{{!panelShow}}" catchtouchmove="ture">
+    <image catchtap="closePanel" class="closeBtn" src="../../image/clear.png" />
+    <image mode="widthFix" src="{{panelImg}}" />
+</view>
 
 </view>
 </view>

@@ -30,7 +30,7 @@
 </view>
 <view class="flexbox menu">
     <view class="menuItem" bindtap="openCharge">
-        <view class="txt">储值卡好礼</view>
+        <view class="txt">会员充值</view>
         <image src="../../image/imgline.png" />
     </view>
     <view class="menuItem" bindtap="openCoupon">
@@ -41,11 +41,19 @@
 <swiper  class="swiper {{fillHeight>=200?'absolute':''}}" autoplay="true"
       indicator-dots="{{indicatorDots}}" indicator-color="#666" indicator-active-color="#fff">
       <block wx:for="{{imgUrls}}" wx:key="{{index}}">
-        <swiper-item>
-          <image src="{{item}}" class="slide-image" />
+        <swiper-item bindtap="jumpFun" data-item="{{item}}">
+          <image src="{{item.imgUrl}}" class="slide-image" />
         </swiper-item>
       </block>
 </swiper>
+
+
+<view class="panel_cover" hidden="{{!panelShow}}" bindtap="closePanel" catchtouchmove="ture"></view>
+
+<view class="panel" hidden="{{!panelShow}}" catchtouchmove="ture">
+    <image catchtap="closePanel" class="closeBtn" src="../../image/clear.png" />
+    <image mode="widthFix" src="{{panelImg}}" />
+</view>
 <!-- 
 <view class="section bottomCon">
   <view class="title">加入会员 即刻享有<view class="backet"> > </view></view>

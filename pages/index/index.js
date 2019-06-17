@@ -14,16 +14,13 @@ Page({
       jumpLock:false,
       noticeClosed:true,
       timer:3,
-      imgUrls: [
-        '../../image/ad.jpg'
-      ],
+      imgUrls: [],
       indicatorDots: false,
       autoplay: false,
       interval: 1500,
       duration: 1500,
       fillHeight:wx.getSystemInfoSync().windowHeight-473.5,
   },
-
   Return:function(){
     wx.redirectTo({url:'../../pages/homepage/index'});
   },
@@ -65,11 +62,6 @@ Page({
     })
   },
 
-  onShow:function(){
-    if (isInitSelfShow) return;
-    this.onLoad();
-  },
-
   onHide() {
     isInitSelfShow = false;
   },
@@ -90,6 +82,23 @@ Page({
       })
     })
     
+    var param = { mini:'mini',
+                  openId:app.globalData.openId,
+                  userId:app.globalData.userId||'',
+                  merId:3,
+                  posId:1 };
+    wx.request({
+        url: app.globalData.host+'/banner/popup',  
+        data: param,
+        success: function (res) {
+          if (res.data.errcode == 0) {
+               _this.setData({panelShow:true,panelImg:res.data.data})   
+          }else{
+
+          }
+        }
+    })
+
     //请求门店信息
     var param = { mini:'mini',
                   shopId:app.globalData.shopId,
@@ -158,17 +167,14 @@ Page({
     //请求Banner
     var param = { mini:'mini',
                   page:'自助点餐首页',
-                  position:'底部' };
+                  posId:1
+                };
     wx.request({
         url: app.globalData.host+'/banner/getBanner', 
         data: param,
         success: function (res) {
           if (res.data.errcode == 0) {
-             var items = res.data.data
-             var imgUrls = []
-             for(var i in items){
-                imgUrls.push(items[i].imgUrl)
-             }
+             var imgUrls = res.data.data
              if(imgUrls.length==1){
                  _this.setData({
                       indicatorDots: false,
@@ -182,9 +188,28 @@ Page({
         }
     })
   },
-
+  jumpFun(e){
+    var item =  e.currentTarget.dataset.item;
+    console.log(item)
+    if(item.type==1){         //type=1,表示跳转链接
+       if(item.hrefUrl){
+           wx.navigateTo({url: '/pages/webPage/index?url='+item.hrefUrl})
+       }
+    }else{
+      if(item.hrefUrl){
+           this.setData({panelImg:item.hrefUrl,panelShow:true})    
+       }
+    }
+  },
+  closePanel(){
+      this.setData({
+         panelShow:false
+      })
+  },
   onShow:function(scene){
+    var _this = this;
     console.log('进入index页面')
+    if (isInitSelfShow) return;
     if(app.globalData.unionId){
         var param =  { mini:'mini',
                        openId:app.globalData.openId,
@@ -204,6 +229,7 @@ Page({
                     app.globalData.userId = userId
                     app.globalData.cardNo = cardNo
                     app.globalData.mobile = mobile
+                    _this.onLoad();
               }
             }
         })
