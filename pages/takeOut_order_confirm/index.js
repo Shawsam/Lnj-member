@@ -113,6 +113,7 @@ Page({
                 var param = {
                     mini:'mini',
                     shopId:'wm',
+                    userId:app.globalData.userId,
                     openId:app.globalData.openId,
                     taoCanNum:0,
                     goodsId:_this.data.goodsId,

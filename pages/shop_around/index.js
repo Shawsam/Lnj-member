@@ -167,7 +167,8 @@ Page({
       var param = { 
            mini:'mini',
            openId:app.globalData.openId,
-           shopId:shopId
+           shopId:shopId,
+           userId:app.globalData.userId
       };
 
       wx.request({

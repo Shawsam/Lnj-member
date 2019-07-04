@@ -149,6 +149,7 @@ Page({
       var param = { 
            mini:'mini',
            openId:app.globalData.openId,
+           userId:app.globalData.userId,
            a:a
       };
       console.log(param);
