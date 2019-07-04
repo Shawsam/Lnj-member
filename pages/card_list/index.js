@@ -64,6 +64,7 @@ Page({
       //优惠券数量   优惠券信息
       var param = {
         mini:'mini',
+        userId:app.globalData.userId,
         shopId:app.globalData.shopId,
         openId:app.globalData.openId,
         taoCanNum:option.taoCanNum,
@@ -101,7 +102,7 @@ Page({
                       var feiTaoCanList = couponsData.feiTaoCanList 
                       var map = {}
                       for(var i in feiTaoCanList){
-                          if(feiTaoCanList[i].type.category==6){         //品类券
+                          if(feiTaoCanList[i].type.category==8){         //品类券
                                 var item = feiTaoCanList[i];
                                 if(!map[item.goodsId]){
                                     pinleiCoupon.push({
@@ -320,7 +321,7 @@ Page({
         console.log(items[parama].data[paramb])                                     //点击的券信息                                        
         //=====================================================================
         //如果所点商品有品类券商品          
-        if(items[parama].data[paramb].type.category == 6){                      //选择的券是品类券
+        if(items[parama].data[paramb].type.category == 8){                      //选择的券是品类券
             console.log('品类券')
             console.log('对应品类'+goodsId)
             var choosedNum =  pinleiMap.get(goodsId+'choosedNum');
