@@ -425,7 +425,20 @@ Page({
                             }
                     })
               }else{
-                   wx.showModal({content:resdata.msg,showCancel: false})
+                   wx.showModal({                           
+                          content:res.data.msg, 
+                          showCancel: false,
+                          success: function(res) {
+                              if (res.confirm) {
+                                _this.data.coupons = []
+                                wx.setStorage({
+                                      key:"choosed_card",
+                                      data:''
+                                })
+                                _this.Init()
+                              }
+                          }
+                    })
               }
           }
         }
