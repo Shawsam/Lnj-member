@@ -81,7 +81,7 @@ Page({
         header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
         data: param,
         success: function (res) {
-              app.globalData.unionId = res.data.unionId
+              app.globalData.unionId = res.data.data.unionId;
               wx.redirectTo({url:'../homepage/index'})
         }
       })
