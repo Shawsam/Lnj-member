@@ -422,19 +422,21 @@ Page({
                 if(cart_items[i].crmGoodsNo==goodsId){                    //领用券对应商品
                     console.log('对应品类：'+cart_items[i].categoryNo)     //领用券对应商品的品类
                     var categoryNo = cart_items[i].categoryNo;
-                    var choosedNum =  pinleiMap.get(categoryNo+'choosedNum');
-                    var maxNum = pinleiMap.get(categoryNo+'maxNum');
-                    if(items[parama].data[paramb].active){
-                        choosedNum--;
-                    }else{
-                        choosedNum++;
-                    }
-                    pinleiMap.set(categoryNo+'choosedNum',choosedNum);
-                    console.log(categoryNo+'总共已选'+choosedNum)
-                    console.log(categoryNo+'总共可选'+maxNum)
                 }              
             }
-
+            var choosedNum =  pinleiMap.get(categoryNo+'choosedNum');
+            var maxNum = pinleiMap.get(categoryNo+'maxNum');
+            console.log(choosedNum)
+            console.log(items[parama].data[paramb])
+            console.log(items[parama].data[paramb].active)
+            if(items[parama].data[paramb].active){
+                choosedNum--;
+            }else{
+                choosedNum++;
+            }
+            pinleiMap.set(categoryNo+'choosedNum',choosedNum);
+            console.log(categoryNo+'总共已选'+choosedNum)
+            console.log(categoryNo+'总共可选'+maxNum)
             items[parama].data[paramb].active = !items[parama].data[paramb].active;
             
             //商品数量对领用券券数量限制
