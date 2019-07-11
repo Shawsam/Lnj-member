@@ -309,8 +309,11 @@ Page({
       var userId = app.globalData.userId;
       console.log('USERID='+userId);
       if(!userId){
-         app.globalData.userInfo = null;  
-         wx.navigateTo({url: '/pages/webLogin/index'})
+          app.globalData.userInfo = null;  
+          wx.navigateToMiniProgram({
+              appId: 'wx57d9a7220682d271',
+              path: 'pages/index/index'
+          })
       }else{
          app.globalData.pageFrom = 'homepage'
          wx.switchTab({url:'/pages/takeOut_index/index'})
@@ -327,14 +330,18 @@ Page({
       //    app.globalData.userInfo = null;  
       //    wx.navigateTo({url: '/pages/webLogin/index'})
       // }else{
-         wx.navigateTo({url:'/pages/webUsercenter/index'});
+         // wx.navigateTo({url:'/pages/webUsercenter/index'});
       // }
+      wx.navigateToMiniProgram({
+          appId: 'wx57d9a7220682d271',
+          path: 'pages/index/index'
+      })
   },
 
   JumpWebShop:function(){
       wx.navigateToMiniProgram({
           appId: 'wx348628e7b74d7528',
-          path: 'pages/Login/Login',
+          path: 'pages/Login/Login'
       })
   },
   JumpToList:function(){

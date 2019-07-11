@@ -36,13 +36,25 @@ Page({
       console.log('USERID='+userId);
       if(!userId){
          app.globalData.userInfo = null;  
-         wx.navigateTo({url: '/pages/webUsercenter/index'})
+         // wx.navigateTo({url: '/pages/webUsercenter/index'})
+         wx.navigateToMiniProgram({
+            appId: 'wx57d9a7220682d271',
+            path: 'pages/coupon/coupon'
+         })  
       }else{
-         wx.navigateTo({url:'/pages/charge/index?bala=0&userId='+ app.globalData.userId +'&mobile='+  app.globalData.mobile });
+         // wx.navigateTo({url:'/pages/charge/index?bala=0&userId='+ app.globalData.userId +'&mobile='+  app.globalData.mobile });
+         wx.navigateToMiniProgram({
+            appId: 'wx57d9a7220682d271',
+            path: 'pages/wallet/wallet'
+         })  
       }      
   },
   openCoupon:function(){
-      wx.navigateTo({url:'/pages/webCoupon/index'});  
+      // wx.navigateTo({url:'/pages/webCoupon/index'});  
+      wx.navigateToMiniProgram({
+          appId: 'wx57d9a7220682d271',
+          path: 'pages/coupon/coupon'
+      })  
   },
   //事件处理函数
   orderTap: function() {

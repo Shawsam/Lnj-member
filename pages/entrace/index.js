@@ -338,7 +338,10 @@ Page({
       console.log('USERID='+userId);
       if(!userId){
          app.globalData.userInfo = null;  
-         wx.navigateTo({url: '/pages/webLogin/index'})
+         wx.navigateToMiniProgram({
+            appId: 'wx57d9a7220682d271',
+            path: 'pages/index/index'
+         })
       }else{
         app.globalData.pageFrom = 'entrace'
          wx.switchTab({url:'/pages/takeOut_index/index?from=entrace'})

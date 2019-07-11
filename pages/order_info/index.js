@@ -308,7 +308,11 @@ Page({
   jumpWebRegister:function(){
      var shopId = this.data.shopId;
      var deskNo = this.data.deskNo;
-     wx.navigateTo({url:'/pages/webLogin/index?shopId='+shopId+'&deskNo='+deskNo});
+     // wx.navigateTo({url:'/pages/webLogin/index?shopId='+shopId+'&deskNo='+deskNo});
+     wx.navigateToMiniProgram({
+          appId: 'wx57d9a7220682d271',
+          path: 'pages/index/index'
+     })
   },
 
   jumpWebShop:function(){

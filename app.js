@@ -3,7 +3,7 @@ import config from './utils/config.js';
 App({
   globalData: {
      webUrl:config.host,
-     host:config.host+'/lnj-weixin-new/console/dc',
+     host:config.host+'/lnj-weixin/console/dc',
      userId:'',           //用户userId
      openId:'',           //小程序openId
      _openId:'',          //公众号_openId
