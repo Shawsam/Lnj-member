@@ -310,7 +310,7 @@ Page({
      var deskNo = this.data.deskNo;
      // wx.navigateTo({url:'/pages/webLogin/index?shopId='+shopId+'&deskNo='+deskNo});
      wx.navigateToMiniProgram({
-          appId: 'wx57d9a7220682d271',
+          appId: 'wxbe8426115715a0c7',
           path: 'pages/index/index'
      })
   },

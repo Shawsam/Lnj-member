@@ -311,7 +311,7 @@ Page({
       if(!userId){
           app.globalData.userInfo = null;  
           wx.navigateToMiniProgram({
-              appId: 'wx57d9a7220682d271',
+              appId: 'wxbe8426115715a0c7',
               path: 'pages/index/index'
           })
       }else{
@@ -333,7 +333,7 @@ Page({
          // wx.navigateTo({url:'/pages/webUsercenter/index'});
       // }
       wx.navigateToMiniProgram({
-          appId: 'wx57d9a7220682d271',
+          appId: 'wxbe8426115715a0c7',
           path: 'pages/index/index'
       })
   },

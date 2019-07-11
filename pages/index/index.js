@@ -38,13 +38,13 @@ Page({
          app.globalData.userInfo = null;  
          // wx.navigateTo({url: '/pages/webUsercenter/index'})
          wx.navigateToMiniProgram({
-            appId: 'wx57d9a7220682d271',
+            appId: 'wxbe8426115715a0c7',
             path: 'pages/coupon/coupon'
          })  
       }else{
          // wx.navigateTo({url:'/pages/charge/index?bala=0&userId='+ app.globalData.userId +'&mobile='+  app.globalData.mobile });
          wx.navigateToMiniProgram({
-            appId: 'wx57d9a7220682d271',
+            appId: 'wxbe8426115715a0c7',
             path: 'pages/wallet/wallet'
          })  
       }      
@@ -52,7 +52,7 @@ Page({
   openCoupon:function(){
       // wx.navigateTo({url:'/pages/webCoupon/index'});  
       wx.navigateToMiniProgram({
-          appId: 'wx57d9a7220682d271',
+          appId: 'wxbe8426115715a0c7',
           path: 'pages/coupon/coupon'
       })  
   },
