@@ -81,8 +81,14 @@ Page({
         header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
         data: param,
         success: function (res) {
-              app.globalData.unionId = res.data.data.unionId;
-              wx.redirectTo({url:'../homepage/index'})
+              console.log(res);
+              if (res.data.errcode == 0) {
+                  app.globalData.unionId = res.data.data.unionId;
+                  wx.redirectTo({url:'../homepage/index'})
+              }else{
+                  var errMsg = 'unionId解密失败';
+                  wx.redirectTo({ url:'../view_state/index?errorMsg='+errMsg })
+              }
         }
       })
   }
