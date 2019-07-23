@@ -711,7 +711,7 @@ Page({
          delete param.subscribe;
     }
     
-    if(this.data.cardNo == undefined ){
+    if(this.data.cardNo == undefined || this.data.cardNo == '' || this.data.cardNo == 'null'){
          delete param.cardNo;
     }
     
