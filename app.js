@@ -1,3 +1,4 @@
+const mtjwxsdk = require("./utils/mtj-wx-sdk.js");      //SDK配置
 import config from './utils/config.js';
 
 App({
