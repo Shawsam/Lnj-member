@@ -163,7 +163,7 @@
 	    </view>
 	</view>
 
-	<view class="cont">
+<!-- 	<view class="cont">
 		<view class="con1 {{couponSlide?'slide':''}}"><view class="couponTitle" catchtap="openCouponTip">农行优惠券<image class="wen" src="../../image/wen.png" /></view>
 		      <view class="right1" catchtap="couponSlideTap">
 		      	<view wx:if="{{nhCouponChoosed}}">{{nhCoupon}}<text class="couponVal">-￥{{nhCouponFee/100}}</text></view>
@@ -184,7 +184,7 @@
 		         </view>
 		     </view>
 	    </view>
-	</view>
+	</view> -->
 
 </view>
 
