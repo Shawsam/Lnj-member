@@ -25,7 +25,10 @@
         <view class="codeNum" wx:if="{{deskNo==999}}">
           <view class="code">打包预定</view>
         </view> 
-        <view class="enterBtn" bindtap="orderTap" >进入菜单</view>
+        <form report-submit="true" bindsubmit="orderTap" wx:if="{{userId}}" >
+            <button class="enterBtn" form-type="submit" >进入菜单</button>
+        </form>
+        <button wx:else class="enterBtn"  bindgetphonenumber="getPhoneNumber" open-type="getPhoneNumber">进入菜单</button>
     </view>
 </view>
 <view class="flexbox menu">
@@ -73,4 +76,15 @@
   </view> 
 </view>
 -->
+
+<!-- 
+
+<view class="panel_cover" hidden="{{!panelRegShow}}" bindtap="closeRegPanel" catchtouchmove="ture"></view>
+
+<view class="Regpanel" hidden="{{!panelRegShow}}" catchtouchmove="ture">
+    <image catchtap="closeRegPanel" class="closeBtn" src="../../image/clear.png" /> 
+    <view class="msg">您还不是会员，立即注册即可享受更多权益。</view>
+    <button class="regButton" bindgetphonenumber="getPhoneNumber" open-type="getPhoneNumber">立即注册</button>
 </view>
+ -->
+ </view>

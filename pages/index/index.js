@@ -20,6 +20,135 @@ Page({
       interval: 1500,
       duration: 1500,
       fillHeight:wx.getSystemInfoSync().windowHeight-473.5,
+      userId:''
+  },
+  userRegister(mobile){
+    var _this = this;
+    var param =  {  mini:'mini',
+                    openid:app.globalData.openId,
+                    unionid:app.globalData.unionId,
+                    mobile,
+                    name:this.data.userInfo.nickName,
+                    gender:this.data.userInfo.gender,
+                    type:3,
+                    shopNo:this.data.shopCode,
+                    shopId:app.globalData.shopId
+                 };
+    wx.request({
+        url: app.globalData.host+'/member/registerUser', 
+        method:'POST',
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        data: param,
+        success: function (res) {
+            if(res.data.errcode==0){
+              _this.userLogin(mobile);
+            }else{
+               wx.showToast({ 
+                                title:res.data.msg,
+                                icon:'none'
+                            });
+            }
+        }
+    })
+  },
+  userLogin(mobile){
+    var _this = this;
+    var param =  {  mini:'mini',
+                    openid:app.globalData.openId,
+                    unionid:app.globalData.unionId,
+                    mobile
+                 };
+    wx.request({
+        url: app.globalData.host+'/member/memberLogin', 
+        method:'POST',
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        data: param,
+        success: function (res) {
+            if(res.data.errcode==0){
+               console.log('登录成功');
+               var { userId, cardNo, mobile } = res.data.data;
+               app.globalData.userId = userId;
+               app.globalData.cardNo = cardNo;
+               app.globalData.mobile = mobile;
+               _this.setData({panelRegShow:false,userId:userId});
+               
+               wx.navigateTo({
+                  url: '../order/index',
+                  success:function(){
+                      setTimeout(function(){
+                         _this.setData({jumpLock:false});
+                      },500)
+                  }
+              })
+            }else{
+               wx.showToast({ 
+                                title:res.data.msg,
+                                icon:'none'
+                            });
+            }
+        }
+    })
+  },
+  getPhoneNumber(res){
+    if(res.detail.encryptedData){
+        var _this = this;
+        var param =  {  mini:'mini',
+                        openId:app.globalData.openId,
+                        iv:res.detail.iv,
+                        encryptedData:res.detail.encryptedData
+                     };
+        wx.request({
+            url: app.globalData.host+'/wxMini/encryptedData2', 
+            method:'GET',
+            header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+            data: param,
+            success: function (res) {
+                if(res.data.errcode==0){
+                    const mobile = res.data.data.phoneNumber;
+                    _this.setData({phoneNumber:mobile})
+                    //通过手机号查询用户是否被注册
+                    var param2 =  {  mini:'mini',
+                                     amount:mobile,
+                                     type:5
+                                 };
+                    wx.request({
+                        url: app.globalData.host+'/member/userInfo', 
+                        method:'GET',
+                        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+                        data: param2,
+                        success: function (res) {
+                            let { errcode } = res.data;
+                            if(errcode==0 || errcode==1001241){
+                                //用户已注册或用户已登出
+                                _this.userLogin(mobile);
+                            }else if(errcode==100124){
+                                //用户不存在
+                                _this.userRegister(mobile);
+                            }else if(errcode==100130){
+                                wx.showToast({ 
+                                                title:'您的账户已被禁用',
+                                                icon:'none'
+                                             });
+                            }else{
+                                wx.showToast({ 
+                                                title:'网络异常，请重试',
+                                                icon:'none'
+                                             });
+                            }
+                        }
+                    })                  
+                }
+            }
+        })
+    }else{
+        wx.showToast({ 
+                          title:'请同意手机号授权',
+                          icon:'none'
+                    });
+    }
+  },
+  closeRegPanel(){
+     this.setData({panelRegShow:false});
   },
   Return:function(){
     wx.redirectTo({url:'../../pages/homepage/index'});
@@ -57,14 +186,18 @@ Page({
       })  
   },
   //事件处理函数
-  orderTap: function() {
+  orderTap: function(e) {
+   var formId = e.detail.formId;
+   this.addFormId(formId,1);
+
+   //====================================
    var _this = this;
    //跳转锁定
    var jumpLock = _this.data.jumpLock;
    if(jumpLock) return;
    _this.setData({jumpLock:true});
 
-    wx.redirectTo({
+    wx.navigateTo({
       url: '../order/index',
       success:function(){
           setTimeout(function(){
@@ -73,12 +206,35 @@ Page({
       }
     })
   },
-
+  addFormId(formId,type){
+    var expiryTime = new Date().getTime()+7*24*360000-360000;
+    var param = { mini:'mini',
+                  openid:app.globalData.openId,
+                  openId:app.globalData.openId,
+                  unionid:app.globalData.unionId,
+                  formId,
+                  expiryTime,
+                  type };
+    wx.request({
+        url: app.globalData.host+'/templateMessage/addFormId', 
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        method:'POST', 
+        data: param,
+        success: function (res) {
+          if (res.data.errcode == 0) {
+              console.log('formId上报成功')   
+          }else{
+              console.log('formId上报失败')   
+          }
+        }
+    })
+  },
   onHide() {
     isInitSelfShow = false;
   },
 
   onLoad: function () {
+    this.setData({userId:app.globalData.userId})
 
     var _this = this;
     if(getCurrentPages().length==1){
@@ -143,6 +299,7 @@ Page({
                 //店铺信息 回填页面
                 _this.setData({
                    shopName:shopName,
+                   shopCode:shopCode,
                    shopAddr:shopAddr
                 })
 
@@ -199,6 +356,23 @@ Page({
           }
         }
     })
+
+    //没有获取到userId, 提示注册
+    // if(!app.globalData.userId){
+    //     var param = { mini:'mini',
+    //                   page:'点餐页',
+    //                   posId:7
+    //                 };
+    //     wx.request({
+    //         url: app.globalData.host+'/banner/getBanner', 
+    //         data: param,
+    //         success: function (res) {
+    //           if (res.data.errcode == 0) {
+    //                _this.setData({panelRegShow:true})      
+    //           }
+    //         }
+    //     })
+    // }
   },
   jumpFun(e){
     var item =  e.currentTarget.dataset.item;

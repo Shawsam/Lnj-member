@@ -51,6 +51,29 @@ Page({
       couponTip:false
 
   },
+  addFormId(formId,type){
+    var expiryTime = new Date().getTime()+7*24*360000-360000;
+    var param = { mini:'mini',
+                  openid:app.globalData.openId,
+                  openId:app.globalData.openId,
+                  unionid:app.globalData.unionId,
+                  formId,
+                  expiryTime,
+                  type };
+    wx.request({
+        url: app.globalData.host+'/templateMessage/addFormId', 
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        method:'POST', 
+        data: param,
+        success: function (res) {
+          if (res.data.errcode == 0) {
+              console.log('formId上报成功')   
+          }else{
+              console.log('formId上报失败')   
+          }
+        }
+    })
+  },
   switchChange:function(e){
       var state = e.detail.value
       if(state){
@@ -144,6 +167,11 @@ Page({
                         couponsNum:dkCoupons?dkCoupons.length:coupons.length,
                         dkCoupons:dkCoupons||null,
                   })
+
+                  //会员卡余额大于订单金额默认选中账户余额支付
+                  if(resdata.userFee<=resdata.bala){
+                      _this.setData({paytype:1});
+                  }
 
                   if(_this.data.nhCoupon){
                       _this.setData({ nhCouponFee:resdata.couponFee })
@@ -631,7 +659,11 @@ Page({
  
 
   //表单校验，提交数据
-  orderSubmit:function(){
+  orderSubmit:function(e){
+    var formId = e.detail.formId;
+    this.addFormId(formId,1);
+
+    //=================================================
     var subscribeTime = this.data.subscribeTime;
 
     if(app.globalData.fromType == 1){  //打包预订

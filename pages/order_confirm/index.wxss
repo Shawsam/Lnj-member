@@ -3,6 +3,7 @@
 .flexbox { display:-webkit-box; display:-webkit-box-flex; display:box; display:-webkit-flex; display:flex; -webkit-box-pack:justify; -webkit-justify-content:space-around; }
 .flexbox > .flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
 ::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
+button:after { border:none; }
 
 page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; background:#f3f3f3; padding-top:90rpx; padding-bottom:110rpx; }
@@ -18,7 +19,7 @@ page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .footer .total_fee{ color:#e5004f; font:30rpx/50rpx "微软雅黑"; font-weight:bold; margin-left:30rpx; margin-right:30rpx; padding-top:35rpx; vertical-align:bottom;}
 .footer .total_fee .fee{ font:44rpx/50rpx "微软雅黑"; font-weight:bold; }
 .footer .detailBtn{ border-radius:4rpx; border:2rpx solid #bfbfbf; color:#333; font:24rpx/36rpx "微软雅黑"; padding:0 16rpx; margin-top:40rpx; }
-.footer .checkBtn{ position:absolute; top:0; right:0; height:110rpx;  font:36rpx/110rpx "微软雅黑"; width:300rpx; background:#FDD01B; font-weight:bold; text-align:center; }
+.footer .checkBtn{ position:absolute; border-radius:0; top:0; right:0; height:110rpx;  font:36rpx/110rpx "微软雅黑"; width:300rpx; background:#FDD01B; font-weight:bold; text-align:center; }
 .footer .checkBtn.num:active{ opacity:0.8;  }
 
 

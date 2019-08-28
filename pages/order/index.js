@@ -6,6 +6,7 @@ var isInitSelfShow = true;
 var app = getApp()
 Page({
   data: {
+     panelShow:false,
      overHeight:false,
      userInfo:null,
      shopName:'老娘舅',
@@ -34,6 +35,29 @@ Page({
      fillHeight:wx.getSystemInfoSync().windowHeight - 100,
      currentIndex:0,
      noticeClosed:false
+  },
+  addFormId(formId,type){
+    var expiryTime = new Date().getTime()+7*24*360000-360000;
+    var param = { mini:'mini',
+                  openid:app.globalData.openId,
+                  openId:app.globalData.openId,
+                  unionid:app.globalData.unionId,
+                  formId,
+                  expiryTime,
+                  type };
+    wx.request({
+        url: app.globalData.host+'/templateMessage/addFormId', 
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        method:'POST', 
+        data: param,
+        success: function (res) {
+          if (res.data.errcode == 0) {
+              console.log('formId上报成功')   
+          }else{
+              console.log('formId上报失败')   
+          }
+        }
+    })
   },
   onLoad: function () {
      var _this = this;
@@ -1093,12 +1117,14 @@ Page({
   
   //去结算
   orderConfirmTap:function(e){
+     var formId = e.detail.formId;
+     this.addFormId(formId,1);
+
      var param = e.currentTarget.dataset.param;
      if(param == 'false') return;
 
 
      var _this = this;
-
      //跳转锁定
      var jumpLock = _this.data.jumpLock;
      if(jumpLock) return;

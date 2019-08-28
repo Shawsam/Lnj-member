@@ -207,7 +207,9 @@
     </view>
     <view class="total_fee">￥<i class="fee">{{cart_fee}}</i></view>
     <view class="detailBtn" data-param="{{cart_num}}" bindtap="detailTap">明细</view>
-    <view class="checkBtn {{cart_num>0?'num':'none'}}"  data-param="{{cart_num>0?'true':'false'}}" bindtap="orderConfirmTap">去结算</view>
+    <form report-submit="true" bindsubmit="orderConfirmTap">
+        <button class="checkBtn {{cart_num>0?'num':'none'}}"  data-param="{{cart_num>0?'true':'false'}}" form-type="submit">去结算</button>
+    </form>
 </view>
 
 <scroll-view hidden="{{!overHeight}}"  scroll-y="{{ !detail_panel && !choose_panel}}"  class="tab_list  overHeight" scroll-into-view ="{{toTabView}}" scroll-with-animation ="true" catchtouchmove="ture">
