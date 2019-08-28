@@ -24,13 +24,11 @@ Page({
     //      });
     //    }
     // })   
-
     app.getUserInfo(function(userInfo){
        //用户信息
        _this.setData({
          userInfo:userInfo
        })
-       
        if(options){
          var url = decodeURIComponent(options.q);
          if(url=='https://weixin.chinauff.com/lnj-weixin/console/dc/home') return;
@@ -140,7 +138,7 @@ Page({
   
          }
        }
-    })
+    },options)
   },
 
   //解析二维码数据

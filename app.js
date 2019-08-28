@@ -4,7 +4,7 @@ import config from './utils/config.js';
 App({
   globalData: {
      webUrl:config.host,
-     host:config.host+'/lnj-weixin/console/dc',
+     host:config.host+'/lnj-weixin-new/console/dc',
      userId:'',           //用户userId
      openId:'',           //小程序openId
      _openId:'',          //公众号_openId
@@ -18,7 +18,7 @@ App({
      fromType:'',         //渠道区分  1、预约打包 2、自助点餐 3、外卖送餐
      userInfo:null        //微信登录接口获取的用户信息
   },
-  getUserInfo: function(cb) {                           
+  getUserInfo: function(cb,options) {                          
       var _this = this
       if (this.globalData.userInfo) {     
         console.log('全局用户信息参数传递')      
@@ -129,7 +129,8 @@ App({
               })
 
             }else{
-              wx.redirectTo({url:"../authorize/index"})
+              const q = options?options.q:'';
+              q?wx.redirectTo({url:"../authorize/index?q="+q}):wx.redirectTo({url:"../authorize/index"});
             }
           }
         })

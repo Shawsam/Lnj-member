@@ -6,7 +6,8 @@ Page({
      userInfo:null,
      canIUse: wx.canIUse('button.open-type.getUserInfo')
   },
-  onLoad:function(){
+  onLoad:function(options){
+        this.setData({q:options.q})
   	    //调用微信登录接口，获取code
         wx.login({
             success: function (r) {
@@ -68,6 +69,8 @@ Page({
         })
   },
   authorizeFun:function(res){
+      var q = this.data.q;
+      if(!res.detail.userInfo) return;
       app.globalData.userInfo = res.detail.userInfo
       this.setData({userInfo:res.detail.userInfo})
       var param =  { mini:'mini',
@@ -84,7 +87,11 @@ Page({
               console.log(res);
               if (res.data.errcode == 0) {
                   app.globalData.unionId = res.data.data.unionId;
-                  wx.redirectTo({url:'../homepage/index'})
+                  if(q){
+                      wx.redirectTo({url:'../entrace/index?q='+q})
+                  }else{
+                      wx.redirectTo({url:'../homepage/index'})
+                  }
               }else{
                   var errMsg = 'unionId解密失败';
                   wx.redirectTo({ url:'../view_state/index?errorMsg='+errMsg })

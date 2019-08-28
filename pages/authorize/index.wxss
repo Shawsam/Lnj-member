@@ -4,6 +4,7 @@
 .flexbox > .flex-item { -webkit-box-flex:1; box-flex:1; flex:1;  }
 ::-webkit-scrollbar { width: 0; height: 0; color: transparent;}
 input{ background:#000!important; }
+button:after{ border:none; }
 
 page{ height:100%; font:26rpx/40rpx "微软雅黑"; }
 .container{ box-sizing:border-box;  height:100%; overflow-y:scroll;-webkit-overflow-scrolling:touch;  position:relative; background:#fff;  }
