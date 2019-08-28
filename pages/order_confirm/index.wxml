@@ -191,7 +191,9 @@
 <view class="footer">
     <view class="total_fee">￥<i class="fee">{{userFeeVal}}</i></view>
     <view class="detailBtn" bindtap="detailTap" >明细</view>
-    <view bindtap="orderSubmit" class="checkBtn">提交</view>
+    <form report-submit="true" bindsubmit="orderSubmit">
+	    <button form-type="submit" class="checkBtn">提交</button>
+	</form>
 </view>
 
 
