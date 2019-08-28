@@ -2,6 +2,8 @@
 //获取应用实例
 
 var isInitSelfShow = true;
+var errorGoodsMap = new Map();
+errorGoodsMap.set('goodsList',[]);
 
 var app = getApp()
 Page({
@@ -640,22 +642,52 @@ Page({
      //判断是否有加价小菜
      var priceAdd = 0,
          _minArray = [];
+
+     var subItemNum = panel_data.sideDcGoodsCategoryList.length;
+     var subItemChoosedNum = 0;
+
      for(var i in panel_data.sideDcGoodsCategoryList){
         for(var j in panel_data.sideDcGoodsCategoryList[i].sideGoodsList){
             if(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].active){
+                  subItemChoosedNum++;
                   _minArray.push(panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j]);              
                   priceAdd = priceAdd + panel_data.sideDcGoodsCategoryList[i].sideGoodsList[j].price;
             }   
         }
      }
-     panel_data.priceVal = ((panel_data.price + priceAdd)/100).toFixed(2);       //加价    
-     _items[panel_i].mainGoodsList[panel_j].cart_items.push(panel_data);         //购物车数据变化
-     _items[panel_i].mainGoodsList[panel_j].minArray.push(_minArray);            //小菜
-    
-     delete panel_data.cart_items;
-     delete panel_data.minArray;
-   
-     this.computed(_items);
+
+     if(subItemChoosedNum != subItemNum){
+        var parama = this.data.panel_i,
+            paramb = this.data.panel_j,
+            work_num_choosed = this.data.work_num_choosed,
+           _count = _items[parama].mainGoodsList[paramb].count;
+
+         if(_items[parama].mainGoodsList[paramb].isWork){
+             work_num_choosed = work_num_choosed - 1; 
+             this.setData({
+                work_num_choosed:work_num_choosed
+             }); 
+             wx.setStorageSync('work_num_choosed',work_num_choosed)
+         }
+
+         _items[parama].mainGoodsList[paramb].count = _count-1;
+         this.computed(_items);
+
+         wx.showToast({
+             title:'配菜库存不足，请选择其他菜品',
+             icon:'none',
+             duration:2000
+         })
+     }else{
+         panel_data.priceVal = ((panel_data.price + priceAdd)/100).toFixed(2);       //加价    
+         _items[panel_i].mainGoodsList[panel_j].cart_items.push(panel_data);         //购物车数据变化
+         _items[panel_i].mainGoodsList[panel_j].minArray.push(_minArray);            //小菜
+        
+         delete panel_data.cart_items;
+         delete panel_data.minArray;
+       
+         this.computed(_items);
+     }
      this.setData({
         choose_panel:false,
         confirmDisabled:false,
@@ -1128,6 +1160,7 @@ Page({
      
      var feiTaoCan = [],
          detail_items = [],
+         m = 0,
          j = 0;
 
 
@@ -1157,10 +1190,13 @@ Page({
            detail_items.push(singe_items);
            
            //套餐内部小菜信息
+           var sideGoodsListLength = cart_items[i].sideDcGoodsCategoryList.length;
+           var _sideGoodsListLength = 0;
            for(var k in cart_items[i].sideDcGoodsCategoryList){
               for(var t in cart_items[i].sideDcGoodsCategoryList[k].sideGoodsList){
                  var food = cart_items[i].sideDcGoodsCategoryList[k].sideGoodsList[t];
                  if(food.active){
+                     _sideGoodsListLength++;
                      var singe_items = {};
                      singe_items.shopId = food.shopId;
                      singe_items.goodsId = food.goodsId;
@@ -1181,7 +1217,31 @@ Page({
               }
            }
            m++;
+           if(sideGoodsListLength != _sideGoodsListLength){
+                var goodsList = errorGoodsMap.get('goodsList')
+                goodsList.push({
+                    index:i,
+                    goodsId:cart_items[i].goodsId,
+                    goodsName:cart_items[i].name
+                });
+                errorGoodsMap.set('goodsList',goodsList);
+           }else{
+                if(cart_items[i].isWork==0){                                              //单品 套餐
+                   feiTaoCan[j]=cart_items[i].crmGoodsNo+"#"+cart_items[i].count;
+                   j++;
+                 } 
 
+                 if(cart_items[i].categoryNo){                                           //品类券商品
+                      feiTaoCan[j] = cart_items[i].categoryNo+"#"+cart_items[i].count;  
+                      j++;
+                 }
+
+                 if(cart_items[i].ticketNum){                                           //会员券 商品
+                   for(var mm = 0; mm<cart_items[i].count; mm++){
+                       dwCoupons.push(JSON.parse(cart_items[i].ticketNoList[mm]));
+                   }
+                 }
+           }
          }else{
              //单品菜信息
              var singe_items = {};
@@ -1201,43 +1261,74 @@ Page({
              singe_items.group = m;
              detail_items.push(singe_items);
              m++;
-         }
-        
-         // if(cart_items[i].isWork==0 && cart_items[i].type == 1){               //单品
-        if(cart_items[i].isWork==0){                                              //单品 套餐
-           feiTaoCan[j]=cart_items[i].crmGoodsNo+"#"+cart_items[i].count;
-           j++;
-         } 
 
-         if(cart_items[i].categoryNo){                                           //品类券商品
-              feiTaoCan[j] = cart_items[i].categoryNo+"#"+cart_items[i].count;  
-              j++;
-         }
+             if(cart_items[i].isWork==0){                                              //单品 套餐
+               feiTaoCan[j]=cart_items[i].crmGoodsNo+"#"+cart_items[i].count;
+               j++;
+             } 
 
-         if(cart_items[i].ticketNum){                                           //会员券 商品
-           for(var m = 0; m<cart_items[i].count; m++){
-               dwCoupons.push(JSON.parse(cart_items[i].ticketNoList[m]));
-           }
-         }
+             if(cart_items[i].categoryNo){                                           //品类券商品
+                  feiTaoCan[j] = cart_items[i].categoryNo+"#"+cart_items[i].count;  
+                  j++;
+             }
+
+             if(cart_items[i].ticketNum){                                           //会员券 商品
+               for(var mm = 0; mm<cart_items[i].count; mm++){
+                   dwCoupons.push(JSON.parse(cart_items[i].ticketNoList[mm]));
+               }
+             }
+         }         
      }
-
      goodsId = feiTaoCan.join('-');
      dwCoupons = JSON.stringify(dwCoupons);
      cart_items = JSON.stringify(cart_items);
      cart_items = cart_items.replace(/\?/g,'');
      detail_items = JSON.stringify(detail_items);
-    
-     
      wx.removeStorage({key:'paytype'});
      wx.removeStorage({key:'choosed_card'});
-     wx.navigateTo({ 
-        url: '../order_confirm/index?cart_items='+cart_items+'&detail_items='+detail_items+'&dwCoupons='+dwCoupons+'&goodsId='+goodsId+'&taoCanNum='+taoCanNum,
-        success:function(){
-            setTimeout(function(){
+
+
+     var errorGoodsList = errorGoodsMap.get('goodsList');
+     var errorGoodsLength = errorGoodsList.length;
+     console.log(errorGoodsLength)
+     var errorGoodsNameArray = []; 
+     if(errorGoodsLength){
+          for(let e = 0; e< errorGoodsLength; e++){
+              errorGoodsNameArray.push(errorGoodsList[e].goodsName)
+
+              var errorGoodsId = errorGoodsList[e].goodsId;
+              for(let ii in items){
+                 for(let jj in items[ii].mainGoodsList){
+                      if(items[ii].mainGoodsList[jj].goodsId == errorGoodsId){
+                         items[ii].mainGoodsList[jj].count = 0;
+                         items[ii].mainGoodsList[jj].cart_items = [];
+                      }                      
+                 }
+              }
+          }
+          wx.showToast({
+             title:errorGoodsNameArray.join(',')+'配菜库存不足，请选择其他菜品',
+             icon:'none',
+             duration:2000
+          })
+          setTimeout(function(){
+               errorGoodsMap.set('goodsList',[]);
+               _this.computed(items);
                _this.setData({jumpLock:false});
-            },500)
-        }
-     })
+          },2000)
+     }else{
+         wx.navigateTo({ 
+            url: '../order_confirm/index?cart_items='+cart_items+'&detail_items='+detail_items+'&dwCoupons='+dwCoupons+'&goodsId='+goodsId+'&taoCanNum='+taoCanNum,
+            success:function(){
+                setTimeout(function(){
+                   _this.setData({jumpLock:false});
+                },500)
+            }
+         })
+     }
+
+
+
   },
 
 
