@@ -64,7 +64,7 @@ Page({
    if(jumpLock) return;
    _this.setData({jumpLock:true});
 
-    wx.redirectTo({
+    wx.navigateTo({
       url: '../order/index',
       success:function(){
           setTimeout(function(){
@@ -207,6 +207,9 @@ Page({
        if(item.hrefUrl){
            wx.navigateTo({url: '/pages/webPage/index?url='+item.hrefUrl})
        }
+    }else if(item.type==4){
+       const { appid, page } = JSON.parse(item.hrefUrl);
+       wx.navigateToMiniProgram({appId:appid,path:page});
     }else{
       if(item.hrefUrl){
            this.setData({panelImg:item.hrefUrl,panelShow:true})    
