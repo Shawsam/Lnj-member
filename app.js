@@ -163,5 +163,24 @@ App({
             }
         })
     }
+  },
+  // 备用接口--通过unionId查询会员信息
+  fetchUserInfoByUnionId(unionId){ 
+      var param =  { mini:'mini',
+                     type:3,
+                     unionId:this.globalData.unionId
+                   };
+      wx.request({
+          url: this.globalData.host+'/member/userInfo', 
+          method:'GET',
+          header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+          data: param,
+          success: function (res) {
+              let { errcode } = res.data;
+              if(errcode==100130){
+                  console.log('账户被禁用');
+              }
+          }
+      })  
   }
 })

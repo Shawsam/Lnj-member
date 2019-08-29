@@ -169,9 +169,11 @@ Page({
                   })
 
                   //会员卡余额大于订单金额默认选中账户余额支付
-                  if(resdata.userFee<=resdata.bala){
-                      _this.setData({paytype:1});
-                  }
+                  if(!_this.data.userChooseType){
+                    if(resdata.userFee<=resdata.bala){
+                        _this.setData({paytype:1});
+                    }
+                  }                  
 
                   if(_this.data.nhCoupon){
                       _this.setData({ nhCouponFee:resdata.couponFee })
@@ -294,7 +296,7 @@ Page({
   onLoad: function (option) {
     var _this = this;
     
-    if(app.globalData.fromType == 1){
+    if(app.globalData.fromType == 1 || app.globalData.deskNo == 999){
         var startTime,endTime,
             currentTime = new Date(),
             currentHours = currentTime.getHours(),
@@ -358,7 +360,7 @@ Page({
         isMember = 0;
         // paytype = 2;
     }
-    if(app.globalData.fromType == 1){  //打包预订 只能外带
+    if(app.globalData.fromType == 1 || app.globalData.deskNo == 999){  //打包预订 只能外带
        subscribe = 1;
        dinnerType = 2;
     }
@@ -400,7 +402,8 @@ Page({
           var data = res.data;
           if(data){
             _this.setData({
-              paytype:data
+              paytype:data,
+              userChooseType:true
             })
           } 
       } 
@@ -429,7 +432,7 @@ Page({
 
   //用餐方式
   dinnerTypeTap:function(e){     
-       if(app.globalData.fromType == 1) return;             
+       if(app.globalData.fromType == 1 || app.globalData.deskNo == 999) return;             
        var dinnerType = e.currentTarget.dataset.type;
        this.setData({
            dinnerType:dinnerType
@@ -666,7 +669,7 @@ Page({
     //=================================================
     var subscribeTime = this.data.subscribeTime;
 
-    if(app.globalData.fromType == 1){  //打包预订
+    if(app.globalData.fromType == 1 || app.globalData.deskNo == 999){  //打包预订
       if(subscribeTime == ''){
           this.showDialog("请选择预订时间");
           // wx.showModal({

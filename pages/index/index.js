@@ -302,6 +302,18 @@ Page({
                    shopCode:shopCode,
                    shopAddr:shopAddr
                 })
+                
+                let subNotAllowed = res.data.isSub;
+                if(app.globalData.deskNo==999 && subNotAllowed){
+                    wx.showModal({
+                      content:'该门店已关闭打包预定功能',
+                      showCancel:false,
+                      success:()=>{
+                          wx.navigateBack();
+                      }
+                    })
+                    return;
+                } 
 
                 // //餐盒收费提示
                 // var noticeDate = new Date('2018-10-01').getTime()

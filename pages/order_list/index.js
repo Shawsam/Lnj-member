@@ -49,6 +49,8 @@ Page({
                // });
              }
 
+             let subNotAllowed = res.data.isSub;
+             _this.setData({subNotAllowed});
              var param = {
                        mini:'mini',
                        shopId:app.globalData.shopId,
@@ -171,7 +173,18 @@ Page({
      var jumpLock = _this.data.jumpLock;
      if(jumpLock) return;
      _this.setData({jumpLock:true});
-
+     
+     if(app.globalData.deskNo==999 && this.data.subNotAllowed){
+        wx.showModal({
+          content:'该门店已关闭打包预定功能',
+          showCancel:false,
+          success:()=>{
+              console.log('该门店打包预定功能已关闭');
+              _this.setData({jumpLock:false});
+          }
+        })
+        return;
+     } 
      wx.setStorageSync('items','');
      wx.navigateTo({
         url: '../order/index',
