@@ -173,6 +173,8 @@ Page({
                   if(!_this.data.userChooseType){
                     if(resdata.userFee<=resdata.bala){
                         _this.setData({paytype:1});
+                    }else{
+                        _this.setData({paytype:2});
                     }
                   }                  
 
