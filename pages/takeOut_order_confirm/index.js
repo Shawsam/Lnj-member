@@ -392,7 +392,7 @@ Page({
                         return;
                     }
 
-                     tradeInfo.paytype = '亲情账户';
+                     tradeInfo.paytype = '舅粉钱包';
                      _this.setData({ 
                         tip_panel:true,
                         tradeInfo:tradeInfo

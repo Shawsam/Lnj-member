@@ -20,7 +20,7 @@
     	<view class="item"><view class="tag">送餐地址：</view><view class="desp">{{address}}</view></view>
     	<view class="item"><view class="tag">订单编号：</view><view class="desp">{{orderNo}}</view></view>
     	<view class="item" wx:if="{{arrive_Time}}"><view class="tag">预计送达时间：</view><view class="desp">{{arrive_Time}}</view></view>
-        <view class="item"><view class="tag">支付方式：</view><view class="desp">{{payType==1?'亲情账户支付':'微信支付'}}</view></view>
+        <view class="item"><view class="tag">支付方式：</view><view class="desp">{{payType==1?'舅粉钱包':'微信支付'}}</view></view>
         <view wx:if="{{riderName}}" class="item"><view class="tag">骑手姓名：</view><view class="desp">{{riderName}}</view></view>
         <view wx:if="{{riderTel}}" class="item"><view class="tag">骑手联系方式：</view><view class="desp">{{riderTel}}</view></view>
     </view>
@@ -91,7 +91,7 @@
      <view class="Con">
        <view class="title">选择支付方式</view>
        <view class="list">
-           <view class="account" data-type="1" bindtap="chooseTap"><image src="../../image/family_card.png" />亲情账户
+           <view class="account" data-type="1" bindtap="chooseTap"><image src="../../image/family_card.png" />舅粉钱包
                <view class="choose {{paytype==1?'active':''}}"><view class="dot"></view></view>
            </view>
            <view class="wx" data-type="2" bindtap="chooseTap"><image src="../../image/wechart.png" />微信支付

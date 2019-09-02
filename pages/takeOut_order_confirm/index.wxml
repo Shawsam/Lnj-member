@@ -88,7 +88,7 @@
     <view class="cont">
 	    <view class="con2" bindtap="openAccount">支付方式
 	       <view class="right">
-	          <view class="payview" wx:if="{{paytype==1}}"><image class="tag" src="../../image/family_card.png" />亲情账户</view>
+	          <view class="payview" wx:if="{{paytype==1}}"><image class="tag" src="../../image/family_card.png" />舅粉钱包</view>
 	       	  <view class="payview" wx:if="{{paytype==2}}"><image class="tag" src="../../image/wechart.png" />微信支付</view>
 	          <image class="arrodow rote" src="../../image/arrodow.png" />
 	       </view>
