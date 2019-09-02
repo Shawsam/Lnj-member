@@ -167,7 +167,7 @@ App({
   // 备用接口--通过unionId查询会员信息
   fetchUserInfoByUnionId(unionId){ 
       var param =  { mini:'mini',
-                     type:3,
+                     idType:3,
                      unionId:this.globalData.unionId
                    };
       wx.request({

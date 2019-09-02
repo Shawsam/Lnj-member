@@ -79,5 +79,8 @@
     "wx348628e7b74d7528",
     "wxbe8426115715a0c7"
   ],
+  "networkTimeout":{
+    "request":10000
+  },
   "sitemapLocation": "sitemap.json"
 }

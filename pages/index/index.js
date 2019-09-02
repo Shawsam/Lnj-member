@@ -43,11 +43,19 @@ Page({
             if(res.data.errcode==0){
               _this.userLogin(mobile);
             }else{
+               wx.hideLoading();
                wx.showToast({ 
                                 title:res.data.msg,
                                 icon:'none'
                             });
             }
+        },
+        fail:()=>{
+            wx.hideLoading();
+            wx.showToast({ 
+                            title:'网络异常，请重试',
+                            icon:'none'
+                         });
         }
     })
   },
@@ -77,20 +85,30 @@ Page({
                   success:function(){
                       setTimeout(function(){
                          _this.setData({jumpLock:false});
+                         wx.hideLoading();
                       },500)
                   }
               })
             }else{
+               wx.hideLoading();
                wx.showToast({ 
                                 title:res.data.msg,
                                 icon:'none'
                             });
             }
+        },
+        fail:()=>{
+            wx.hideLoading();
+            wx.showToast({ 
+                            title:'网络异常，请重试',
+                            icon:'none'
+                         });
         }
     })
   },
   getPhoneNumber(res){
     if(res.detail.encryptedData){
+        wx.showLoading({title:'加载中...',mask:true})
         var _this = this;
         var param =  {  mini:'mini',
                         openId:app.globalData.openId,
@@ -109,7 +127,7 @@ Page({
                     //通过手机号查询用户是否被注册
                     var param2 =  {  mini:'mini',
                                      amount:mobile,
-                                     type:5
+                                     idType:5
                                  };
                     wx.request({
                         url: app.globalData.host+'/member/userInfo', 
@@ -125,22 +143,39 @@ Page({
                                 //用户不存在
                                 _this.userRegister(mobile);
                             }else if(errcode==100130){
+                                wx.hideLoading();
                                 wx.showToast({ 
                                                 title:'您的账户已被禁用',
                                                 icon:'none'
                                              });
                             }else{
+                                wx.hideLoading();
                                 wx.showToast({ 
                                                 title:'网络异常，请重试',
                                                 icon:'none'
                                              });
                             }
+                        },
+                        fail:()=>{
+                            wx.hideLoading();
+                            wx.showToast({ 
+                                            title:'网络异常，请重试',
+                                            icon:'none'
+                                         });
                         }
                     })                  
                 }
+            },
+            fail:()=>{
+                wx.hideLoading();
+                wx.showToast({ 
+                                title:'网络异常，请重试',
+                                icon:'none'
+                             });
             }
         })
     }else{
+        wx.hideLoading();
         wx.showToast({ 
                           title:'请同意手机号授权',
                           icon:'none'
