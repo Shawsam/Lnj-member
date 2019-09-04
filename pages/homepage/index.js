@@ -267,9 +267,19 @@ Page({
      var _this = this;
      //跳转锁定
      var userInfo = _this.data.userInfo;
-     if(!userInfo) return;
-
-     wx.navigateTo({url: '/pages/entrace/index'})
+     if(!userInfo){
+          wx.showModal({ title:'提示',
+                         content:'请先授权',
+                         success:(res)=>{
+                            if(res.confirm){
+                                wx.redirectTo({url:"../authorize/index"})
+                            }
+                         }
+                      })
+          return;
+     }else{
+         wx.navigateTo({url: '/pages/entrace/index'})
+     }     
   },
   //外卖送餐
   takeAway:function(){
@@ -285,7 +295,17 @@ Page({
       }
       
       var userInfo = this.data.userInfo;
-      if(!userInfo) return;
+      if(!userInfo){
+          wx.showModal({ title:'提示',
+                         content:'请先授权',
+                         success:(res)=>{
+                            if(res.confirm){
+                                wx.redirectTo({url:"../authorize/index"})
+                            }
+                         }
+                      })
+          return;
+      }
       
 
       var unionId = app.globalData.unionId;
