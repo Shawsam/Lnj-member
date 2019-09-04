@@ -186,7 +186,7 @@ Page({
                     return;
                 }
 
-                 tradeInfo.paytype = '会员卡';
+                 tradeInfo.paytype = '舅粉钱包';
                  _this.setData({ 
                     tip_panel:true,
                     tradeInfo:tradeInfo

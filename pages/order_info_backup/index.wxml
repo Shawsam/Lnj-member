@@ -113,7 +113,7 @@
       <view class="item">支付方式<view class="desp" wx-if="{{paytype!=12&&paytype!=14}}">{{order.payTypeDesc}}</view></view>
       <view class="paygroup" wx-if="{{paytype==12||paytype==14}}">
           <view wx:for="{{dcOrderPays}}" wx-if="{{item.payType==1}}">
-               <view class="item">会员卡支付<view class="desp">￥{{item.payFee/100}}</view></view>
+               <view class="item">舅粉钱包支付<view class="desp">￥{{item.payFee/100}}</view></view>
           </view>
           <view wx:for="{{dcOrderPays}}" wx-if="{{item.payType==2}}">
                <view class="item">微信支付<view class="desp">￥{{item.payFee/100}}</view></view>
