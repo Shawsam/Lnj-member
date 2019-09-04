@@ -4,7 +4,7 @@ import config from './utils/config.js';
 App({
   globalData: {
      webUrl:config.host,
-     host:config.host+'/lnj-weixin-new/console/dc',
+     host:config.host+'/lnj-weixin/console/dc',
      userId:'',           //用户userId
      openId:'',           //小程序openId
      _openId:'',          //公众号_openId
@@ -129,8 +129,8 @@ App({
               })
 
             }else{
-              const q = options?options.q:'';
-              q?wx.redirectTo({url:"../authorize/index?q="+q}):wx.redirectTo({url:"../authorize/index"});
+              const q = options ? options.q : '';
+              if (q) wx.redirectTo({ url: "../authorize/index?q=" + q });       //扫码进入直接提示授权
             }
           }
         })
