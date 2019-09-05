@@ -98,6 +98,8 @@ App({
                                                              _this.globalData.mobile = mobile;
                                                              _this.globalData.cardNo = cardNo;
                                                              cb(_this.globalData.userInfo)
+                                                          }else{
+                                                             wx.redirectTo({ url: '../view_state/index'})
                                                           }
                                                       },
                                                       fail: function () {

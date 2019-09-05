@@ -139,56 +139,43 @@ Page({
                                  app.globalData.cardNo = cardNo;
                                  app.globalData.deskNo = deskNo;
 
-                                  //请求门店信息
-                                  var param = { mini:'mini',
-                                                shopId:app.globalData.shopId,
-                                                openId:app.globalData.openId };
-                                  
-
-                                  wx.request({
-                                      url: app.globalData.host+'/shop/shopInfo',  
-                                      data: param,
-                                      success: function (res) {
-                                          //服务器返回的结果
-                                          console.log(res);
-                                          _this.setData({ loaderhide:true });
-                                          if (res.data.errcode == 0) {
-                                              var shopName = res.data.data.shopName;
-                                              app.globalData.shopName = shopName;
-                                              
-                                             //跳转控制
-                                             if(orderNum){
-                                                 wx.navigateTo({
-                                                    url: '../order_list/index',
-                                                    success:function(){
-                                                            setTimeout(function(){
-                                                                   _this.setData({jumpLock:false});
-                                                            },500)
+                                 if (unionId) {
+                                     _this.fetchShopInfo(orderNum);
+                                 } else {
+                                     console.log('需要解密出unionId')
+                                     wx.getUserInfo({
+                                         success: function(res) {
+                                             app.globalData.userInfo = res.userInfo
+                                             var param = {
+                                                 mini: 'mini',
+                                                 openId: app.globalData.openId,
+                                                 iv: res.iv,
+                                                 encryptedData: res.encryptedData
+                                             };
+                                             wx.request({
+                                                 url: app.globalData.host + '/wxMini/encryptedData',
+                                                 method: 'POST',
+                                                 header: { "Content-Type": "application/x-www-form-urlencoded" },
+                                                 data: param,
+                                                 success: function(res) {
+                                                     if (res.data.errcode == 0) {
+                                                         var resData = res.data.data;
+                                                         app.globalData.unionId = resData.unionId;
+                                                         _this.fetchShopInfo(orderNum);
+                                                     } else {
+                                                         wx.redirectTo({ url: '../view_state/index'})
                                                      }
-                                                 })
-                                             }else{
-                                                 wx.navigateTo({
-                                                    url: '../index/index',
-                                                    success:function(){
-                                                            setTimeout(function(){
-                                                                   _this.setData({jumpLock:false});
-                                                            },500)
-                                                     }
-                                                 })
-                                             }
-
-                                          }else{
-                                             wx.navigateTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg='+res.data.msg,
-                                                             success:function(){
-                                                              setTimeout(function(){
-                                                                   _this.setData({jumpLock:false});
-                                                              },500)
-                                                             }
+                                                 },
+                                                 fail: function() {
+                                                     wx.redirectTo({ url: '../view_state/index?errorMsg=网络异常，请重试' })
+                                                 }
                                              })
-                                          }
-                                      }
-                                  })
-
+                                         },
+                                         fail: function() {
+                                             wx.redirectTo({ url: '../view_state/index?errorMsg=网络异常，请重试' })
+                                         }
+                                     })
+                                 }
                               }
                         }
                       })
@@ -199,6 +186,58 @@ Page({
          }
        }
     })
+  },
+  fetchShopInfo(orderNum){
+      //请求门店信息
+      var _this = this;
+      var param = { mini:'mini',
+                    shopId:app.globalData.shopId,
+                    openId:app.globalData.openId };
+      
+
+      wx.request({
+          url: app.globalData.host+'/shop/shopInfo',  
+          data: param,
+          success: function (res) {
+              //服务器返回的结果
+              console.log(res);
+              _this.setData({ loaderhide:true });
+              if (res.data.errcode == 0) {
+                  var shopName = res.data.data.shopName;
+                  app.globalData.shopName = shopName;
+                  
+                 //跳转控制
+                 if(orderNum){
+                     wx.navigateTo({
+                        url: '../order_list/index',
+                        success:function(){
+                                setTimeout(function(){
+                                       _this.setData({jumpLock:false});
+                                },500)
+                         }
+                     })
+                 }else{
+                     wx.navigateTo({
+                        url: '../index/index',
+                        success:function(){
+                                setTimeout(function(){
+                                       _this.setData({jumpLock:false});
+                                },500)
+                         }
+                     })
+                 }
+
+              }else{
+                 wx.navigateTo({ url:'../view_state/index?error='+res.statusCode+'&errorMsg='+res.data.msg,
+                                 success:function(){
+                                  setTimeout(function(){
+                                       _this.setData({jumpLock:false});
+                                  },500)
+                                 }
+                 })
+              }
+          }
+      })
   },
 
   //解析二维码数据
