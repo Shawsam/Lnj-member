@@ -99,8 +99,16 @@ App({
                                                              _this.globalData.cardNo = cardNo;
                                                              cb(_this.globalData.userInfo)
                                                           }
+                                                      },
+                                                      fail: function () {
+                                                          console.log('网络异常，请重试')
+                                                          wx.redirectTo({ url:'../view_state/index?errorMsg=网络异常，请重试'})
                                                       }
                                                   })
+                                              },
+                                              fail: function () {
+                                                  console.log('网络异常，请重试')
+                                                  wx.redirectTo({ url:'../view_state/index?errorMsg=网络异常，请重试'})
                                               }
                                           })
                                      }
@@ -111,8 +119,8 @@ App({
 
                               },
                               fail: function () {
-                                  console.log('网络错误，请重试')
-                                  wx.redirectTo({ url:'../view_state/index?errorMsg=网络错误，请重试'})
+                                  console.log('网络异常，请重试')
+                                  wx.redirectTo({ url:'../view_state/index?errorMsg=网络异常，请重试'})
                               }
                           })
                       } else {

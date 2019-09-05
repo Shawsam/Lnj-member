@@ -68,6 +68,9 @@ Page({
             }
         })
   },
+  cancelPanel:()=>{
+      wx.navigateBack();
+  },
   authorizeFun:function(res){
       var q = this.data.q;
       if(!res.detail.userInfo) return;

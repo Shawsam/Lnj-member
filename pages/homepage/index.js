@@ -272,7 +272,7 @@ Page({
                          content:'请先授权',
                          success:(res)=>{
                             if(res.confirm){
-                                wx.redirectTo({url:"../authorize/index"})
+                                wx.navigateTo({url:"../authorize/index"})
                             }
                          }
                       })
@@ -300,7 +300,7 @@ Page({
                          content:'请先授权',
                          success:(res)=>{
                             if(res.confirm){
-                                wx.redirectTo({url:"../authorize/index"})
+                                wx.navigateTo({url:"../authorize/index"})
                             }
                          }
                       })
