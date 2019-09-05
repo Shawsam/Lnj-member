@@ -106,79 +106,84 @@ Page({
                     var code = r.code;        //登录凭证
                     console.log(code);
                     if (code) {
+                      if(a){
+                          //请求服务器，解密用户信息 获取unionId等加密信息
+                          var param = { mini:'mini',
+                                        jsCode:code,
+                                        a:a
+                                      };
+                          wx.request({
+                              url: app.globalData.host+'/indexForJson', 
+                              method:'GET',
+                              data: param,
+                              success: function (res) {
+                                  //服务器返回的结果
+                                  console.log(res);
+                                  if (res.data.errcode == 0) {
+                                      var orderNum = res.data.data,
+                                         openId = res.data.miniOpenId,
+                                         _openId = res.data.openId,
+                                         userId = res.data.userId,
+                                         shopId = res.data.shopId,
+                                         unionId = res.data.unionId,
+                                         mobile = res.data.mobile,
+                                         cardNo =  res.data.cardNo,
+                                         deskNo =  res.data.deskNo;
+                                         
+                                     app.globalData.shopId = shopId;
+                                     app.globalData.openId = openId;
+                                     app.globalData._openId = _openId;
+                                     app.globalData.userId = userId;
+                                     app.globalData.unionId = unionId;
+                                     app.globalData.mobile = mobile;
+                                     app.globalData.cardNo = cardNo;
+                                     app.globalData.deskNo = deskNo;
 
-                      //请求服务器，解密用户信息 获取unionId等加密信息
-                      var param = { mini:'mini',
-                                    jsCode:code,
-                                    a:a
-                                  };
-                      wx.request({
-                          url: app.globalData.host+'/indexForJson', 
-                          method:'GET',
-                          data: param,
-                          success: function (res) {
-                              //服务器返回的结果
-                              console.log(res);
-                              if (res.data.errcode == 0) {
-                                  var orderNum = res.data.data,
-                                     openId = res.data.miniOpenId,
-                                     _openId = res.data.openId,
-                                     userId = res.data.userId,
-                                     shopId = res.data.shopId,
-                                     unionId = res.data.unionId,
-                                     mobile = res.data.mobile,
-                                     cardNo =  res.data.cardNo,
-                                     deskNo =  res.data.deskNo;
-                                     
-                                 app.globalData.shopId = shopId;
-                                 app.globalData.openId = openId;
-                                 app.globalData._openId = _openId;
-                                 app.globalData.userId = userId;
-                                 app.globalData.unionId = unionId;
-                                 app.globalData.mobile = mobile;
-                                 app.globalData.cardNo = cardNo;
-                                 app.globalData.deskNo = deskNo;
-
-                                 if (unionId) {
-                                     _this.fetchShopInfo(orderNum);
-                                 } else {
-                                     console.log('需要解密出unionId')
-                                     wx.getUserInfo({
-                                         success: function(res) {
-                                             app.globalData.userInfo = res.userInfo
-                                             var param = {
-                                                 mini: 'mini',
-                                                 openId: app.globalData.openId,
-                                                 iv: res.iv,
-                                                 encryptedData: res.encryptedData
-                                             };
-                                             wx.request({
-                                                 url: app.globalData.host + '/wxMini/encryptedData',
-                                                 method: 'POST',
-                                                 header: { "Content-Type": "application/x-www-form-urlencoded" },
-                                                 data: param,
-                                                 success: function(res) {
-                                                     if (res.data.errcode == 0) {
-                                                         var resData = res.data.data;
-                                                         app.globalData.unionId = resData.unionId;
-                                                         _this.fetchShopInfo(orderNum);
-                                                     } else {
-                                                         wx.redirectTo({ url: '../view_state/index'})
+                                     if (unionId) {
+                                         _this.fetchShopInfo(orderNum);
+                                     } else {
+                                         console.log('需要解密出unionId')
+                                         wx.getUserInfo({
+                                             success: function(res) {
+                                                 app.globalData.userInfo = res.userInfo
+                                                 var param = {
+                                                     mini: 'mini',
+                                                     openId: app.globalData.openId,
+                                                     iv: res.iv,
+                                                     encryptedData: res.encryptedData
+                                                 };
+                                                 wx.request({
+                                                     url: app.globalData.host + '/wxMini/encryptedData',
+                                                     method: 'POST',
+                                                     header: { "Content-Type": "application/x-www-form-urlencoded" },
+                                                     data: param,
+                                                     success: function(res) {
+                                                         if (res.data.errcode == 0) {
+                                                             var resData = res.data.data;
+                                                             app.globalData.unionId = resData.unionId;
+                                                             _this.fetchShopInfo(orderNum);
+                                                         } else {
+                                                             wx.redirectTo({ url: '../view_state/index'})
+                                                         }
+                                                     },
+                                                     fail: function() {
+                                                         wx.redirectTo({ url: '../view_state/index?errorMsg=网络异常，请重试' })
                                                      }
-                                                 },
-                                                 fail: function() {
-                                                     wx.redirectTo({ url: '../view_state/index?errorMsg=网络异常，请重试' })
-                                                 }
-                                             })
-                                         },
-                                         fail: function() {
-                                             wx.redirectTo({ url: '../view_state/index?errorMsg=网络异常，请重试' })
-                                         }
-                                     })
-                                 }
-                              }
-                        }
-                      })
+                                                 })
+                                             },
+                                             fail: function() {
+                                                 wx.redirectTo({ url: '../view_state/index?errorMsg=网络异常，请重试' })
+                                             }
+                                         })
+                                     }
+                                  }else{
+                                     wx.redirectTo({ url: '../view_state/index?errorMsg=二维码解析失败' })
+                                  }
+                            }
+                          })
+                      }else{
+                          wx.redirectTo({ url: '../view_state/index?errorMsg=无法识别该二维码' })
+                      }
                   }
               }
             })
