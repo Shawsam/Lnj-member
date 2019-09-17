@@ -22,6 +22,53 @@ Page({
       fillHeight:wx.getSystemInfoSync().windowHeight-473.5,
       userId:''
   },
+  fetchUnionID(callback){
+      console.log('需要解密出unionId')
+      wx.getUserInfo({
+          success: function(res) {
+              app.globalData.userInfo = res.userInfo
+              var param =  { mini:'mini',
+                             openId:app.globalData.openId,
+                             iv:res.iv,
+                             encryptedData:res.encryptedData
+                           };
+              wx.request({
+                  url: app.globalData.host+'/wxMini/encryptedData', 
+                  method:'POST',
+                  header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+                  data: param,
+                  success: function (res) {
+                      if(res.data.errcode==0){
+                         var resData = res.data.data
+                         console.log(resData)
+                         app.globalData.unionId = resData.unionId
+                         var _openId = resData.openId,
+                             userId = resData.userId,
+                             unionId = resData.unionId,
+                             mobile = resData.mobile,
+                             cardNo =  resData.cardNo;
+                         app.globalData._openId = _openId;
+                         app.globalData.userId = userId;
+                         app.globalData.unionId = unionId;
+                         app.globalData.mobile = mobile;
+                         app.globalData.cardNo = cardNo;
+                         callback();
+                      }else{
+                         wx.redirectTo({ url: '../view_state/index'})
+                      }
+                  },
+                  fail: function () {
+                      console.log('网络异常，请重试')
+                      wx.redirectTo({ url:'../view_state/index?errorMsg=网络异常，请重试'})
+                  }
+              })
+          },
+          fail: function () {
+              console.log('网络异常，请重试')
+              wx.redirectTo({ url:'../view_state/index?errorMsg=网络异常，请重试'})
+          }
+      })
+  },
   userRegister(mobile){
     var _this = this;
     var param =  {  mini:'mini',
@@ -138,10 +185,22 @@ Page({
                             let { errcode } = res.data;
                             if(errcode==0 || errcode==1001241){
                                 //用户已注册或用户已登出
-                                _this.userLogin(mobile);
+                                 if(app.globalData.unionId && app.globalData.unionId!='undefined'){
+                                    _this.userLogin(mobile);
+                                 }else{
+                                    _this.fetchUnionID(function(){
+                                       _this.userLogin(mobile);
+                                    })    
+                                 }
                             }else if(errcode==100124){
                                 //用户不存在
-                                _this.userRegister(mobile);
+                                 if(app.globalData.unionId && app.globalData.unionId!='undefined'){
+                                    _this.userRegister(mobile);
+                                 }else{
+                                    _this.fetchUnionID(function(){
+                                       _this.userRegister(mobile);
+                                    })
+                                 }                                
                             }else if(errcode==100130){
                                 wx.hideLoading();
                                 wx.showToast({ 
