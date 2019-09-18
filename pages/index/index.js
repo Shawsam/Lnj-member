@@ -89,6 +89,11 @@ Page({
         success: function (res) {
             if(res.data.errcode==0){
               _this.userLogin(mobile);
+            }else if(res.data.errcode==970001){
+               wx.hideLoading();
+               _this.fetchUnionID(function(){
+                    _this.userRegister(mobile);
+               })
             }else{
                wx.hideLoading();
                wx.showToast({ 
@@ -136,6 +141,11 @@ Page({
                       },500)
                   }
               })
+            }else if(res.data.errcode==970001){
+               wx.hideLoading();
+               _this.fetchUnionID(function(){
+                   _this.userLogin(mobile);
+               })
             }else{
                wx.hideLoading();
                wx.showToast({ 

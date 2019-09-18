@@ -170,6 +170,9 @@ Page({
            shopId:shopId,
            userId:app.globalData.userId
       };
+      if(!app.globalData.userId){
+         delete param.userId
+      }
 
       wx.request({
           url: app.globalData.host+'/getOrderCount', 
