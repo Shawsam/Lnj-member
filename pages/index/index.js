@@ -311,7 +311,7 @@ Page({
     })
   },
   addFormId(formId,type){
-    var expiryTime = new Date().getTime()+7*24*360000-360000;
+    var expiryTime = new Date().getTime()+7*24*3600000-3600000;
     var param = { mini:'mini',
                   miniProId:2,   // 1为会员中心小程序,2为点餐小程序
                   openid:app.globalData.openId,
@@ -515,30 +515,30 @@ Page({
   onShow:function(scene){
     var _this = this;
     console.log('进入index页面')
-    if (isInitSelfShow) return;
-    if(app.globalData.unionId){
-        var param =  { mini:'mini',
-                       openId:app.globalData.openId,
-                       unionId:app.globalData.unionId
-                     };
-        wx.request({
-            url: app.globalData.host+'/wxMini/getUseByUnionId', 
-            data: param,
-            success: function (res) {
-              console.log(res)
-              var userId = res.data.data.userId;
-              var cardNo = res.data.data.cardNo;
-              var mobile = res.data.data.mobile;
-              if(app.globalData.userId!=userId){           //userId 发生变化
-                    console.log('变化前userId'+app.globalData.userId)
-                    console.log('变化后userId'+userId)
-                    app.globalData.userId = userId
-                    app.globalData.cardNo = cardNo
-                    app.globalData.mobile = mobile
-                    _this.onLoad();
-              }
-            }
-        })
-    }
+    // if (isInitSelfShow) return;
+    // if(app.globalData.unionId){
+    //     var param =  { mini:'mini',
+    //                    openId:app.globalData.openId,
+    //                    unionId:app.globalData.unionId
+    //                  };
+    //     wx.request({
+    //         url: app.globalData.host+'/wxMini/getUseByUnionId', 
+    //         data: param,
+    //         success: function (res) {
+    //           console.log(res)
+    //           var userId = res.data.data.userId;
+    //           var cardNo = res.data.data.cardNo;
+    //           var mobile = res.data.data.mobile;
+    //           if(app.globalData.userId!=userId){           //userId 发生变化
+    //                 console.log('变化前userId'+app.globalData.userId)
+    //                 console.log('变化后userId'+userId)
+    //                 app.globalData.userId = userId
+    //                 app.globalData.cardNo = cardNo
+    //                 app.globalData.mobile = mobile
+    //                 _this.onLoad();
+    //           }
+    //         }
+    //     })
+    // }
   }
 })

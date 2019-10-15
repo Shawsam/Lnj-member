@@ -39,7 +39,7 @@ Page({
      noticeClosed:false
   },
   addFormId(formId,type){
-    var expiryTime = new Date().getTime()+7*24*360000-360000;
+    var expiryTime = new Date().getTime()+7*24*3600000-3600000;
     var param = { mini:'mini',
                   miniProId:2,   // 1为会员中心小程序,2为点餐小程序
                   openid:app.globalData.openId,
