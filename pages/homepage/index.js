@@ -427,29 +427,29 @@ Page({
 
   onShow:function(scene){
     console.log('进入homepage页面')
-    if(app.globalData.unionId){
-        var param =  { mini:'mini',
-                       openId:app.globalData.openId,
-                       unionId:app.globalData.unionId
-                     };
-        wx.request({
-            url: app.globalData.host+'/wxMini/getUseByUnionId', 
-            data: param,
-            success: function (res) {
-              console.log(res)
-              var userId = res.data.data.userId;
-              var cardNo = res.data.data.cardNo;
-              var mobile = res.data.data.mobile;
-              if(app.globalData.userId!=userId){           //userId 发生变化
-                    console.log('变化前userId'+app.globalData.userId)
-                    console.log('变化后userId'+userId)
-                    app.globalData.userId = userId
-                    app.globalData.cardNo = cardNo
-                    app.globalData.mobile = mobile
-              }
-            }
-        })
-    }
+    // if(app.globalData.unionId){
+    //     var param =  { mini:'mini',
+    //                    openId:app.globalData.openId,
+    //                    unionId:app.globalData.unionId
+    //                  };
+    //     wx.request({
+    //         url: app.globalData.host+'/wxMini/getUseByUnionId', 
+    //         data: param,
+    //         success: function (res) {
+    //           console.log(res)
+    //           var userId = res.data.data.userId;
+    //           var cardNo = res.data.data.cardNo;
+    //           var mobile = res.data.data.mobile;
+    //           if(app.globalData.userId!=userId){           //userId 发生变化
+    //                 console.log('变化前userId'+app.globalData.userId)
+    //                 console.log('变化后userId'+userId)
+    //                 app.globalData.userId = userId
+    //                 app.globalData.cardNo = cardNo
+    //                 app.globalData.mobile = mobile
+    //           }
+    //         }
+    //     })
+    // }
   },
 
   //=======提示框=========================================

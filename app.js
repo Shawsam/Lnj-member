@@ -148,31 +148,31 @@ App({
   },
   onShow:function(scene){
     console.log('小程序进程被唤起')
-    var _this = this
-    if(this.globalData.unionId){
-        var param =  { mini:'mini',
-                       openId:this.globalData.openId,
-                       unionId:this.globalData.unionId
-                     };
-        wx.request({
-            url: this.globalData.host+'/wxMini/getUseByUnionId', 
-            data: param,
-            success: function (res) {
-              console.log(res)
-              var userId = res.data.data.userId;
-              var cardNo = res.data.data.cardNo;
-              var mobile = res.data.data.mobile;
-              if(_this.globalData.userId!=userId){           //userId 发生变化
-                   console.log('变化前userId'+_this.globalData.userId)
-                   console.log('变化后userId'+userId)
-                  _this.globalData.userId = userId
-                  _this.globalData.cardNo = cardNo
-                  _this.globalData.mobile = mobile
-                  wx.reLaunch({ url:'../homepage/index'})
-              }
-            }
-        })
-    }
+    // var _this = this
+    // if(this.globalData.unionId){
+    //     var param =  { mini:'mini',
+    //                    openId:this.globalData.openId,
+    //                    unionId:this.globalData.unionId
+    //                  };
+    //     wx.request({
+    //         url: this.globalData.host+'/wxMini/getUseByUnionId', 
+    //         data: param,
+    //         success: function (res) {
+    //           console.log(res)
+    //           var userId = res.data.data.userId;
+    //           var cardNo = res.data.data.cardNo;
+    //           var mobile = res.data.data.mobile;
+    //           if(_this.globalData.userId!=userId){           //userId 发生变化
+    //                console.log('变化前userId'+_this.globalData.userId)
+    //                console.log('变化后userId'+userId)
+    //               _this.globalData.userId = userId
+    //               _this.globalData.cardNo = cardNo
+    //               _this.globalData.mobile = mobile
+    //               wx.reLaunch({ url:'../homepage/index'})
+    //           }
+    //         }
+    //     })
+    // }
   },
   // 备用接口--通过unionId查询会员信息
   fetchUserInfoByUnionId(unionId){ 
