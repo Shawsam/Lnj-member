@@ -7,6 +7,87 @@ Page({
      loaderhide:true,
      jumpLock:false
   },
+  onShow(){
+    //查询用户是否登录,注册状态
+    var param =  {  mini:'mini',
+                    openid:app.globalData.openId,
+                    unionid:app.globalData.unionId,
+                    name:app.globalData.userInfo.nickName
+                 };
+    wx.request({
+        url: app.globalData.host+'/member/userInfo', 
+        method:'GET',
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        data: param,
+        success: function (res) {
+            let { errcode } = res.data;
+            if(errcode==0){
+                app.globalData.userId = res.data.data.userId;
+            }else if(errcode==1001241){
+                //用户已注册或用户已登出
+                wx.showModal({
+                  title:'您的登录信息失效，请重新登录',
+                  success:(res)=>{
+                    if(res.confirm){
+                      wx.navigateToMiniProgram({
+                          appId: 'wxbe8426115715a0c7',
+                          path: 'pages/index/index',
+                          success:(res)=>{
+                            console.log(res)
+                          },
+                          fail:(err)=>{
+                            this.onShow();
+                          }
+                      })
+                    }else{
+                      wx.reLaunch({ url:'../homepage/index'})
+                    }
+                  }
+                })
+            }else if(errcode==100124){
+                //用户不存在
+                wx.showModal({
+                  title:'您还不是会员，请注册',
+                  success:(res)=>{
+                    if(res.confirm){
+                      wx.navigateToMiniProgram({
+                          appId: 'wxbe8426115715a0c7',
+                          path: 'pages/index/index',
+                          success:(res)=>{
+                            console.log(res)
+                          },
+                          fail:(err)=>{
+                            this.onShow();
+                          }
+                      })
+                    }else{
+                      wx.reLaunch({ url:'../homepage/index'})
+                    }
+                  }
+                })         
+            }else if(errcode==100130){
+                wx.hideLoading();
+                wx.showToast({ 
+                                title:'您的账户已被禁用',
+                                icon:'none'
+                             });
+            }else{
+                wx.hideLoading();
+                wx.showToast({ 
+                                title:'网络异常，请重试',
+                                icon:'none'
+                             });
+            }
+        },
+        fail:()=>{
+            wx.hideLoading();
+            wx.showToast({ 
+                            title:'网络异常，请重试',
+                            icon:'none'
+                         });
+        }
+    })                  
+  },
   onLoad:function(option){
 	  var _this = this;
 	  //获取全局数据，初始化当前页面
