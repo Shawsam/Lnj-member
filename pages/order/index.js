@@ -38,30 +38,6 @@ Page({
      currentIndex:0,
      noticeClosed:false
   },
-  addFormId(formId,type){
-    var expiryTime = new Date().getTime()+7*24*3600000-3600000;
-    var param = { mini:'mini',
-                  miniProId:2,   // 1为会员中心小程序,2为点餐小程序
-                  openid:app.globalData.openId,
-                  openId:app.globalData.openId,
-                  unionid:app.globalData.unionId,
-                  formId,
-                  expiryTime,
-                  type };
-    wx.request({
-        url: app.globalData.host+'/templateMessage/addFormId', 
-        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
-        method:'POST', 
-        data: param,
-        success: function (res) {
-          if (res.data.errcode == 0) {
-              console.log('formId上报成功')   
-          }else{
-              console.log('formId上报失败')   
-          }
-        }
-    })
-  },
   onLoad: function () {
      var _this = this;
   
@@ -1151,7 +1127,7 @@ Page({
   //去结算
   orderConfirmTap:function(e){
      var formId = e.detail.formId;
-     this.addFormId(formId,1);
+     app.addFormId(formId,2);
 
      var param = e.currentTarget.dataset.param;
      if(param == 'false') return;

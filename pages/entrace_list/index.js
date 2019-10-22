@@ -178,8 +178,13 @@ Page({
      var jumpLock = _this.data.jumpLock;
      if(jumpLock) return;
      _this.setData({jumpLock:true});
-
-     wx.navigateBack();
+     
+     const pages = getCurrentPages()
+     if(pages[0].route == 'pages/entrace/index'){
+         wx.navigateBack();
+     }else{
+         wx.reLaunch({ url:'../entrace/index'})
+     }
   },
 
   ScrollLower:function(){

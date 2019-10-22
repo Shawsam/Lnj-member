@@ -18,6 +18,30 @@ App({
      fromType:'',         //渠道区分  1、预约打包 2、自助点餐 3、外卖送餐
      userInfo:null        //微信登录接口获取的用户信息
   },
+  addFormId(formId,location,type=1){
+    var expiryTime = new Date().getTime()+7*24*3600000-3600000;
+    var param = { mini:'mini',
+                  miniProId:2,      // 1为会员中心小程序,2为点餐小程序
+                  openid:this.globalData.openId,
+                  openId:this.globalData.openId,
+                  unionid:this.globalData.unionId,
+                  formId,
+                  category:type,    // formId类型
+                  type:location };  //位置
+    wx.request({
+        url: this.globalData.host+'/templateMessage/addFormId', 
+        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
+        method:'POST', 
+        data: param,
+        success: function (res) {
+          if (res.data.errcode == 0) {
+              console.log('formId上报成功')   
+          }else{
+              console.log('formId上报失败')   
+          }
+        }
+    })
+  },
   getUserInfo: function(cb,options) {                          
       var _this = this
       if (this.globalData.userInfo) {     

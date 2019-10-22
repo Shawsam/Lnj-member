@@ -51,30 +51,6 @@ Page({
       couponTip:false
 
   },
-  addFormId(formId,type){
-    var expiryTime = new Date().getTime()+7*24*3600000-3600000;
-    var param = { mini:'mini',
-                  miniProId:2,   // 1为会员中心小程序,2为点餐小程序
-                  openid:app.globalData.openId,
-                  openId:app.globalData.openId,
-                  unionid:app.globalData.unionId,
-                  formId,
-                  expiryTime,
-                  type };
-    wx.request({
-        url: app.globalData.host+'/templateMessage/addFormId', 
-        header: {  "Content-Type": "application/x-www-form-urlencoded" }, 
-        method:'POST', 
-        data: param,
-        success: function (res) {
-          if (res.data.errcode == 0) {
-              console.log('formId上报成功')   
-          }else{
-              console.log('formId上报失败')   
-          }
-        }
-    })
-  },
   switchChange:function(e){
       var state = e.detail.value
       if(state){
@@ -667,7 +643,7 @@ Page({
   //表单校验，提交数据
   orderSubmit:function(e){
     var formId = e.detail.formId;
-    this.addFormId(formId,1);
+    app.addFormId(formId,3);
 
     //=================================================
     var subscribeTime = this.data.subscribeTime;
@@ -788,7 +764,11 @@ Page({
               //============生成订单成功============//
               if(orderId){
                   //调微信支付
-                  if(resdata.paySign){                            
+                  if(resdata.paySign){     
+                    var packages = tradeInfo.packages;
+                    var prepay_id = packages.split('prepay_id=')[1];
+                    app.addFormId(prepay_id,4,2);
+
                      wx.requestPayment({
                        'timeStamp': resdata.timeStamp,
                        'nonceStr': resdata.nonceStr,
