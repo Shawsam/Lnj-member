@@ -219,7 +219,7 @@ Page({
 
       app.globalData.fromType = 1;
       wx.getLocation({
-        type: 'wgs84',
+        type: 'gcj02',
         success: (res) => {
            setTimeout(function(){
               _this.setData({jumpLock:false});
